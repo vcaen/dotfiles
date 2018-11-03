@@ -1,0 +1,35 @@
+[user]
+	name = Vadim Caen
+	email = 
+[color]
+	ui = auto
+[alias]
+	st = status
+	a = add -A
+	ai = add -i
+	ap = add -p
+	ci = commit
+	cf = commit --fixup
+	cia = commit -a
+	ciamn = commit -a --amend --no-edit
+	ciam = commit -a --amend
+	cm = commit --amend
+	co = checkout
+	b = branch --sort=-committerdate -v
+	d = difftool
+	rc = rebase --continue
+	ri = rebase -i
+	ria = rebase -i --autosquash
+	ll = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 10
+	dsh = diff --stat HEAD~1
+	ds = diff --stat
+	dh =  diff HEAD~1
+
+[diff]
+	tool = cdiff
+[difftool]
+	prompt = true
+[http]
+	cookiefile = ~/.gitcookies
+[log]
+	date = iso
