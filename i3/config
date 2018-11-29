@@ -194,7 +194,7 @@ bar {
 }
 
 # lock screen
-bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/thailand2.png  -f && xset dpms force off"
+bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@

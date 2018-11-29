@@ -30,11 +30,13 @@ alias draft="repo upload -d --no-verify --cbr ."
 
 # upload the current branch on gerrit
 alias rupcb="repo upload --cbr ."
-alias xx="(Xephyr -ac -br -noreset -nolock -dpi 101 -resizeable -screen 2560x1600 :10 & metacity --replace -d=:10 &) >/dev/null 2>&1"
+alias xx="{ killall Xephyr; DISPLAY=:0; (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); sleep 1; DISPLAY=:10; feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; cinnamon2d --replace -d :10 & DISPLAY=:0;  } 2> /dev/null > /dev/null"
 alias ii="ibus-daemon -rd"
 alias 4k="xrandr   -d :0  --fb  3840x2160    --output    default"
 alias hd="xrandr   -d :0  --fb  2560x1600    --output    default"
 alias x4k="(Xephyr -ac -br -noreset -nolock -dpi 230 -screen 3838x2140 :10 & metacity --replace -d=:10 &) >/dev/null 2>&1"
+
+alias wallpaper="feh --bg-scale --no-xinerama ~/Documents/wallpaper/8k-mountain.jpg"
 
 
 alias bazel="\$STUDIO_BASE/tools/base/bazel/bazel"
