@@ -1,6 +1,5 @@
 [user]
 	name = Vadim Caen
-	email = 
 [color]
 	ui = auto
 [alias]
@@ -24,6 +23,9 @@
 	dsh = diff --stat HEAD~1
 	ds = diff --stat
 	dh =  diff HEAD~1
+	reball = ! gitrebase
+	con = ! gitbranchnum
+	debug = !echo helloy
 
 [diff]
 	tool = cdiff
@@ -33,3 +35,7 @@
 	cookiefile = ~/.gitcookies
 [log]
 	date = iso
+[core]
+	pager = less -FRX
+[pager]
+	log = true
