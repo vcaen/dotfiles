@@ -35,7 +35,7 @@ alias cpll="cp \$LAYOUTLIB_OUT/layoutlib.jar \$STUDIO_LAYOUTLIB_DIR/"
 alias mcp="pushd \$LAYOUTLIB_PROJECT && mm && cpll && popd"
 
 # Reload bashrc
-alias src="source ~/.bashrc"
+alias src="source ~/.zshrc"
 
 # Kill existing instance of Xephyr and start a new one
 alias xx="{ killall Xephyr; DISPLAY=:0; (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); sleep 1; DISPLAY=:10; feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; cinnamon2d --replace -d :10 & DISPLAY=:0;  } 2> /dev/null > /dev/null"
