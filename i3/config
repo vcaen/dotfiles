@@ -194,7 +194,8 @@ bar {
 }
 
 # lock screen
-bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
+# bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
+bindsym Mod1+Mod4+l exec "env XSECURELOCK_NO_COMPOSITE=0 XSECURELOCK_COMPOSITE_OBSCURER=1 xsecurelock"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@
