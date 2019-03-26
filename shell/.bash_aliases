@@ -48,8 +48,11 @@ alias hd="xrandr   -d :0  --fb  2560x1600    --output    default"
 
 alias wallpaper="feh --bg-scale --no-xinerama ~/Documents/wallpaper/8k-mountain.jpg"
 
-
 alias bazel="\$STUDIO_BASE/tools/base/bazel/bazel"
+
+# Print all Java process with JVM arguments on separate lines
+alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
+
 # Functions
 function killstudio () {
   kill -9 $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
