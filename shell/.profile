@@ -15,7 +15,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-#     LayoutLib
+# LayoutLib
 if [ -f ~/.android_env ]; then
       . ~/.android_env
 fi

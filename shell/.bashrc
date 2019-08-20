@@ -91,7 +91,7 @@ POWERLINE_BASH_SELECT=1
 . "$HOME/bin/powerline.sh"
 
 #PATH
-export PATH=~/bin:~/Android/Sdk/platform-tools:$PATH
+export PATH=~/Android/Sdk/platform-tools:$PATH
 
 if [ -f ~/.bash_profile ]; then
   . ~/.bash_profile

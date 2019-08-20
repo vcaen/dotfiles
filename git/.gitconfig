@@ -1,5 +1,6 @@
 [user]
 	name = Vadim Caen
+	email = caen@google.com
 [color]
 	ui = auto
 [alias]
@@ -13,9 +14,10 @@
 	ciamn = commit -a --amend --no-edit
 	ciam = commit -a --amend
 	cm = commit --amend
+	cmn = commit --amend --no-edit
 	co = checkout
 	b = branch --sort=-committerdate -v
-	d = difftool
+	d = difftool --dir-diff
 	rc = rebase --continue
 	ri = rebase -i
 	ria = rebase -i --autosquash
@@ -25,12 +27,22 @@
 	dh =  diff HEAD~1
 	reball = ! gitrebase
 	con = ! gitbranchnum
-	debug = !echo helloy
+	dn = "!sh -c 'if [ $# -eq 0 ] ; then git d HEAD~1 HEAD ; else git d HEAD~`expr $1 + 1` HEAD~$1 ; fi' -"
 
 [diff]
-	tool = cdiff
+    tool = kitty
+    guitool = kitty.gui
+
 [difftool]
-	prompt = true
+    prompt = false
+    trustExitCode = true
+
+[difftool "kitty"]
+    cmd = kitty +kitten diff $LOCAL $REMOTE
+
+[difftool "kitty.gui"]
+    cmd = kitty kitty +kitten diff $LOCAL $REMOTE
+
 [http]
 	cookiefile = ~/.gitcookies
 [log]
