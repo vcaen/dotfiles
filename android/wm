@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+function parseArgs() {
+  if [ -z "$1" ]; then
+    displayHelp
+    return 1
+  fi
+
+  while [ "$1" != "" ]; do
+    case $1 in
+    -a | --activities)
+      shift
+      dumpActivities "$@"
+      return 0
+      ;;
+    -w | --windows)
+      shift
+      dumpWindows "$@"
+      return 0
+      ;;
+    -sf )
+      shift
+      dumpSurfaceFlinger "$@"
+      return 0
+      ;;
+    -h | *)
+      displayHelp
+      return 0
+      ;;
+    esac
+    shift
+  done
+}
+
+function displayHelp() {
+  cat <<-EOF
+wm usage:
+ -a  | --activities : adb shell dumpsys activity activities
+ -w  | --windows    : adb shell dumpsys window visible
+ -sf |              : adb shell dumpsys SurfaceFlinger visible
+ -h  |              : This message.
+EOF
+}
+
+PATTERN_WINDOW_BEGIN="Window #.*:"
+PATTERN_SIZE="(?<=[,\[\( =])[0-9]{4}(?=[,\]\) ])"
+PATTERN_ACTIVITY="resizebackground.*Activity"
+PATTERN_CONFIG=" [a-zA-Z]*Config[a-zA-Z]*="
+PATTERN_ORIENTATION=" (land|port) "
+
+function dumpActivities() {
+  adb shell dumpsys activity activities | greph "$PATTERN_SIZE" "$PATTERN_ACTIVITY" "$PATTERN_CONFIG" "$PATTERN_ORIENTATION" "$@" | less -r
+}
+
+function dumpWindows() {
+  adb shell dumpsys window visible | greph  "$PATTERN_SIZE" "$PATTERN_ACTIVITY" "$PATTERN_CONFIG" "$PATTERN_ORIENTATION" "$PATTERN_WINDOW_BEGIN" "$@" | less -r
+}
+
+function dumpSurfaceFlinger() {
+  adb shell dumpsys SurfaceFlinger visible | greph "$PATTERN_SIZE" "$PATTERN_ACTIVITY" | less -r
+}
+
+# shellcheck source=src/lib.sh
+source "$DOTFILE_DIR/shell/.bash_aliases"
+parseArgs "$@"

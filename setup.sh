@@ -40,3 +40,5 @@ mkdir -p $KITTY
 ln -s $DIR/kitty/kitty.conf $KITTY/kitty.conf
 ln -s $DIR/kitty/colors.conf $KITTY/colors.conf
 ln -s $DIR/kitty/diff.conf $KITTY/diff.conf
+
+ln -s $DIR/mygitignore.txt ~/.personal_gitignore
