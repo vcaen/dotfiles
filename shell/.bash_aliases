@@ -46,25 +46,31 @@ alias src="source ~/.zshrc"
 # GREP
 # greph: highlight each pattern into a its own color
 function greph() {
-  color=31
-  declare -a  patterns
-  while [[ -n $1 ]] && [[ $1 != "-"* ]] ; do
+  color=1
+  declare -a patterns
+  declare -a args
+  while [[ -n $1 ]] && [[ $1 != "-" ]] ; do
+
+  if [[ $1 = -* ]] ; then
+    args+=("$1")
+  else
     patterns+=("$1|$")
-    shift
+  fi
+  shift
   done
 
   if [[ $1 = "-" ]] ; then # Next argument is a file
     shift
   fi
 
-    result=""
-    while IFS= read line;  # IFS allows to keep whitespace when calling read.
-    do
-      result="$result\n$line"
-    done < "${1:-/dev/stdin}"
+  result=""
+  while IFS= read line;  # IFS allows to keep whitespace when calling read.
+  do
+    result="$result\n$line"
+  done < "${1:-/dev/stdin}"
 
   for pattern in "${patterns[@]}"; do
-    result="$(echo -e "$result" | GREP_COLORS="mt=01;$color" grep --color=always -P "$pattern")"
+    result="$(echo -e "$result" | GREP_COLORS="mt=01;49;38;5;$color" grep --color=always -P "${args[@]/#/}" "$pattern")"
     color=$((color+1))
   done
   echo -e "$result"
@@ -79,6 +85,8 @@ function grepd() {
   return 0
 }
 
+
+# Diff between current clipboard content and next clipboard content
 function clipdiff() {
   local a="";
   local b=""
@@ -90,6 +98,26 @@ function clipdiff() {
    grepd <(echo "$b") <(echo "$a")
 
 }
+
+# Open vim and edit the given command
+function vimc() {
+  local command_path=""
+  local pattern=""
+  if [[ -n "$1" ]] ; then
+    command_path=$(which "$1")
+    [[ -z $command_path ]] && { echo "Nothing found for $1"; return 1; }
+
+    if [[ ! -f $command_path ]] ; then
+      command_path=$(type "$1" | rev | cut -d' ' -f1 | rev)
+      pattern="+/function $1"
+    fi
+
+    [[ ! -f $command_path ]] && { echo "$1 is not a script"; return 2; }
+
+    vim ${pattern:+$pattern} "$command_path";
+  fi
+}
+
 # Kill existing instance of Xephyr and start a new one
 alias xx="{ killall Xephyr; DISPLAY=:0; (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); sleep 1; DISPLAY=:10; feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; cinnamon2d --replace -d :10 & DISPLAY=:0;  } 2> /dev/null > /dev/null"
 
