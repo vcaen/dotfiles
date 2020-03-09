@@ -13,12 +13,18 @@
 	cia = commit -a
 	ciamn = commit -a --amend --no-edit
 	ciam = commit -a --amend
-	cm = commit --amend
+    cm = commit --amend
+    cim = commit --amend
 	cmn = commit --amend --no-edit
+	cimn = commit --amend --no-edit
 	co = checkout
+    cp = cherry-pick
+    cpc = cherry-pick --continue
+    cpa = cherry-pick --abort
 	b = branch --sort=-committerdate -v
 	d = difftool --dir-diff
-	rc = rebase --continue
+    rc = rebase --continue
+    ra = rebase --abort
 	ri = rebase -i
 	ria = rebase -i --autosquash
 	ll = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 10
@@ -29,6 +35,8 @@
 	con = ! gitbranchnum
 	dn = "!sh -c 'if [ $# -eq 0 ] ; then git d HEAD~1 HEAD ; else git d HEAD~`expr $1 + 1` HEAD~$1 ; fi' -"
 	reskeep = "!git reset HEAD~1 && git commit --allow-empty -C HEAD@{1} "
+	vb="! git b | rofi -dmenu | awk '{print$1}'"
+	vl="! git ll | rofi -dmenu | awk '{print$1}'"
 
 [diff]
     tool = kitty

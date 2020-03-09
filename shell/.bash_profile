@@ -22,6 +22,6 @@ if [ -f ~/.bash_aliases_mac ]; then
     . ~/.bash_aliases_mac
 fi
 
-export PATH=$PATH:$DOTFILE_DIR/android
+export PATH=$PATH:$DOTFILE_DIR/android:$DOTFILE_DIR/shell/bin
 export CHROME_REMOTE_DESKTOP_DEFAULT_DESKTOP_SIZES="240x1400,3840x2560"
 

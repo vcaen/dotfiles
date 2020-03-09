@@ -4,3 +4,4 @@ conky
 compton
 wdiff
 colordiff
+pidcat # https://github.com/JakeWharton/pidcat

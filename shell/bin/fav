@@ -1,0 +1,128 @@
+#!/bin/bash
+
+DEBUG=false
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+FAV_FILE=$DIR/../favorites.sh
+
+function parseArgs() {
+  while [ "$1" != "" ] ; do
+    case $1 in
+      -a | --add)
+        shift
+        addToFav "$@"
+        return 0
+        ;;
+      -l | --list)
+        shift
+        listFav "$@"
+        return 0
+        ;;
+      -r | --run)
+        shift
+        runFav "$@"
+        return 0
+        ;;
+      -e | --edit)
+        shift
+        editFavorites
+        return 0
+        ;;
+      -h |  *)
+        displayHelp
+        return 0
+        ;;
+    esac
+  done
+}
+
+USAGE="fav: Manage a list of favorite commands"
+
+
+function displayHelp() {
+  echo $USAGE
+}
+
+function checkFav() {
+  if [ ! -f $FAV_FILE ] ; then
+    exit 1
+  fi
+}
+
+
+function addToFav() {
+  checkFav
+
+  doc=""
+  command=""
+
+  while [ "$1" != "" ] ; do
+    if [ "$1" = "-d" ] ; then
+      if [ -z "$2" ] ; then
+        echo "No documentation provided with -d"
+        exit 1
+      fi
+      doc="$2"
+      shift; shift;
+    else
+      command="$1"
+      shift
+    fi
+  done
+
+  if [ "$command" = "" ] ; then
+    echo "Empty command to add"
+    exit 1
+  fi
+
+  if [ -z "$(grep "$command" "$FAV_FILE")" ]; then
+
+    if [ ! -z "$doc" ] ; then
+      echo "# $doc" >> $FAV_FILE
+    fi
+
+    printf "$command\n\n" >> $FAV_FILE
+    echo "Command \"$command\" has been added to favorites"
+  else
+    echo "Command \"$command\" is already in favorites"
+  fi
+
+}
+
+function listFav() {
+  nl -b a $FAV_FILE
+}
+
+function runFav() {
+  if [ -z $1 ] ; then
+    listFav
+    exit 1
+  fi
+  if [[ $1 =~ ^[0-9]+$ ]] ; then
+    sed_command="$1q;d"
+    command="$(sed $sed_command $FAV_FILE)"
+    echo "Running $command"
+    $command
+    exit 0
+  else
+    echo "$1 is not a number"
+    exit 1
+  fi
+}
+
+function editFavorites() {
+  vim $FAV_FILE
+}
+
+
+if $DEBUG ; then
+  set -x
+fi
+
+parseArgs "$@"
+
+if $DEBUG ; then
+  set +x
+fi
+
+
+
