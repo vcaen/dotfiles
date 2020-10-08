@@ -41,6 +41,7 @@
 [diff]
     tool = kitty
     guitool = kitty.gui
+	renameLimit = 999999
 
 [difftool]
     prompt = false
@@ -53,7 +54,7 @@
     cmd = kitty kitty +kitten diff $LOCAL $REMOTE
 
 [http]
-	cookiefile = ~/.gitcookies
+	cookiefile = /home/caen/.gitcookies
 [log]
 	date = iso
 [core]
@@ -61,3 +62,5 @@
 	excludesfile = ~/.personal_gitignore
 [pager]
 	log = true
+[merge]
+	renameLimit = 999999

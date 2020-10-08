@@ -56,12 +56,24 @@ bar {
 }
 
 # start a terminal
-bindsym $mod+Return exec kitty tmux new-session
+bindsym $mod+Return exec kitty #tmux new-session
+bindsym $mod+Shift+Return exec kitty --detach zsh -c "tmux attach -t $(tmux list-session | grep -v attached | cut -d':' -f1 | head -n 1)"
+
+set $close "Close the window? (y/n)"
+
+mode $close {
+    bindsym y kill, mode default
+    bindsym Return kill, mode default
+    bindsym $mod+Shift+q kill, mode default
+
+    bindsym n mode default
+    bindsym Escape mode default
+}
 
 # kill focused window
-bindsym $mod+Shift+q kill
-bindsym $mod+Control+Shift+q kill
-bindsym Control+Shift+q kill
+bindsym $mod+Shift+q mode $close
+bindsym $mod+Control+Shift+q mode $close
+bindsym Control+Shift+q mode $close
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -126,12 +138,12 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
+bindsym $mod+1 workspace 1: Dev
+bindsym $mod+2 workspace 2: Term
+bindsym $mod+3 workspace 3: WWW Corp
+bindsym $mod+4 workspace 4: Corp 1
+bindsym $mod+5 workspace 5: Corp 2
+bindsym $mod+6 workspace 6: Perso
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
@@ -140,12 +152,12 @@ bindsym XF86Forward workspace next
 bindsym XF86Back workspace prev
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+1 move container to workspace 1: Dev
+bindsym $mod+Shift+2 move container to workspace 2: Term
+bindsym $mod+Shift+3 move container to workspace 3: WWW Corp
+bindsym $mod+Shift+4 move container to workspace 4: Corp 1
+bindsym $mod+Shift+5 move container to workspace 5: Corp 2
+bindsym $mod+Shift+6 move container to workspace 6: Perso
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
@@ -162,6 +174,11 @@ bindsym $mod+F2 workspace 7
 bindsym $mod+F3 workspace 8
 bindsym $mod+F4 workspace 9
 bindsym $mod+F5 workspace 10
+
+bindsym $mod+Shift+m move container to workspace media; workspace media
+bindsym $mode+Shift+m workspace media
+
+assign [title=".*YouTube Music$"] media
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -226,17 +243,23 @@ bindsym $mod+Tab workspace back_and_forth
 hide_edge_borders smart #none|vertical|horizontal|both|smart
 new_window 1pixel
 
-bindsym $mod+Shift+x [floating class="kitty"] move scratchpad
-bindsym $mod+x [floating] scratchpad show
+bindsym $mod+Shift+x move scratchpad
+bindsym $mod+x scratchpad show
 bindsym $mod+t border toggle
-
 bindsym Mod1+Control+e exec nemo
+bindsym $mod+c move absolute position mouse
 
 bindsym $mod+Shift+g move workspace to output right
 bindsym $mod+Shift+f move workspace to output left
 
 for_window [class="Gpick*"] floating enable
+for_window [title="JetBrains Toolbox"] floating enable, move absolute position mouse
+for_window [class="jetbrains-studio"] title_format "<span background='#3DDC84' foreground='#1E1D1C'>  %title            </span>"
+for_window [class="crx_fopnnpbiicdignnlklkacidbjkkbodph"] floating enable, resize set 400 700, move window to position cursor
+for_window [title="^Android Emulator -"] floating enable, resize set 400 700
+for_window [class="jetbrains-studio" title="^win\d+$"] focus
 
 exec "killall compton; compton -b --config ~/.config/compton.conf"
 exec --no-startup-id dunst -conf  ~/.dunstrc
+
 
