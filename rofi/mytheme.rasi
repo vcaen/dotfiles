@@ -16,10 +16,10 @@ configuration {
 }
 
 * {
-	background-color:            #08080877;
+	background-color:            #080A1077;
 	linebg: 	                 #00000000;
 	text-color:                  #d3d7cf;
-	selbg:                       #215d9c;
+	selbg:                       #bf616a;
 	actbg:                       #262626;
 	urgbg:                       #e53935;
 	winbg:			             #26c6da;
