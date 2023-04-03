@@ -226,7 +226,7 @@ bindsym $mod+z floating enable; resize set 400 700; move window to position curs
 
 # lock screen
 # bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
-bindsym Mod1+Mod4+l exec "xdg-screensaver lock"
+bindsym Mod1+Mod4+l exec "xdg-screensaver lock && sleep 3 && xset dpms force off"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@
