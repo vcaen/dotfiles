@@ -102,18 +102,28 @@ function clipdiff() {
 function vimc() {
     local command_path=""
     local pattern=""
-    if [[ -n "$1" ]] ; then
-        command_path=$(which "$1")
-        [[ -z $command_path ]] && { echo "Nothing found for $1"; return 1; }
+    local use_code=false
+    
+    [[ "$1" == "-c" ]] && { use_code=true; shift; }
+    
+    local command=$1; shift
+    if [[ -n ""$command"" ]] ; then
+        command_path=$(which ""$command"")
+        [[ -z $command_path ]] && { echo "Nothing found for "$command""; return 1; }
 
         if [[ ! -f $command_path ]] ; then
-            command_path=$(type "$1" | rev | cut -d' ' -f1 | rev)
-            pattern="+/function $1"
+            command_path=$(type ""$command"" | rev | cut -d' ' -f1 | rev)
+            pattern="+/function "$command""
         fi
 
-        [[ ! -f $command_path ]] && { echo "$1 is not a script"; return 2; }
+        [[ ! -f $command_path ]] && { echo ""$command" is not a script"; return 2; }
 
-        vim ${pattern:+$pattern} "$command_path";
+        if [[ $use_code == true ]] ; then 
+            local line=$(grep -nE "fun(ction)? $command" $command_path | cut -d':' -f1)
+            code -g $command_path:$line
+        else 
+            vim ${pattern:+$pattern} "$command_path";
+        fi
     fi
 }
 
@@ -304,15 +314,16 @@ function lf() {
         return 1
     fi
     dir="."
+    command=""
     if [ $# -gt 1 ] ; then
-        dir=$1; shift
+        command=$1; shift
     fi
-    command=$1; shift
-    file=$(ls -FH1 $dir | grep -vE "@|/" | head -n 1)
+    dir=$1; shift
+    file=$(ls -FtH1 $dir | grep -vE "@|/" | head -n 1)
     
     if [ -z $file ] ; then
         echo "No file in $dir"; return 1
     fi
-
-    eval "$command $@ $dir/$file"
+    echo "$command" "$@" "$dir/$file"
+    eval "$command" "$@" "\"$dir/$file\""
 }

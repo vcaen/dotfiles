@@ -36,7 +36,10 @@ if [ -f ~/.android_env ]; then
       . ~/.android_env
 fi
 
+# cord
+if [ -f ~/.dotfiles/corp/aliases ]; then
+      . ~/.dotfiles/corp/aliases
+fi
+
 #PATH
 export PATH=~/bin:~/Android/Sdk/platform-tools:$PATH
-
-# export JAVA_HOME="$STUDIO_BASE/prebuilts/studio/jdk/mac/Contents/Home"

@@ -277,7 +277,7 @@ assign [title=".*YouTube Music$"] media
 # Window Formatting
 for_window [class=".*"] title_format "<span size='smaller'>%title</span>"
 for_window [class="Gpick*"] floating enable
-
+for_window [class="crx_.*" title=".*Tasks.*"] floating enable, resize set 400 700, move absolute position mouse
 ## Jetbrains
 for_window [title="JetBrains Toolbox"] floating enable, move absolute position mouse
 for_window [class="jetbrains-studio"] title_format "<span foreground='#3DDC84' size='smaller'>   %title</span>"
