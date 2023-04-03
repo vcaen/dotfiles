@@ -107,3 +107,7 @@ fpath+=~/.dotfiles/shell/zfunc/
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.cargo/bin:$PATH"
 
 alias -s {png,PNG,jpeg,jpg,JPEG}="eog"
+
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+
