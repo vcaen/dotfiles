@@ -10,9 +10,6 @@ ln -is ~/.dotfiles/bin/aanim ~/bin/aanim
 ln -is ~/.dotfiles/bin/dc ~/bin/dc
 ln -is ~/.dotfiles/bluetooth/bose_connect ~/bin/boseconnect
 ln -is ~/.dotfiles/config/mpv ~/.config/mpv
-ln -is ~/.dotfiles/corp/android_env ~/.android_env
-ln -is ~/.dotfiles/corp/wm ~/bin/wm
-ln -is ~/.dotfiles/corp/xsecurelockrc ~/.xsecurelockrc
 ln -is ~/.dotfiles/git/.gitconfig ~/.gitconfig
 ln -is ~/.dotfiles/i3/config ~/.config/i3/config
 ln -is ~/.dotfiles/i3/.conkyrc ~/.conkyrc
@@ -33,3 +30,4 @@ ln -is ~/.dotfiles/shell/vadim.zsh-theme ~/.oh-my-zsh/custom/themes/vadim.zsh-th
 ln -is ~/.dotfiles/shell/.zshrc ~/.zshrc
 ln -is ~/.dotfiles/VSCode/keybindings.json ~/.config/Code/User/keybindings.json
 ln -is ~/.dotfiles/VSCode/settings.json ~/.config/Code/User/settings.json
+zsh ~/.dotfiles/corp/setup_links.sh
