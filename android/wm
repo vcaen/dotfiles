@@ -24,6 +24,16 @@ function parseArgs() {
       dumpSurfaceFlinger "$@"
       return 0
       ;;
+    --proto-tag )
+      shift
+      protoTag $*
+      return 0
+      ;;
+    -pea )
+      shift
+      protoLogEnable -all
+      return 0
+      ;;
     -h | *)
       displayHelp
       return 0
@@ -36,10 +46,12 @@ function parseArgs() {
 function displayHelp() {
   cat <<-EOF
 wm usage:
- -a  | --activities : adb shell dumpsys activity activities
- -w  | --windows    : adb shell dumpsys window visible
- -sf |              : adb shell dumpsys SurfaceFlinger visible
- -h  |              : This message.
+ -a   | --activities : adb shell dumpsys activity activities
+ -w   | --windows    : adb shell dumpsys window visible
+ -sf  |              : adb shell dumpsys SurfaceFlinger visible
+      | --proto-tag  : adb shell dumpsys window logging
+ -pea |              : adb shell wm logging enable-text
+ -h   |              : This message.
 EOF
 }
 
@@ -59,6 +71,14 @@ function dumpWindows() {
 
 function dumpSurfaceFlinger() {
   adb shell dumpsys SurfaceFlinger visible | greph "$PATTERN_SIZE" "$PATTERN_ACTIVITY" | less -r
+}
+
+function protoTag() {
+  adb shell dumpsys window logging | grep Proto: | cut -c 10- | tr ' ' '\n'
+}
+
+function protoLogEnable() {
+   adb shell wm logging enable-text $(protoTag | tr '\n' ' ')
 }
 
 # shellcheck source=src/lib.sh
