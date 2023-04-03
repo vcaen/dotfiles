@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -15,17 +17,26 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# LayoutLib
-if [ -f ~/.android_env ]; then
-      . ~/.android_env
-fi
 
 # Alias definitions.
+
+# Mac specific
+if [ "$(uname)" = "Darwin" ]; then
+	if [ -f ~/.bash_aliases_mac ]; then
+		. ~/.bash_aliases_mac
+	fi
+fi
+
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
+fi
+
+# Android
+if [ -f ~/.android_env ]; then
+      . ~/.android_env
 fi
 
 #PATH
 export PATH=~/bin:~/Android/Sdk/platform-tools:$PATH
 
-export JAVA_HOME="$STUDIO_BASE/prebuilts/studio/jdk/mac/Contents/Home"
+# export JAVA_HOME="$STUDIO_BASE/prebuilts/studio/jdk/mac/Contents/Home"

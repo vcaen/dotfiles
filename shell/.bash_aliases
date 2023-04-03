@@ -162,6 +162,21 @@ function killij () {
     kill $sig $(echo "$pids")
 }
 
+function killij () {
+  local sig="$1"
+  if [ -z $sig ] ; then
+    sig="-15"
+  fi
+  processes=$(ps -aux | grep -E "\-Didea.platform.prefix=Idea" | grep -v grep)
+  if [ -z $processes ] ; then
+    echo "No IntelliJ session found"
+    return -1
+  fi
+  pids=$(echo $processes | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
+  echo "Killing $pids"
+  kill $sig $(echo $pids)
+}
+
 # Open the url given as a parameter as a standalone window of Google Chrome
 function app () {
     local profile=""
