@@ -34,18 +34,18 @@ volume master {
 }
 
 tztime local {
-		format = "<span background='#ff9a76'>  </span><span background='#e5e9f0'> %time </span>"
-		format_time = "%a %-d %b | %H:%M"
+		format = "<span background='#ff9a76'>  </span><span background='#e5e9f0'> %a %-d %b | %H:%M </span>"
+		
 }
 
 tztime san-fransisco {
-		format = "<span background='#679b9b'> MTV </span><span background='#e5e9f0'> %time </span>"
-		format_time = " %H "
+		format = "<span background='#679b9b'> MTV </span><span background='#e5e9f0'>  %H  </span>"
+		
         timezone = "America/Los_Angeles"
 }
 
 tztime taipei {
-		format = "<span background='#3FBDA6'> TPE </span><span background='#e5e9f0'> %time </span>"
-		format_time = " %H "
+		format = "<span background='#3FBDA6'> TPE </span><span background='#e5e9f0'>  %H  </span>"
+		
         timezone = "Asia/Taipei"
 }

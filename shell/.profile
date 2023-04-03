@@ -36,7 +36,7 @@ if [ -f ~/.android_env ]; then
       . ~/.android_env
 fi
 
-# cord
+# corp
 if [ -f ~/.dotfiles/corp/aliases ]; then
       . ~/.dotfiles/corp/aliases
 fi

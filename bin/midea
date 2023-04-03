@@ -34,7 +34,7 @@ function _midea() {
 
     [[ ! -f $SELECTED ]] && { echo "$SELECTED is not a file."; return 1 }
 
-    $SELECTED >/dev/null 2>&1 &; disown
+    $SELECTED "$@" >/dev/null 2>&1 &; disown
 }
 
 _midea "$@"

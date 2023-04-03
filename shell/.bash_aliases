@@ -247,7 +247,7 @@ function totelegram() {
             https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
     }
     
-    if [[ ! -f ~/.telegram_token ]] || [[ -z $TELEGRAM_BOT_TOKEN ]] ; then
+    if [[ ! -f ~/.telegram_token ]] ; then
         echo "No token defined in ~/.telegram_token or env variable TELEGRAM_BOT_TOKEN"
         return 1
     fi

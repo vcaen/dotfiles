@@ -156,7 +156,7 @@ max_icon_size = 36
 icon_path = /usr/share/icons/Paper/16x16/mimetypes/:/usr/share/icons/Paper/48x48/status/:/usr/share/icons/Paper/16x16/devices/:/usr/share/icons/Paper/48x48/notifications/:/usr/share/icons/Paper/48x48/emblems/
 
 frame_width = 2
-frame_color = "#00527a"
+frame_color = "#007A9f"
 
 [shortcuts]
 
@@ -187,13 +187,14 @@ timeout = 2
 [urgency_normal]
 background = "#00587a"
 foreground = "#d8dee8"
+frame_color = "#01A16a"
 timeout = 4
 
 [urgency_critical]
 background = "#00587a"
 foreground = "#d8dee8"
 frame_color = "#bf616a"
-timeout = 0
+timeout = 10
 
 
 
