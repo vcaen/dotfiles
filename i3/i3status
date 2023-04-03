@@ -1,0 +1,51 @@
+general {
+        output_format = "i3bar"
+        colors = true
+        markup = pango
+        interval = 1
+}
+
+order += "cpu_usage"
+order += "disk /"
+order += "disk /home/caen/E"
+order += "volume master"
+order += "tztime san-fransisco"
+order += "tztime taipei"
+order += "tztime local"
+
+cpu_usage {
+        format = "<span background='#50fa7b'>  </span><span background='#e5e9f0'> %usage </span>"
+}
+
+disk "/" {
+        format = "<span background='#04a6c2'> / </span><span background='#e5e9f0'> %free </span>"
+}
+
+disk "/home/caen/E" {
+        format = "<span background='#bd93f9'> E </span><span background='#e5e9f0'> %free </span>"
+}
+
+volume master {
+        format = "<span background='#78A273'>  </span><span background='#e5e9f0'> %volume </span>"
+        format_muted = "<span background='#78A273'>  </span><span background='#e5e9f0'> Muted </span>"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+tztime local {
+		format = "<span background='#ff9a76'>  </span><span background='#e5e9f0'> %time </span>"
+		format_time = "%a %-d %b | %H:%M"
+}
+
+tztime san-fransisco {
+		format = "<span background='#679b9b'> MTV </span><span background='#e5e9f0'> %time </span>"
+		format_time = " %H "
+        timezone = "America/Los_Angeles"
+}
+
+tztime taipei {
+		format = "<span background='#3FBDA6'> TPE </span><span background='#e5e9f0'> %time </span>"
+		format_time = " %H "
+        timezone = "Asia/Taipei"
+}

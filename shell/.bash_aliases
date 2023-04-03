@@ -15,7 +15,7 @@ function envproc() { echo $(( $(nproc)*2)); }
 # Login if needed and Sync the current projec
 alias rs="git credential-corpsso check > /dev/null || glogin; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -qcnj19 && repo sync -qclj99"
+alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -cj32"
 alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"

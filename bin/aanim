@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function setScale() {
+    if [ "$1" != "-*" ]; then
+        SPEED=$1
+        shift
+    fi
+    adb "$@" shell settings put global window_animation_scale $SPEED
+    adb "$@" shell settings put global transition_animation_scale $SPEED
+    adb "$@" shell settings put global animator_duration_scale $SPEED
+}
+
+setScale "$@"

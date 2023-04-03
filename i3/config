@@ -281,18 +281,32 @@ assign [title=".*YouTube Music$"] media
 # Window Formatting
 for_window [class=".*"] title_format "<span size='smaller'>%title</span>"
 for_window [class="Gpick*"] floating enable
+
+## Jetbrains
 for_window [title="JetBrains Toolbox"] floating enable, move absolute position mouse
 for_window [class="jetbrains-studio"] title_format "<span foreground='#3DDC84' size='smaller'>   %title</span>"
 for_window [class="jetbrains-idea"] title_format "  <span foreground='#05c1fd' size='smaller'> %title</span>"
-for_window [class="jetbrains-idea" title=".*android/master"] title_format "[MSTR]<span size='smaller'> %title</span>"
+for_window [class="jetbrains-*" title="^win\d+$"] floating enable, move to workspace $w1   # Jetbrains splashscreen
+
+## Android Specific
 for_window [class="jetbrains-idea" title=".*android/rvc"] title_format \
            "<span foreground='#05c1fd' stretch='ultracondensed'>[RVC]</span><span size='smaller'> %title</span>"
 for_window [class="jetbrains-idea" title=".*android/sc"] title_format \
           "<span foreground='#05c1fd' stretch='ultracondensed'>[SC] </span><span size='smaller'> %title</span>"
-for_window [class="Google-chrome" instance="crx_icnbakklofenjdkjiojfillaededmonb"] title_format "<span size='smaller'>   %title</span>" # Google Chat
+for_window [class="jetbrains-idea" title=".*android/master"] title_format "[MSTR]<span size='smaller'> %title</span>"
+for_window [class="jetbrains-idea" title=".*android/sc.*cts"] title_format \
+          "<span foreground='#05c1fd' stretch='ultracondensed'>[SC-CTS] </span><span size='smaller'> %title</span>"
+
+
+## Google Chat
+for_window [class="Google-chrome" instance="crx_icnbakklofenjdkjiojfillaededmonb"] title_format "<span size='smaller'>   %title</span>" 
+
+## Emulator
 for_window [title="Android Emulator -"] floating enable, resize set 400 700
+
+## Other
 for_window [class="scrcpy"] floating enable, border normal 
-for_window [class="jetbrains-*" title="^win\d+$"] floating enable, move to workspace $w1
+for_window [class="^pavucontrol"] floating enable, resize set 500 500, move position center # Volume Controls
 
 #exec --no-startup-id "killall picom; picom -b"
 exec --no-startup-id "dunst -conf ~/.dunstrc &> /tmp/dunst"

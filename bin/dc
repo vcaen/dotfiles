@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+# Display a device using scrcpy 
+adb devices -l | \
+    tail -n+2 | tr -s ' ' |  tr ':' ' ' | cut  -d' ' -f8,6,1 | tr '_' ' '  | \
+    rofi -dmenu | awk '{print$1}' | \
+    xargs -I {} scrcpy -m 1080 --window-height 700 -ws {} >/dev/null  & 
+    disown
