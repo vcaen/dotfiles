@@ -30,7 +30,7 @@ alias cdiff="cdiff -sw140"
 # LayoutLib specific commands
 alias cdll="cd \$LAYOUTLIB_PROJECT"
 alias benv=". \$LAYOUTLIB_BASE/build/envsetup.sh && lunch \$LUNCH-eng"
-alias mm="mm -j30"
+alias mm="mm -j"
 alias cpll="cp \$LAYOUTLIB_OUT/layoutlib.jar \$STUDIO_LAYOUTLIB_DIR/"
 alias mcp="pushd \$LAYOUTLIB_PROJECT && mm && cpll && popd"
 
@@ -49,6 +49,7 @@ alias hd="xrandr   -d :0  --fb  2560x1600    --output    default"
 alias wallpaper="feh --bg-scale --no-xinerama ~/Documents/wallpaper/8k-mountain.jpg"
 
 alias bazel="\$STUDIO_BASE/tools/base/bazel/bazel"
+
 
 # Print all Java process with JVM arguments on separate lines
 alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
@@ -96,3 +97,6 @@ function ergb {
 }
 
 
+function fs() {
+  i3-msg fullscreen > /dev/null && $*; i3-msg fullscreen > /dev/null
+}
