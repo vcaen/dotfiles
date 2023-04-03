@@ -26,7 +26,7 @@
     cp = cherry-pick
     cpc = cherry-pick --continue
     cpa = cherry-pick --abort
-	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset):%(end) %(contents:subject)\""
+	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset)%(end) %(contents:subject)\""
     rc = rebase --continue
     ra = rebase --abort
 	ri = rebase -i
@@ -81,5 +81,5 @@
 [merge]
 	renameLimit = 999999
 [repo]
-	superprojectChoiceExpire = 1647006439
+	superprojectChoiceExpire = 1650012553
 	superprojectChoice = true

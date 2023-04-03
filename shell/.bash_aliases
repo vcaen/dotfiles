@@ -256,7 +256,10 @@ function totelegram() {
 
 function notif() {
     [ -z "$1" ] && return 1
-    notify-send "$1"; echo "$1" | totelegram > /dev/null
+    message="$1" 
+    shift
+    notify-send $message "$@"
+    echo $message | totelegram > /dev/null
 }
 
 function clip() {
