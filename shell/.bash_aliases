@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOTFILE_DIR=~/.dotfiles
+
 # Some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'

@@ -1,10 +1,32 @@
 #!/bin/zsh
 
+# set -x
+
+TOOLBOX_PATH=~/.local/share/JetBrains/Toolbox/apps
+APP_DIR=
+APP_NAME=
+APP_SCRIPT=
+
+function _setup_idea() {
+    APP_DIR="IDEA-C"
+    APP_NAME="IntelliJ"
+    APP_SCRIPT="idea.sh"
+}
+
+function _setup_studio() {
+    APP_DIR="AndroidStudio"
+    APP_NAME="Android Studio"
+    APP_SCRIPT="studio.sh"
+}
+
 function _midea() {
-    PS3="Which Intellij version would you like to run? "; 
-    TOOLBOX_PATH=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/
-    SCRIPT_NAME="idea.sh"
-    IDEA_PATHS=$(find $TOOLBOX_PATH -name $SCRIPT_NAME -print)
+    if [[ $1 = "-a" ]] ; then
+        _setup_studio; shift
+    else
+        _setup_idea
+    fi
+    PS3="Which $APP_NAME would you like to run? "; 
+    IDEA_PATHS=$(find $TOOLBOX_PATH/$APP_DIR -name $APP_SCRIPT -print)
     IDEA_VERSIONS=( $(echo $IDEA_PATHS | awk -F'/' '{print $(NF-2)}' | sort -r ) )
     select name in $IDEA_VERSIONS ; do break; done;
 
@@ -15,4 +37,4 @@ function _midea() {
     $SELECTED >/dev/null 2>&1 &; disown
 }
 
-_midea
+_midea "$@"

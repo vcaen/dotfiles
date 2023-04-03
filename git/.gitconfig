@@ -80,3 +80,6 @@
 	log = true
 [merge]
 	renameLimit = 999999
+[repo]
+	superprojectChoiceExpire = 1647006439
+	superprojectChoice = true

@@ -23,9 +23,10 @@ function _current_dir() {
 
 function _user_host() {
   if [[ -n $SSH_CONNECTION ]]; then
-    me="%n@%m"
-  elif [[ $LOGNAME != $USER ]]; then
-    me="%n"
+    me="@%2m"
+  fi  
+  if [[ $LOGNAME != $USER ]]; then
+    me="%n$me"
   fi
   if [[ -n $me ]]; then
     echo "%{$fg[cyan]%}$me%{$reset_color%}:"
