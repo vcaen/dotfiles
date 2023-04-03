@@ -10,7 +10,8 @@ ln -is ~/.dotfiles/bin/aanim ~/bin/aanim
 ln -is ~/.dotfiles/bin/dc ~/bin/dc
 ln -is ~/.dotfiles/bluetooth/bose_connect ~/bin/boseconnect
 ln -is ~/.dotfiles/config/mpv ~/.config/mpv
-ln -is ~/.dotfiles/git/.gitconfig ~/.gitconfig
+ln -is ~/.dotfiles/git/gitconfig ~/.gitconfig
+ln -is ~/.dotfiles/git/mygitignore.txt ~/.personal_gitignore
 ln -is ~/.dotfiles/i3/config ~/.config/i3/config
 ln -is ~/.dotfiles/i3/.conkyrc ~/.conkyrc
 ln -is ~/.dotfiles/i3/dunstrc ~/.dunstrc
@@ -18,7 +19,6 @@ ln -is ~/.dotfiles/i3/i3status ~/.config/i3/i3status
 ln -is ~/.dotfiles/kitty/colors.conf ~/.config/kitty/colors.conf
 ln -is ~/.dotfiles/kitty/diff.conf ~/.config/kitty/diff.conf
 ln -is ~/.dotfiles/kitty/kitty.conf ~/.config/kitty/kitty.conf
-ln -is ~/.dotfiles/mygitignore.txt ~/.personal_gitignore
 ln -is ~/.dotfiles/picom.conf ~/.config/picom.conf
 ln -is ~/.dotfiles/rofi ~/.config/rofi
 ln -is ~/.dotfiles/shell/.bash_aliases ~/.bash_aliases
