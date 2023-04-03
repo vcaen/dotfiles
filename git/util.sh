@@ -37,5 +37,3 @@ function gitbranchnum() {
   git checkout $NEWBRANCH
 }
 
-export -f gitrebase
-export -f gitbranchnum
