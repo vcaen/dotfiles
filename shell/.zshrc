@@ -91,7 +91,6 @@ export DEFAULT_USER="caen"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias src="source ~/.zshrc"
 
-
 autoload -Uz compinit
 compinit
 # Completion for kitty
