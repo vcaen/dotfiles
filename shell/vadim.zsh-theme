@@ -1,16 +1,21 @@
 # AVIT ZSH Theme
 
 PROMPT='
-$(_user_host)${_current_dir} $(git_prompt_info) $(_ruby_version)
+$(_user_host)${_current_dir} $(git_prompt_info)
 %{$fg[$CARETCOLOR]%}▶%{$resetcolor%} '
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
-RPROMPT='$(_vi_status)%{$(echotc UP 1)%}$(_android_branch) $(_git_time_since_commit) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='%{$(echotc UP 1)%}$(android_prompt) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
 
 local _current_dir="%{$fg_bold[blue]%}%5~%{$reset_color%} "
 local _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
 local _hist_no="%{$fg[grey]%}%h%{$reset_color%}"
+
+function android_prompt() {
+  prompt=$(android_shell_prompt 2>/dev/null)
+  [[ $? -eq 0 ]] && echo $prompt
+}
 
 function _current_dir() {
   local _max_pwd_length="65"
@@ -30,20 +35,6 @@ function _user_host() {
   fi
   if [[ -n $me ]]; then
     echo "%{$fg[cyan]%}$me%{$reset_color%}:"
-  fi
-}
-
-function _vi_status() {
-  if {echo $fpath | grep -q "plugins/vi-mode"}; then
-    echo "$(vi_mode_prompt_info)"
-  fi
-}
-
-function _ruby_version() {
-  if {echo $fpath | grep -q "plugins/rvm"}; then
-    echo "%{$fg[grey]%}$(rvm_prompt_info)%{$reset_color%}"
-  elif {echo $fpath | grep -q "plugins/rbenv"}; then
-    echo "%{$fg[grey]%}$(rbenv_prompt_info)%{$reset_color%}"
   fi
 }
 
@@ -75,19 +66,6 @@ function _git_time_since_commit() {
     color=$ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL
     echo "$color$commit_age%{$reset_color%}"
   fi
-}
-
-function _android_branch() {
- local prompt=""
- if [[ $(pwd) == "$ANDROID_BASE"* ]] ; then
-   prompt="%{$fg_bold[blue]%}$TARGET_PRODUCT-$TARGET_BUILD_VARIANT $ANDROID_BRANCH%{$reset_color%}"
- fi
-
- if [[ -n $ANDROID_SERIAL ]] ; then
-    prompt="$ANDROID_SERIAL $prompt"
- fi
-
- echo $prompt
 }
 
 if [[ $USER == "root" ]]; then
