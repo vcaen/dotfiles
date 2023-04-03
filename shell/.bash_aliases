@@ -276,18 +276,18 @@ function notif() {
             args+=$1
             shift
         else
-            [[ $# -gt 1 ]] && { summary="$1"; shift }
+            [[ $# -gt 1 ]] && { summary="$1"; shift; }
             message="$1"
             shift
         fi
     done
 
-    notify-send -t 5000 $summary $message "$args[@]" "$@"
+    notify-send -t 5000 "$summary" "$message" "${args[@]}" "$@"
     
     if [[ -n $summary ]] ; then 
         message="$summary\n$message"
     fi
-    totelegram "$message\n$@" > /dev/null
+    totelegram "$message\n$*" > /dev/null
 }
 
 function clip() {
