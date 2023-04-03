@@ -36,6 +36,10 @@ TEXT
 
 # JSON for i3bar
 [
+
+    {
+        "full_text": " ${exec xprop -id $(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}') | awk '/_NET_WM_NAME/{$1=$2="";print}' | tr -s ' ' | awk '{print substr($0, 3, length($0) - 3)}'} ", "name":"window"
+    },
     {
        "full_text" : "RAM ${memperc}%" , "color" :
         ${if_match ${memperc}<90}"\#ffffff"

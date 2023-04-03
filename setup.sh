@@ -13,3 +13,7 @@ fi
 if [ ! -f ~/.gitconfig ]; then
   ln -s $DIR/git/.gitconfig ~/.gitconfig
 fi
+
+if [ ! -f ~/.conkyrc ]; then
+  ln -s $DIR/i3/.conkyrc ~/.conkyrc
+fi
