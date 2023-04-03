@@ -14,7 +14,7 @@
         "**/.factorypath": true
     },
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+        "*.ipynb": "jupyter-notebook"
     },
     "files.associations": {
         "**/i3/config": "i3"
@@ -40,20 +40,34 @@
     ],
     "editor.largeFileOptimizations": false,
     "[cpp]": {
-        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+        "editor.defaultFormatter": "xaver.clang-format"
     },
     "workbench.startupEditor": "none",
     "C_Cpp.intelliSenseEngine": "disabled",
+    /************************************
+     * Custom settings manually edited *
+     ************************************/
+    // --------------
+    // Font
     "editor.fontFamily": "'Fira Code', 'Droid Sans Mono', 'monospace', monospace",
     "editor.fontLigatures": true,
     "editor.formatOnSaveMode": "modifications",
-
-    
-    "errorLens.fontWeight":"200",
-    "errorLens.fontStyleItalic":true,
-    "errorLens.fontSize":"0.8em",
-
-
+    "editor.lineHeight": 1.8,
+    "editor.fontWeight": "450",
+    "editor.inlayHints.fontSize": 11,
+    "editor.letterSpacing": 0,
+    "editor.inlayHints.padding": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.maxColumn": 50,
+    "editor.minimap.autohide": true,
+    "editor.scrollbar.verticalScrollbarSize": 5,
+    // -----------
+    // Error Lens
+    "errorLens.fontWeight": "200",
+    "errorLens.fontStyleItalic": true,
+    "errorLens.fontSize": "0.8em",
+    // -------------------
+    // Color customizations
     "workbench.colorCustomizations": {
         "editor.background": "#111920",
         "editor.foreground": "#d0d0d0",
@@ -61,26 +75,30 @@
         "editorInlayHint.foreground": "#878686",
         "errorLens.errorBackground": "#712b2d0d",
         "errorLens.errorForeground": "#f58b8b",
-        "editorIndentGuide.background":"#161f27",
-        "editorError.foreground": "#b44848"
+        "editorIndentGuide.background": "#161f27",
+        "editorIndentGuide.activeBackground": "#273946",
+        "editorError.foreground": "#b44848",
+        "editorLineNumber.foreground": "#273540",
+        "editorLineNumber.activeForeground": "#6290b3",
+        "editor.lineHighlightBackground": "#19242d",
     },
-
+    // ----------------
+    // Token customizations
     "editor.tokenColorCustomizations": {
-        "types": "#d99e52",
-        "functions": "#ebebeb",
+        "types": "#ffb351",
+        "functions": "#ffffff",
         "strings": "#a9c444",
-
         "textMateRules": [
             {
                 "scope": "entity.name.namespace",
                 "settings": {
-                    "foreground": "#f3fff1"
+                    "foreground": "#7792b2"
                 }
             },
             {
                 "scope": "support.class",
                 "settings": {
-                    "foreground": "#efdd55"
+                    "foreground": "#efd855"
                 }
             },
             {
@@ -96,8 +114,7 @@
                 }
             },
         ]
-
     },
-
-
+    "editor.mouseWheelZoom": true,
+    "git.openRepositoryInParentFolders": "never",
 }
