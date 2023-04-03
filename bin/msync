@@ -1,0 +1,22 @@
+#!/bin/zsh
+
+if [[ $(pwd) != "$HOME"* ]] ; then
+    echo "Only works below Home dir"
+    exit 1
+fi
+
+if [ $# -lt 1 ] ; then
+    echo "Usage msync HOST"
+    exit 1
+fi
+
+host=$1; shift
+
+dir=$(pwd | sed "s#$HOME/##")
+echo "Parsing $dir on host machine."
+files=$(ssh $host "cd ~/$dir; git status -s" | awk '{print$2}');
+
+full_files=$(echo $files | while read f ; do echo "$dir/$f" ; done )
+
+echo $files
+rsync -P --files-from=<(echo $files) $host:$dir .

@@ -263,8 +263,7 @@ alias sp="i3-msg floating enable; i3-msg move scratchpad; i3-msg scratchpad show
 alias vimi3="vim $DOTFILE_DIR/i3/config"
 
 # Display history
-
-function h() {
+function hist() {
     local arg="*"
     [ -n "$1" ] && arg="$1"
     local HIST_GREP=$(history -n -m  "*$arg*" | uniq | tac)
