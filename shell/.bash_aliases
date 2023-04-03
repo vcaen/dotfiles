@@ -357,6 +357,53 @@ function fh() {
 }
 
 if ! which rofi ; then 
-  alias rofi=fzf;
+  alias rofi="fzf" >/dev/null ;
 fi
 
+function fout() {
+    # Fuzzy search in tmux scrollback buffer and copy the selected line in the tmux paste buffer
+    if ! which fzf >/dev/null ; then 
+        echo "fzf must be installed";
+        return 1
+    fi
+    local lines=${1:1000} # 1000 line of scrollback of no arg supplied 
+    local buffer_name="tmux_fzf_tmp_buffer"
+    tmux capture-pane -e -S -$lines -b $buffer_name || return 1
+
+    # Compute the range, or 0 if negative
+    local range_min="\$(( val = {n} - FZF_PREVIEW_LINES / 2 - 1, val > 0 ? val : 0 ))"
+    local range_max="\$(( val = {n} + FZF_PREVIEW_LINES / 2,  val > 0 ? val : 0 )) "
+
+    # Input command, inverted to match the line numbering of Tmux
+    local input_command="tmux show-buffer -b $buffer_name | tac"
+
+    # Invert the preview to match the scrolling direction
+    local preview_command
+    if which bat >/dev/null ; then
+        preview_command="bat -n --color=always -r $range_min:$range_max -H \$(( {n} + 1 )) <(eval $input_command) | tac"
+    else
+        preview_command="cat <(eval $input_command) | tail -n+$range_min | head -n+\$FZF_PREVIEW_LINES | tac "
+    fi
+
+    # Command to be executed when alt+enter is pressed:
+    # jump to the selected line in the TMUX scrollback buffer and select it
+    local alt_enter_cmd="tmux copy-mode; \
+        tmux send-keys -X goto-line \$(( {n} )); \
+        tmux send-keys -X select-line; \
+        tmux send-keys -X stop-selection; \
+        tmux send-keys -X halfpage-down; \
+        tmux send-keys -X middle-line; " 
+
+    local out=$(eval $input_command | \
+        fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 \
+        --no-sort \
+        --preview "eval $preview_command" --preview-window "up,75%,nowrap" \
+        --bind "ctrl-j:accept+execute(eval $alt_enter_cmd)" \
+        --header 'Press CTRL-J to jump to the selected line' \
+        )
+
+    if [[ -n $out ]] ; then
+        tmux set-buffer -w $out
+        echo $out
+    fi
+}
