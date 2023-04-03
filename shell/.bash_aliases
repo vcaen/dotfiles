@@ -21,6 +21,11 @@ alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -cj32"
 alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"
+# Upload a draft on gerrit
+alias rdraft="repo upload -w --no-verify --cbr ."
+# upload the current branch on gerrit
+alias rupcb="repo upload --cbr ."
+alias rupcby="repo upload --cbr -y ."
 
 # GIT
 alias gsso="git credential-corpsso login"
@@ -28,12 +33,6 @@ alias gcn="gitbranchnum"
 alias gtmp="git add -A && git commit -m TEMP" # Create a commit named TEMP
 alias gdl="git diff --color=always | less -r" # Open git diff in less with colors
 
-# upload a draft on gerrit
-alias draft="repo upload -w --no-verify --cbr ."
-
-# upload the current branch on gerrit
-alias rupcb="repo upload --cbr ."
-alias rupcby="repo upload --cbr -y ."
 
 #invoke the cdiff tool
 alias cdiff="cdiff -sw140"
@@ -238,28 +237,41 @@ function hist() {
 alias mn="rofi -dmenu"
 
 function totelegram() {
-    if [[ ! -f ~/.telegram_token ]] ; then
-        echo "No token defined in ~/.telegram_token"
-        return 1
-    fi
-    
-    TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
-    VAR=$1
-    while read message ;
-    do
+
+    local message=""
+
+    postMessage() {
         curl -s -S -X POST \
             -H 'Content-Type: application/json' \
             -d "{\"chat_id\": \"348981135\", \"text\": \"$message\", \"disable_notification\": true}" \
             https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
-    done < "${VAR:-/dev/stdin}" ;
+    }
+    
+    if [[ ! -f ~/.telegram_token ]] || [[ -z $TELEGRAM_BOT_TOKEN ]] ; then
+        echo "No token defined in ~/.telegram_token or env variable TELEGRAM_BOT_TOKEN"
+        return 1
+    fi
+
+    TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
+    
+    if [[ -n $1 ]] ; then 
+        message=$@
+        postMessage
+    else 
+        while read message ;
+        do
+            postMessage
+        done < "/dev/stdin" ;
+    fi
 }
 
 function notif() {
-    [ -z "$1" ] && return 1
-    message="$1" 
+    [[ -z "$1" ]] && return 1
+    message="$1"
     shift
-    notify-send $message "$@"
-    echo $message | totelegram > /dev/null
+
+    notify-send -t 5000 $message $@
+    totelegram "$message\n" "$@" > /dev/null
 }
 
 function clip() {
