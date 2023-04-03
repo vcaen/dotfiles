@@ -11,3 +11,6 @@ flameshot # Screen capture
 cargo install bat
 cargo install ag
 cargo install fd-find
+
+# hHighlighter
+curl -o bin/h.sh https://raw.githubusercontent.com/paoloantinori/hhighlighter/master/h.sh

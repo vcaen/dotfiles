@@ -22,6 +22,8 @@
 
 # Check for the ack command
 
+
+
 h() {
 
     _usage() {
@@ -64,9 +66,13 @@ h() {
         local OLD_IFS="$IFS"
         IFS=','
         local _COLORS_FG=()
-        for entry in $_CSV; do
-          _COLORS_FG=("${_COLORS_FG[@]}" "$entry")
-        done
+        if [[ -n $ZSH_VERSION ]]; then
+            _COLORS_FG=($=_CSV)
+        else
+            for entry in $_CSV; do
+              _COLORS_FG=("${_COLORS_FG[@]}" "$entry")
+            done
+        fi
         IFS="$OLD_IFS"
     else
         _COLORS_FG=( 
@@ -84,9 +90,13 @@ h() {
         local OLD_IFS="$IFS"
         IFS=','
         local _COLORS_BG=()
-        for entry in $_CSV; do
-          _COLORS_BG=("${_COLORS_BG[@]}" "$entry")
-        done
+        if [[ -n $ZSH_VERSION ]]; then
+            _COLORS_BG=($=_CSV)
+        else
+            for entry in $_CSV; do
+              _COLORS_BG=("${_COLORS_BG[@]}" "$entry")
+            done
+        fi
         IFS="$OLD_IFS"
     else
         _COLORS_BG=(            
