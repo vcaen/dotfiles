@@ -70,7 +70,7 @@ hide_duplicates_count = yes
 # The width can be negative.  In this case the actual width is the
 # screen width minus the width defined in within the geometry option.
 #geometry = "250x50-40+40"
-geometry = "500x50-15-49"
+geometry = "500x50-15-100"
 
 corner_radius = 5
 # Shrink window if it's smaller than the width.  Will be ignored if
@@ -150,7 +150,7 @@ browser = /usr/bin/google-chrome
 
 # Align icons left/right/off
 icon_position = left
-max_icon_size = 36
+max_icon_size = 48
 
 # Paths to default icons.
 icon_path = /usr/share/icons/Paper/16x16/mimetypes/:/usr/share/icons/Paper/48x48/status/:/usr/share/icons/Paper/16x16/devices/:/usr/share/icons/Paper/48x48/notifications/:/usr/share/icons/Paper/48x48/emblems/

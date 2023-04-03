@@ -179,7 +179,6 @@ function app () {
     local url=""
     local flags=""
 
-
     while [[ -n "$1" ]] ;
     do
         if [[ $1 == -* ]]; then
@@ -238,7 +237,6 @@ function hist() {
 alias mn="rofi -dmenu"
 
 function totelegram() {
-
     local message=""
     local chatid="5361565130"
 
@@ -338,7 +336,6 @@ function lf() {
 
 function gcon() {
     # Checkout a git branch by number
-
     local branches=$(git b)
     echo "$branches" | >&2 grep -n '^'
     read sel"?Branch: "
@@ -353,6 +350,7 @@ function rcode() {
 }
 
 function fh() {
+    # History fuzzy search
     print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history | sort -u -k 2 | sort -n -k 1 -r ) | sort -u -k 2 | sort -n -k 1 -r | fzf +s | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
 }
 
@@ -400,7 +398,7 @@ function fout() {
 
     # Invert the preview to match the scrolling direction
     local preview_command
-    local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|' )|$)\" - "
+    local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|^$' )|$)\" - "
     if which bat >/dev/null ; then
         preview_command="bat -n --color=always -r $range_min:$range_max -H \$(( {n} + 1 )) <(eval $input_command)  | $grep_cmd"
     else
@@ -435,3 +433,4 @@ function fout() {
         echo $out
     fi
 }
+

@@ -236,11 +236,20 @@ function aps() {
     [[ "$1" == "-p" ]] && { pid=true; shift; }
     [[ "$1" == "-v" ]] && { verbose=true; shift; }
     [[ -n "$1" ]] && grep_str="$1"
+
+    if [[ -z $grep_str ]] ; then
+        local awk_index=9
+        if [[ $pid == true ]] ; then 
+            awk_index=2
+        fi
+        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30% | awk "{print\$$awk_index}"
+        return 0;
+    fi
     if [[ $verbose == true ]] ; then 
         adb shell ps -o pid -o name | grep "$grep_str"
     elif [[ $pid == true ]] ; then 
         adb shell ps -o name -o pid | grep "$grep_str" | awk '{print$2}'
-    else
+    elif [[ -n $grep_str ]] ; then
         adb shell ps -o name | grep "$grep_str"
     fi
 }
@@ -329,6 +338,17 @@ function logcat() {
 }
 
 function adebugenable() {
+    # Enable JDWP debugging
 	adb shell setprop persist.debug.dalvik.vm.jdwp.enabled 1
 	adb reboot
+}
+
+function sjava() {
+    # Search Java file
+    ag --java --ignore "*test*" -H -C 5 $1 | bat -l java --pager "less +/$1 -R"
+}
+
+function sbp() {
+    # Search bp and mk files
+    ag --G ".*\.(bp|mk)" $1 -H -C 5 | bat -l js --pager "less +/$1 -R"
 }
