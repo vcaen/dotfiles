@@ -328,3 +328,7 @@ function logcat() {
     adb logcat -v "brief color" "$@"
 }
 
+function adebugenable() {
+	adb shell setprop persist.debug.dalvik.vm.jdwp.enabled 1
+	adb reboot
+}
