@@ -1,4 +1,5 @@
 #!/bin/zsh
+
 # This file contains utilities related to Android developement 
 # but to to setting up the environnment and working with the Platfom. 
 # android_env is the file containing environmment related function
@@ -124,6 +125,33 @@ function ash {
     adb shell "$@"
 }
 
+alias aa=adbserial
+function adbserial() {
+    # Show a list the available device to select and set to the ANDROID_SERIAL 
+    # variable.
+    # If an argument is given, the line matching the argument will be used without
+    # showing a prompt.
+    filter=""
+    if [[ $# -gt 0 ]] ; then
+        filter="-f $1"
+        shift
+    fi
+    serial=$(adbd $(echo "$filter"))
+    if [[ -z $serial ]] ; then
+        unset ANDROID_SERIAL
+        unset ANDROID_SERIAL_PRODUCT
+    else
+        export ANDROID_SERIAL=$serial
+        export ANDROID_SERIAL_PRODUCT=$(aproductname)
+    fi
+}
+
+function aproductname() {
+    productname=$(adb shell getprop ro.product.name)
+    [[ -z $productname ]] && productname=$(adb shell getprop ro.productname)
+    echo $productname
+}
+
 function apxtodp {
     # Convert px to dp for the connected device
     [[ -z $1 ]] && return 1;
@@ -148,24 +176,6 @@ function askipwizard() {
 function anosleep() {
     # Set the Screen timeout to 450 seconds
     adb shell settings put system screen_off_timeout 450000
-}
-
-function atransit() {
-    # Enable Shell Transition
-    local prop="persist.wm.debug.shell_transit"
-    local enabled=$(adb shell getprop $prop)
-    local toggle="true"
-    
-    if [[ $enabled == "true" ]] ; then 
-        toggle="false"
-    fi
-
-    echo "Toggle Shell transition to $toggle ? [y/n]"
-    read -q || return 0
-    echo
-    adb shell setprop $prop $toggle || return 1
-    echo "Shell transition set to $toggle, restarting the server"
-    adb shell stop && adb shell start;
 }
 
 function adebugapp() {
