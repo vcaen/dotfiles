@@ -351,3 +351,8 @@ function rcode() {
     local file=$2
     /usr/bin/code --remote ssh-remote+$host $file
 }
+
+function fh() {
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history | sort -u -k 2 | sort -n -k 1 -r ) | sort -u -k 2 | sort -n -k 1 -r | fzf +s | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+}
+
