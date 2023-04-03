@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+set -x
+
 palette=`mktemp -t XXXXXXXXXXX.png`
 
 filters="fps=30,scale=640:-1:flags=lanczos"

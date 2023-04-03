@@ -283,3 +283,12 @@ function lf() {
     echo "$command" "$@" "$dir/$file"
     eval "$command" "$@" "\"$dir/$file\""
 }
+
+function gcon() {
+    # Checkout a git branch by number
+    local branches=$(git b)
+    echo "$branches" | >&2 grep -n '^'
+    read sel"?Branch: "
+    br=$(echo $branches | awk "NR==$sel {print\$1}")
+    git co $br
+}

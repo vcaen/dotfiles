@@ -26,7 +26,7 @@
     cp = cherry-pick
     cpc = cherry-pick --continue
     cpa = cherry-pick --abort
-	b = branch --sort=-committerdate -v
+	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset):%(end) %(contents:subject)\""
     rc = rebase --continue
     ra = rebase --abort
 	ri = rebase -i
