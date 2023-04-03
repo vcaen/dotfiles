@@ -1,0 +1,103 @@
+{
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "files.associations": {
+        "**/i3/config": "i3"
+    },
+    "files.autoSave": "afterDelay",
+    "security.workspace.trust.untrustedFiles": "open",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "zenMode.hideLineNumbers": false,
+    "zenMode.hideActivityBar": false,
+    "zenMode.fullScreen": false,
+    "zenMode.silentNotifications": false,
+    "workbench.editor.untitled.hint": "hidden",
+    "workbench.editor.limit.enabled": true,
+    "workbench.editor.limit.value": 15,
+    "terminal.integrated.defaultProfile.linux": "tmux",
+    "cmake.configureOnOpen": true,
+    "rust-analyzer.server.extraEnv": null,
+    "window.zoomLevel": 1,
+    "errorLens.enabledDiagnosticLevels": [
+        "warning",
+        "info",
+        "error"
+    ],
+    "editor.largeFileOptimizations": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+    "workbench.startupEditor": "none",
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "editor.fontFamily": "'Fira Code', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontLigatures": true,
+    "editor.formatOnSaveMode": "modifications",
+
+    
+    "errorLens.fontWeight":"200",
+    "errorLens.fontStyleItalic":true,
+    "errorLens.fontSize":"0.8em",
+
+
+    "workbench.colorCustomizations": {
+        "editor.background": "#111920",
+        "editor.foreground": "#d0d0d0",
+        "editorInlayHint.background": "#ffffff0e",
+        "editorInlayHint.foreground": "#878686",
+        "errorLens.errorBackground": "#712b2d0d",
+        "errorLens.errorForeground": "#f58b8b",
+        "editorIndentGuide.background":"#161f27",
+        "editorError.foreground": "#b44848"
+    },
+
+    "editor.tokenColorCustomizations": {
+        "types": "#d99e52",
+        "functions": "#ebebeb",
+        "strings": "#a9c444",
+
+        "textMateRules": [
+            {
+                "scope": "entity.name.namespace",
+                "settings": {
+                    "foreground": "#f3fff1"
+                }
+            },
+            {
+                "scope": "support.class",
+                "settings": {
+                    "foreground": "#efdd55"
+                }
+            },
+            {
+                "scope": "keyword.control.directive.include, keyword.control.directive.include",
+                "settings": {
+                    "foreground": "#78f762"
+                }
+            },
+            {
+                "scope": "keyword.control",
+                "settings": {
+                    "foreground": "#73ee67"
+                }
+            },
+        ]
+
+    },
+
+
+}

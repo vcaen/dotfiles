@@ -1,6 +1,7 @@
 # Directories:
 mkdir -p ~/bin
 mkdir -p ~/.config
+mkdir -p ~/.config/Code/User
 mkdir -p ~/.config/i3
 mkdir -p ~/.config/kitty
 mkdir -p ~/.oh-my-zsh/custom/themes
@@ -30,3 +31,5 @@ ln -is ~/.dotfiles/shell/.profile ~/.profile.bak
 ln -is ~/.dotfiles/shell/.tmux.conf ~/.tmux.conf
 ln -is ~/.dotfiles/shell/vadim.zsh-theme ~/.oh-my-zsh/custom/themes/vadim.zsh-theme
 ln -is ~/.dotfiles/shell/.zshrc ~/.zshrc
+ln -is ~/.dotfiles/VSCode/keybindings.json ~/.config/Code/User/keybindings.json
+ln -is ~/.dotfiles/VSCode/settings.json ~/.config/Code/User/settings.json
