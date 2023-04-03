@@ -226,7 +226,7 @@ bindsym $mod+z floating enable; resize set 400 700; move window to position curs
 
 # lock screen
 # bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
-bindsym Mod1+Mod4+l exec "xsecurelock"
+bindsym Mod1+Mod4+l exec "xdg-screensaver lock"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@
@@ -264,6 +264,7 @@ bindsym $mod+t border toggle
 
 bindsym Mod1+Control+e exec nemo
 bindsym $mod+c move absolute position mouse
+bindsym $mod+Shift+v exec copyq show
 
 # Workspace Monitor Switch
 bindsym $mod+Shift+g move workspace to output right
@@ -277,7 +278,7 @@ assign [title=".*YouTube Music$"] media
 # Window Formatting
 for_window [class=".*"] title_format "<span size='smaller'>%title</span>"
 for_window [class="Gpick*"] floating enable
-for_window [class="crx_.*" title=".*Tasks.*"] floating enable, resize set 400 700, move absolute position mouse
+for_window [class="crx_.*" title=".*Tasks.*"] floating enable, resize set 400 700, move position mouse
 ## Jetbrains
 for_window [title="JetBrains Toolbox"] floating enable, move absolute position mouse
 for_window [class="jetbrains-studio"] title_format "<span foreground='#3DDC84' size='smaller'>   %title</span>"
@@ -293,22 +294,25 @@ for_window [class="jetbrains-idea" title=".*android/master"] title_format "[MSTR
 for_window [class="jetbrains-idea" title=".*android/sc.*cts"] title_format \
           "<span foreground='#05c1fd' stretch='ultracondensed'>[SC-CTS] </span><span size='smaller'> %title</span>"
 
+set $google-chat crx_mdpkiolbdkhdjpekfbkbmhigcaggjagi
 
 ## Google Chat
-for_window [class="Google-chrome" instance="crx_icnbakklofenjdkjiojfillaededmonb"] title_format "<span size='smaller'>   %title</span>" 
+for_window [class="Google-chrome" instance=$google-chat] title_format "<span size='smaller'>   %title</span>" 
 
 ## Emulator
-for_window [title="^Android Emulator*"] floating enable; resize set 400 700; move window to position cursor; border normal
+for_window [title="^Android Emulator*"] floating enable; resize set 400 700; move window to position mouse; border normal
 
 ## Other
 for_window [class="scrcpy"] floating enable; border normal 
 for_window [class="^pavucontrol*"] floating enable; resize set 500 500; move position center # Volume Controls
+for_window [class="^copyq"] floating enable, move position center
 
 #exec --no-startup-id "killall picom; picom -b"
 # exec_always --no-startup-id polybar -c $DOTFILE_DIR/i3/polybar vadim
 exec --no-startup-id "dunst -conf ~/.dunstrc &> /tmp/dunst"
-exec --no-startup-id "feh --bg-scale --no-xinerama ~/.dotfiles/wallpaper/"
+exec --no-startup-id "feh --bg-fill  ~/.dotfiles/wallpaper/8k-mountain.jpg ~/.dotfiles/wallpaper/pexels-craig-adderley-1563355.jpg"
 exec --no-startup-id "copyq"
+exec --no-startup-id "setxkbmap -layout us -variant altgr-intl -option nodeadkeys"
 
 
 
