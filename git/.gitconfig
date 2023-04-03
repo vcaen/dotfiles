@@ -1,0 +1,76 @@
+[user]
+	name = Vadim Caen
+	email = vadimcaen@gmail.com
+
+[include] 
+	path = ~/.dotfiles/corp/gitconfig
+
+[color]
+	ui = auto
+
+[alias]
+	st = status
+	a = add -A
+	ai = add -i
+	ap = add -p
+	ci = commit
+	cf = commit --fixup
+	cia = commit -a
+	ciamn = commit -a --amend --no-edit
+	ciam = commit -a --amend
+    cm = commit --amend
+    cim = commit --amend
+	cmn = commit --amend --no-edit
+	cimn = commit --amend --no-edit
+	co = checkout
+    cp = cherry-pick
+    cpc = cherry-pick --continue
+    cpa = cherry-pick --abort
+	b = branch --sort=-committerdate -v
+    rc = rebase --continue
+    ra = rebase --abort
+	ri = rebase -i
+    ria = rebase -i --autosquash
+    rian = "! GIT_SEQUENCE_EDITOR=: git ria"
+	ll = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 10
+	d = difftool --dir-diff
+	dsh = diff --stat HEAD~1
+	ds = diff --stat
+	dh =  diff HEAD~1
+	reball = ! gitrebase
+	con = ! gitbranchnum
+	dn = "!sh -c 'if [ $# -eq 0 ] ; then git d HEAD~1 HEAD ; else git d HEAD~`expr $1 + 1` HEAD~$1 ; fi' -"
+	reskeep = "!git reset HEAD~1 && git commit --allow-empty -C HEAD@{1} "
+
+	# Visual git branch using rofi
+	vb="! git b | rofi -dmenu | awk '{print$1}'"
+
+	# Visual git log using rofi
+	vl="! git ll | rofi -dmenu | awk '{print$1}'"
+
+[diff]
+    tool = kitty
+    guitool = kitty.gui
+	renameLimit = 999999
+
+[difftool]
+    prompt = false
+    trustExitCode = true
+
+[difftool "kitty"]
+    cmd = kitty +kitten diff $LOCAL $REMOTE
+
+[difftool "kitty.gui"]
+    cmd = kitty kitty +kitten diff $LOCAL $REMOTE
+
+[http]
+	cookiefile = /home/caen/.gitcookies
+[log]
+	date = iso
+[core]
+	pager = less -FRX
+	excludesfile = ~/.personal_gitignore
+[pager]
+	log = true
+[merge]
+	renameLimit = 999999

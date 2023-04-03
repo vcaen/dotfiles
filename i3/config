@@ -254,7 +254,6 @@ bindsym $mod+Tab workspace back_and_forth
 hide_edge_borders smart #none|vertical|horizontal|both|smart
 new_window 1pixel
 
-<<<<<<< HEAD
 # Scratchpad
 bindsym $mod+Shift+x move scratchpad
 bindsym $mod+x scratchpad show
@@ -262,11 +261,7 @@ bindsym $mod+g [title="^(Android )?Emulator"] move container to workspace emulat
 
 # Border toggle
 bindsym $mod+t border toggle 
-=======
-bindsym $mod+Shift+x [floating class="kitty"] move scratchpad
-bindsym $mod+x [floating] scratchpad show
 
->>>>>>> 60e3a0e (Mac merge)
 bindsym Mod1+Control+e exec nemo
 bindsym $mod+c move absolute position mouse
 
