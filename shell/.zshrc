@@ -95,7 +95,10 @@ alias src="source ~/.zshrc"
 autoload -Uz compinit
 compinit
 # Completion for kitty
-kitty + complete setup zsh | source /dev/stdin
+if `which kitty >/dev/null 2>&1` ; then 
+    kitty + complete setup zsh | source /dev/stdin
+fi
+
 zstyle ':completion:*' file-sort modification 
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
