@@ -22,7 +22,7 @@ alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"
 # Upload a draft on gerrit
-alias rdraft="repo upload -w --no-verify --cbr ."
+alias rdraft="echo -n \"Temporary Commit message: \" && read msg && git add -A && git commit -a -m \"TEMP \$msg\" && { repo upload --wip -y --cbr --no-verify . ; git reset HEAD@{1} }"
 # upload the current branch on gerrit
 alias rupcb="repo upload --cbr ."
 alias rupcby="repo upload --cbr -y ."
@@ -41,6 +41,8 @@ alias cdiff="cdiff -sw140"
 alias src="source ~/.zshrc"
 
 alias gw="./gradlew"
+
+alias fd="fdfind"
 
 # Highlight
 source ~/.dotfiles/bin/h.sh
@@ -238,11 +240,12 @@ alias mn="rofi -dmenu"
 function totelegram() {
 
     local message=""
+    local chatid="5361565130"
 
     postMessage() {
         curl -s -S -X POST \
             -H 'Content-Type: application/json' \
-            -d "{\"chat_id\": \"348981135\", \"text\": \"$message\", \"disable_notification\": true}" \
+            -d "{\"chat_id\": \"$chatid\", \"text\": \"$message\", \"disable_notification\": false}" \
             https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
     }
     
@@ -335,9 +338,16 @@ function lf() {
 
 function gcon() {
     # Checkout a git branch by number
+
     local branches=$(git b)
     echo "$branches" | >&2 grep -n '^'
     read sel"?Branch: "
     br=$(echo $branches | awk "NR==$sel {print\$1}")
     git co $br
+}
+
+function rcode() {
+    local host=$1
+    local file=$2
+    /usr/bin/code --remote ssh-remote+$host $file
 }

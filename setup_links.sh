@@ -9,7 +9,6 @@ ln -is ~/.dotfiles/bin/aanim ~/bin/aanim
 ln -is ~/.dotfiles/bin/dc ~/bin/dc
 ln -is ~/.dotfiles/bluetooth/bose_connect ~/bin/boseconnect
 ln -is ~/.dotfiles/config/mpv ~/.config/mpv
-ln -is ~/.dotfiles/corp/ag ~/bin/ag
 ln -is ~/.dotfiles/corp/android_env ~/.android_env
 ln -is ~/.dotfiles/corp/wm ~/bin/wm
 ln -is ~/.dotfiles/corp/xsecurelockrc ~/.xsecurelockrc

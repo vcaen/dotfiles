@@ -95,12 +95,15 @@ alias src="source ~/.zshrc"
 autoload -Uz compinit
 compinit
 # Completion for kitty
-if `which kitty >/dev/null 2>&1` ; then 
+if `which kitty >/dev/null 2>&1` ; then
     kitty + complete setup zsh | source /dev/stdin
 fi
 
-zstyle ':completion:*' file-sort modification 
+zstyle ':completion:*' file-sort modification
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+fpath+=~/.dotfiles/shell/zfunc/
+
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.cargo/bin:$PATH"
 
 alias -s {png,PNG,jpeg,jpg,JPEG}="eog"

@@ -23,6 +23,7 @@ function logcat_filter() {
     local verbose=
     local logcat_default=("-v" "tag color")
     local logcat_options=()
+    local logcat_args=()
 
     while [[ -n "$1" ]] ; do 
         case "$1" in
@@ -42,6 +43,7 @@ function logcat_filter() {
           ;;
           -L) # Start parsing logcat args or filters
                shift;
+               logcat_default=() # reset default logcat option
                break;
           ;;
           *)   print_usage
@@ -71,7 +73,7 @@ function logcat_filter() {
     for i in "${filter_args[@]}"; do
         gargs_str="$gargs_str$i|"
     done
-    gargs_str=${gargs_str::-1}
+    gargs_str=${gargs_str::-1} # remove last '|' char
 
     if [[ $verbose == "true" ]] ; then
         echo "Logcat args: $logcat_args"
@@ -86,9 +88,10 @@ function logcat_filter() {
     fi
 
     if [[ $filter == true ]] ; then
-        adb logcat $logcat_default $logcat_options $logcat_args | grep -Ei "($gargs_str)" | h -i $(echo "${filter_args[@]}")
+        adb logcat $logcat_default $logcat_options $logcat_args | grep --line-buffered -Ei "($gargs_str)" | h -i $filter_args
+#        adb logcat $logcat_default $logcat_options $logcat_args -e "($gargs_str)" | h -i $filter_args
     else
-        adb logcat $logcat_default $logcat_options $logcat_args | h -i $(echo "$filter_args")
+        adb logcat $logcat_default $logcat_options $logcat_args | h -i $filter_args
     fi
 
     [[ -n $DEBUG ]] && set +x

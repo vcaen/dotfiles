@@ -95,3 +95,4 @@ if [ -f ~/.bash_profile ]; then
 fi
 
 
+. "$HOME/.cargo/env"

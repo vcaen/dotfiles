@@ -6,6 +6,8 @@
 # Edit this file
 echo "Sourcing android_utils"
 
+alias pidcat=~/.dotfiles/android/pidcat.py
+
 function adbd() {
     # Prompt which device to use before running the adb command
     local filter=""
@@ -23,7 +25,7 @@ function adbd() {
     if [[ -n $filter ]] ; then
         serial=$(echo "$devices" | grep "$filter" | awk '{print$1}')
     else
-        if [ $count -gt 1 ] ; then  
+        if [ $count -gt 1 ] ; then
             echo $( echo "$header" | head -n1 ) >&2
             echo "$devices" | >&2 grep -n '^'
             read sel"?Device: "
@@ -46,7 +48,7 @@ function adba() {
     if  [[ "$1" = "-f" ]] ; then
         filter="$2"; shift; shift;
     fi
-    
+
     if [[ $# -lt 1 ]] ; then 
       echo "No args given for ADB";
        return 1; 
@@ -220,9 +222,13 @@ function aps() {
     # Find an Android process by name
     grep_str=""
     pid=false
+    verbose=false
     [[ "$1" == "-p" ]] && { pid=true; shift; }
+    [[ "$1" == "-v" ]] && { verbose=true; shift; }
     [[ -n "$1" ]] && grep_str="$1"
-    if [[ $pid == true ]] ; then 
+    if [[ $verbose == true ]] ; then 
+        adb shell ps -o pid -o name | grep "$grep_str"
+    elif [[ $pid == true ]] ; then 
         adb shell ps -o name -o pid | grep "$grep_str" | awk '{print$2}'
     else
         adb shell ps -o name | grep "$grep_str"

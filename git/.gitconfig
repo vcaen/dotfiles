@@ -85,3 +85,5 @@
 [repo]
 	superprojectChoiceExpire = 1663169187
 	superprojectChoice = true
+[pull]
+	rebase = true
