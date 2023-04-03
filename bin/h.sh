@@ -22,8 +22,6 @@
 
 # Check for the ack command
 
-
-
 h() {
 
     _usage() {

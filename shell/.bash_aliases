@@ -87,7 +87,6 @@ function grepd() {
     return 0
 }
 
-
 # Diff between current clipboard content and next clipboard content
 function clipdiff() {
     local a="$(xclip -o -selection clip)";
@@ -111,8 +110,8 @@ function vimc() {
     [[ "$1" == "-c" ]] && { use_code=true; shift; }
     
     local command=$1; shift
-    if [[ -n ""$command"" ]] ; then
-        command_path=$(which ""$command"")
+    if [[ -n "$command" ]] ; then
+        command_path=$(which "$command")
         [[ -z $command_path ]] && { echo "Nothing found for "$command""; return 1; }
 
         if [[ ! -f $command_path ]] ; then
@@ -265,6 +264,25 @@ function totelegram() {
     fi
 }
 
+function n() {
+    # Run a command a notification when done
+    "$@"
+    result=$?
+    result_verbose=""
+    if [[ $result -eq 0 ]] ; then 
+        result_verbose="sucessfully"
+        urgency=normal
+    else
+        result_verbose="with an error ($result)"
+        
+        urgency=critical
+    fi
+
+    msg="$(date +%T): $1 finised $result_verbose" 
+
+    notif "$1" "$msg" --urgency=$urgency
+}
+
 function notif() {
     [[ -z "$1" ]] && return 1
     local args=()
@@ -273,7 +291,7 @@ function notif() {
 
     while [[ -n $1 ]] ; do
         if [[ $1 = "--"* ]] ;  then
-            args+=$1
+            args+=("$1")
             shift
         else
             [[ $# -gt 1 ]] && { summary="$1"; shift; }
@@ -312,7 +330,7 @@ function lf() {
         echo "No file in $dir"; return 1
     fi
     echo "$command" "$@" "$dir/$file"
-    eval "$command" "$@" "\"$dir/$file\""
+    "$command" "$@" "\"$dir/$file\""
 }
 
 function gcon() {
