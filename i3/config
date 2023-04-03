@@ -308,6 +308,7 @@ for_window [class="^pavucontrol*"] floating enable; resize set 500 500; move pos
 # exec_always --no-startup-id polybar -c $DOTFILE_DIR/i3/polybar vadim
 exec --no-startup-id "dunst -conf ~/.dunstrc &> /tmp/dunst"
 exec --no-startup-id "feh --bg-scale --no-xinerama ~/.dotfiles/wallpaper/"
- 
+exec --no-startup-id "copyq"
+
 
 

@@ -1,10 +1,10 @@
 #!/bin/zsh
-
-TARGET_FILE="$DOTFILE_DIR/setup_links.sh"
+# set -x
+TARGET_FILE=".dotfiles/setup_links.sh"
 
 links=$(find ~ -maxdepth 4 -type l -printf "mkdir -p %h && ln -is %l %p\n"\
-    | grep dotfile\
-    | sed -s 's#/home/caen#~#gi;s#\(?= \)[/~]?dotfiles/#$DIR/#gi;s/mkdir -p ~ && //gi'\
+    | grep dotfiles\
+    | sed -s "s#$HOME#~#gi;s#\(?= \)[/~]?dotfiles/#$DIR/#gi;s/mkdir -p ~ && //gi"\
     | sort -t' ' -k 1r,3)
 
 echo $links

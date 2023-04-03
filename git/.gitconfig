@@ -48,6 +48,12 @@
 	# Visual git log using rofi
 	vl="! git ll | rofi -dmenu | awk '{print$1}'"
 
+	fixup-file = "!sh -c '\
+        [ $(git diff          --numstat $1 | wc -l) -eq 1 ] && git add $1 && \
+        [ $(git diff --cached --numstat $1 | wc -l) -eq 1 ] || (echo No changes staged. ; exit 1) && \
+        COMMIT=$(git log -n 1 --pretty=format:"%H" $1) && \
+            git commit --fixup=$COMMIT' -"
+
 [diff]
     tool = kitty
     guitool = kitty.gui
