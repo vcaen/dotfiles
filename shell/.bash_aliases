@@ -108,9 +108,9 @@ function vimc() {
     local command_path=""
     local pattern=""
     local use_code=false
-    
+
     [[ "$1" == "-c" ]] && { use_code=true; shift; }
-    
+
     local command=$1; shift
     if [[ -n "$command" ]] ; then
         command_path=$(which "$command")
@@ -374,20 +374,21 @@ function fout() {
     local range_min="\$(( val = {n} - FZF_PREVIEW_LINES / 2 - 1, val > 0 ? val : 0 ))"
     local range_max="\$(( val = {n} + FZF_PREVIEW_LINES / 2,  val > 0 ? val : 0 )) "
 
-    # Input command, inverted to match the line numbering of Tmux
-    local input_command="tmux show-buffer -b $buffer_name | tac"
+    # Input command
+    local input_command="tmux show-buffer -b $buffer_name"
 
     # Invert the preview to match the scrolling direction
     local preview_command
-    if which bat >/dev/null ; then
-        preview_command="bat -n --color=always -r $range_min:$range_max -H \$(( {n} + 1 )) <(eval $input_command) | tac"
+    local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|' )|$)\" - "
+    if ! which bat >/dev/null ; then
+        preview_command="bat -n --color=always -r $range_min:$range_max -H \$(( {n} + 1 )) <(eval $input_command)  | $grep_cmd"
     else
-        preview_command="cat <(eval $input_command) | tail -n+$range_min | head -n+\$FZF_PREVIEW_LINES | tac "
+        preview_command="cat <(eval $input_command) | tail -n+$range_min | head -n+\$FZF_PREVIEW_LINES  | $grep_cmd "
     fi
 
     # Command to be executed when alt+enter is pressed:
     # jump to the selected line in the TMUX scrollback buffer and select it
-    local alt_enter_cmd="tmux copy-mode; \
+    local jump_to_line_cmd="tmux copy-mode; \
         tmux send-keys -X goto-line \$(( {n} )); \
         tmux send-keys -X select-line; \
         tmux send-keys -X stop-selection; \
@@ -396,10 +397,11 @@ function fout() {
 
     local out=$(eval $input_command | \
         fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 \
-        --no-sort \
+        --no-sort --tac\
         --preview "eval $preview_command" --preview-window "up,75%,nowrap" \
-        --bind "ctrl-j:accept+execute(eval $alt_enter_cmd)" \
-        --header 'Press CTRL-J to jump to the selected line' \
+        --bind "ctrl-j:accept+execute(eval $jump_to_line_cmd)" \
+        --bind "ctrl-p:toggle-preview" \
+        --header 'CTRL-J: jump to the selected line | CTRL-P: toggle preview' \
         )
 
     if [[ -n $out ]] ; then
