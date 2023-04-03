@@ -267,11 +267,27 @@ function totelegram() {
 
 function notif() {
     [[ -z "$1" ]] && return 1
-    message="$1"
-    shift
+    local args=()
+    local summary=''
+    local message=""
 
-    notify-send -t 5000 $message $@
-    totelegram "$message\n" "$@" > /dev/null
+    while [[ -n $1 ]] ; do
+        if [[ $1 = "--"* ]] ;  then
+            args+=$1
+            shift
+        else
+            [[ $# -gt 1 ]] && { summary="$1"; shift }
+            message="$1"
+            shift
+        fi
+    done
+
+    notify-send -t 5000 $summary $message "$args[@]" "$@"
+    
+    if [[ -n $summary ]] ; then 
+        message="$summary\n$message"
+    fi
+    totelegram "$message\n$@" > /dev/null
 }
 
 function clip() {
