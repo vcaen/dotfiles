@@ -99,3 +99,5 @@ kitty + complete setup zsh | source /dev/stdin
 zstyle ':completion:*' file-sort modification 
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+alias -s {png,PNG,jpeg,jpg,JPEG}="eog"

@@ -42,4 +42,4 @@ if [ -f ~/.dotfiles/corp/aliases ]; then
 fi
 
 #PATH
-export PATH=~/bin:~/Android/Sdk/platform-tools:$PATH
+export PATH=~/bin:~/Android/Sdk/platform-tools:~/.dotfiles/bin:$PATH

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SOME MOre ls aliases
+# Some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -40,6 +40,9 @@ alias cdiff="cdiff -sw140"
 alias src="source ~/.zshrc"
 
 alias gw="./gradlew"
+
+# Highlight
+source ~/.dotfiles/bin/h.sh
 
 # GREP
 # greph: highlight each pattern into a its own color
@@ -144,11 +147,6 @@ alias ii="ibus-daemon -rd"
 alias 4k="xrandr   -d :0  --fb  3840x2160    --output    default"
 alias hd="xrandr   -d :0  --fb  2560x1600    --output    default"
 
-alias wallpaper="feh --bg-scale --no-xinerama ~/Documents/wallpaper/8k-mountain.jpg"
-
-alias bazel="\$STUDIO_BASE/tools/base/bazel/bazel"
-
-
 # Print all Java process with JVM arguments on separate lines
 alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
 
@@ -170,21 +168,6 @@ function killij () {
     pids=$(echo "$processes" | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
     echo "Killing $pids"
     kill $sig $(echo "$pids")
-}
-
-function killij () {
-  local sig="$1"
-  if [ -z $sig ] ; then
-    sig="-15"
-  fi
-  processes=$(ps -aux | grep -E "\-Didea.platform.prefix=Idea" | grep -v grep)
-  if [ -z $processes ] ; then
-    echo "No IntelliJ session found"
-    return -1
-  fi
-  pids=$(echo $processes | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
-  echo "Killing $pids"
-  kill $sig $(echo $pids)
 }
 
 # Open the url given as a parameter as a standalone window of Google Chrome
@@ -233,33 +216,6 @@ function swln() {
     fi
 }
 
-# Rebase onto
-function rebo {
-    git rebase --onto "$1" HEAD^;
-}
-
-function ergo {
-    cp "$1" ~/W/ergodoxez
-    unzip "$1"
-    NAME=$(basename "$1")
-    pushd ~/W/ergodoxez || exit;
-    make all file="$NAME";
-    popd || exit;
-}
-
-function ergb {
-    pushd ~/W/ergodoxez || exit;
-    make build;
-    popd || exit;
-}
-
-
-function fs() {
-    i3-msg fullscreen > /dev/null && $*; i3-msg fullscreen > /dev/null
-}
-
-alias sp="i3-msg floating enable; i3-msg move scratchpad; i3-msg scratchpad show"
-
 alias vimi3="vim $DOTFILE_DIR/i3/config"
 
 # Display history
@@ -280,7 +236,6 @@ function hist() {
 alias mn="rofi -dmenu"
 
 function totelegram() {
-
     if [[ ! -f ~/.telegram_token ]] ; then
         echo "No token defined in ~/.telegram_token"
         return 1

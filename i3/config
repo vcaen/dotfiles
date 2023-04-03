@@ -222,7 +222,7 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-bindsym $mod+z resize set 400 700; floating enable; move window to position cursor
+bindsym $mod+z floating enable; resize set 400 700; move window to position cursor
 
 # lock screen
 # bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
@@ -298,15 +298,16 @@ for_window [class="jetbrains-idea" title=".*android/sc.*cts"] title_format \
 for_window [class="Google-chrome" instance="crx_icnbakklofenjdkjiojfillaededmonb"] title_format "<span size='smaller'>   %title</span>" 
 
 ## Emulator
-for_window [title="Android Emulator -"] floating enable, resize set 400 700
+for_window [title="^Android Emulator*"] floating enable; resize set 400 700; move window to position cursor; border normal
 
 ## Other
-for_window [class="scrcpy"] floating enable, border normal 
-for_window [class="^pavucontrol"] floating enable, resize set 500 500, move position center # Volume Controls
+for_window [class="scrcpy"] floating enable; border normal 
+for_window [class="^pavucontrol*"] floating enable; resize set 500 500; move position center # Volume Controls
 
 #exec --no-startup-id "killall picom; picom -b"
-exec --no-startup-id "dunst -conf ~/.dunstrc &> /tmp/dunst"
 # exec_always --no-startup-id polybar -c $DOTFILE_DIR/i3/polybar vadim
+exec --no-startup-id "dunst -conf ~/.dunstrc &> /tmp/dunst"
+exec --no-startup-id "feh --bg-scale --no-xinerama ~/.dotfiles/wallpaper/"
  
 
 

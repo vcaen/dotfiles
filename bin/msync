@@ -1,22 +1,33 @@
 #!/bin/zsh
 
-if [[ $(pwd) != "$HOME"* ]] ; then
-    echo "Only works below Home dir"
-    exit 1
-fi
 
-if [ $# -lt 1 ] ; then
-    echo "Usage msync HOST"
-    exit 1
-fi
+function git_change_only() {
+    if [[ $(pwd) != "$HOME"* ]] ; then
+        echo "Only works below Home dir"
+        exit 1
+    fi
 
-host=$1; shift
+    if [ $# -lt 1 ] ; then
+        echo "Usage msync HOST"
+        exit 1
+    fi
 
-dir=$(pwd | sed "s#$HOME/##")
-echo "Parsing $dir on host machine."
-files=$(ssh $host "cd ~/$dir; git status -s" | awk '{print$2}');
+    host=$1; shift
 
-full_files=$(echo $files | while read f ; do echo "$dir/$f" ; done )
+    dir=$(pwd | sed "s#$HOME/##")
+    echo "Parsing $dir on host machine."
+    files=$(ssh $host "cd ~/$dir; git status -s" | awk '{print$2}');
 
-echo $files
-rsync -P --files-from=<(echo $files) $host:$dir .
+    full_files=$(echo $files | while read f ; do echo "$dir/$f" ; done )
+
+    echo $files
+    rsync -P --files-from=<(echo $files) $host:$dir .
+}
+
+git_change_only
+
+function android_tree() {
+    if [[ -z $ANDROID_BUILD_TOP -o $(pwd) != $ANDROID_BUILD_TOP ]] ; then
+        echo "Must be in Android tree root"
+    fi
+}
