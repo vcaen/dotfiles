@@ -123,23 +123,23 @@ function vimc() {
 
         [[ ! -f $command_path ]] && { echo ""$command" is not a script"; return 2; }
 
-        if [[ $use_code == true ]] ; then 
+        if [[ $use_code == true ]] ; then
             local line=$(grep -nE "fun(ction)? $command" $command_path | cut -d':' -f1)
             code -g $command_path:$line
-        else 
+        else
             vim ${pattern:+$pattern} "$command_path";
         fi
     fi
 }
 
 # Kill existing instance of Xephyr and start a new one
-function xx(){ 
+function xx(){
     killall Xephyr;
-    DISPLAY=:0; 
-    (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); 
+    DISPLAY=:0;
+    (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &);
     sleep 1;
-    DISPLAY=:10; 
-    feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; 
+    DISPLAY=:10;
+    feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg;
     cinnamon2d --replace -d :10 & DISPLAY=:0;
 }
 
@@ -181,7 +181,7 @@ function app () {
 
 
     while [[ -n "$1" ]] ;
-    do 
+    do
         if [[ $1 == -* ]]; then
             flags="$flags $1"
         elif [[ -f "$1"  ]]; then
@@ -248,18 +248,18 @@ function totelegram() {
             -d "{\"chat_id\": \"$chatid\", \"text\": \"$message\", \"disable_notification\": false}" \
             https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
     }
-    
+
     if [[ ! -f ~/.telegram_token ]] ; then
         echo "No token defined in ~/.telegram_token or env variable TELEGRAM_BOT_TOKEN"
         return 1
     fi
 
     TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
-    
-    if [[ -n $1 ]] ; then 
+
+    if [[ -n $1 ]] ; then
         message=$@
         postMessage
-    else 
+    else
         while read message ;
         do
             postMessage
@@ -272,16 +272,16 @@ function n() {
     "$@"
     result=$?
     result_verbose=""
-    if [[ $result -eq 0 ]] ; then 
+    if [[ $result -eq 0 ]] ; then
         result_verbose="sucessfully"
         urgency=normal
     else
         result_verbose="with an error ($result)"
-        
+
         urgency=critical
     fi
 
-    msg="$(date +%T): $1 finised $result_verbose" 
+    msg="$(date +%T): $1 finised $result_verbose"
 
     notif "$1" "$msg" --urgency=$urgency
 }
@@ -304,8 +304,8 @@ function notif() {
     done
 
     notify-send -t 5000 "$summary" "$message" "${args[@]}" "$@"
-    
-    if [[ -n $summary ]] ; then 
+
+    if [[ -n $summary ]] ; then
         message="$summary\n$message"
     fi
     totelegram "$message\n$*" > /dev/null
@@ -316,7 +316,7 @@ function clip() {
 }
 
 function lf() {
-    if [ $# -lt 1 ] ; then 
+    if [ $# -lt 1 ] ; then
         echo "Usage: lf [<dir>] <command> [args...]. "
         echo "Execute the command using the last modified file from the dir as argument"
         return 1
@@ -328,7 +328,7 @@ function lf() {
     fi
     dir=$1; shift
     file=$(ls -FtH1 $dir | grep -vE "@|/" | head -n 1)
-    
+
     if [ -z $file ] ; then
         echo "No file in $dir"; return 1
     fi
@@ -356,17 +356,37 @@ function fh() {
     print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history | sort -u -k 2 | sort -n -k 1 -r ) | sort -u -k 2 | sort -n -k 1 -r | fzf +s | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
 }
 
-if ! which rofi ; then 
+if ! which rofi ; then
   alias rofi="fzf" >/dev/null ;
 fi
 
 function fout() {
     # Fuzzy search in tmux scrollback buffer and copy the selected line in the tmux paste buffer
-    if ! which fzf >/dev/null ; then 
+    if ! which fzf >/dev/null ; then
         echo "fzf must be installed";
         return 1
     fi
-    local lines=${1:1000} # 1000 line of scrollback of no arg supplied 
+
+    local query=""
+    local scrollback=-1
+
+    while [[ -n $1 ]] ; do
+        case $1 in
+            [0-9]*)
+                scrollback=$1; shift;
+            ;;
+            [a-zA-Z]*)
+                query="$query '$1"; shift;
+            ;;
+            *)
+                echo "$1 unrecognized"; return 1
+        esac
+    done
+
+    local lines=$scrollback # 1000 line of scrollback of no arg supplied
+    if [[ $lines -lt 0 ]] ; then
+        lines=$(tmux display-message -p "#{history_size}")
+    fi
     local buffer_name="tmux_fzf_tmp_buffer"
     tmux capture-pane -e -S -$lines -b $buffer_name || return 1
 
@@ -376,11 +396,12 @@ function fout() {
 
     # Input command
     local input_command="tmux show-buffer -b $buffer_name"
+    local input_length=$(eval $input_command | wc -l)
 
     # Invert the preview to match the scrolling direction
     local preview_command
     local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|' )|$)\" - "
-    if ! which bat >/dev/null ; then
+    if which bat >/dev/null ; then
         preview_command="bat -n --color=always -r $range_min:$range_max -H \$(( {n} + 1 )) <(eval $input_command)  | $grep_cmd"
     else
         preview_command="cat <(eval $input_command) | tail -n+$range_min | head -n+\$FZF_PREVIEW_LINES  | $grep_cmd "
@@ -389,19 +410,24 @@ function fout() {
     # Command to be executed when alt+enter is pressed:
     # jump to the selected line in the TMUX scrollback buffer and select it
     local jump_to_line_cmd="tmux copy-mode; \
-        tmux send-keys -X goto-line \$(( {n} )); \
+        tmux send-keys -X goto-line \$(( $input_length - {n} - 1 )); \
         tmux send-keys -X select-line; \
         tmux send-keys -X stop-selection; \
         tmux send-keys -X halfpage-down; \
-        tmux send-keys -X middle-line; " 
+        tmux send-keys -X middle-line; "
+
+    if [[ -n $query ]] ; then
+        query="-q $query"
+    fi
 
     local out=$(eval $input_command | \
         fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 \
-        --no-sort --tac\
+        --no-sort --tac \
         --preview "eval $preview_command" --preview-window "up,75%,nowrap" \
         --bind "ctrl-j:accept+execute(eval $jump_to_line_cmd)" \
         --bind "ctrl-p:toggle-preview" \
         --header 'CTRL-J: jump to the selected line | CTRL-P: toggle preview' \
+        $query \
         )
 
     if [[ -n $out ]] ; then
