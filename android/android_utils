@@ -298,3 +298,23 @@ function ascreen {
     screen_record_pid=$(echo $!)
     echo
 }
+
+function logcat() {
+    while [[ -n $1 ]] ; do
+        case $1 in
+            error)
+                adb logcat -v "brief color" -b all -s "*:E" -T 1
+                shift
+                return
+                ;;
+            warn)
+                adb logcat -v "brief color" -b all -s "*:W" -T 1
+                shift
+                return
+                ;;
+        esac
+    done
+
+    adb logcat -v "brief color" "$@"
+}
+

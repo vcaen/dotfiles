@@ -30,7 +30,7 @@ function logcat_filter() {
           -p) print_previous="true"
               shift
           ;;
-          -c) logcat_options+=("-T", "1")
+          -c) logcat_options+=("-T" "1")
               shift
           ;;
           -f) filter="true"
