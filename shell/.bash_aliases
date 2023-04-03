@@ -296,3 +296,23 @@ function notif() {
 function clip() {
     xclip -selection clip
 }
+
+function lf() {
+    if [ $# -lt 1 ] ; then 
+        echo "Usage: lf [<dir>] <command> [args...]. "
+        echo "Execute the command using the last modified file from the dir as argument"
+        return 1
+    fi
+    dir="."
+    if [ $# -gt 1 ] ; then
+        dir=$1; shift
+    fi
+    command=$1; shift
+    file=$(ls -FH1 $dir | grep -vE "@|/" | head -n 1)
+    
+    if [ -z $file ] ; then
+        echo "No file in $dir"; return 1
+    fi
+
+    eval "$command $@ $dir/$file"
+}

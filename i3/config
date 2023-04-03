@@ -241,10 +241,11 @@ bindsym $mod+KP_Add exec --no-startup-id pactl set-sink-volume $sink +5% #increa
 bindsym $mod+KP_Subtract exec --no-startup-id pactl set-sink-volume $sink -5% #decrease sound volume
 bindsym $mod+KP_Enter exec --no-startup-id pactl set-sink-mute $sink toggle # mute sound
 
-focus_follows_mouse yes
+focus_follows_mouse no
 popup_during_fullscreen smart
 
-bindsym $mod+minus sticky toggle
+bindsym $mod+minus floating enable; sticky toggle; resize shrink width 20px; resize shrink height 20px
+bindsym $mod+Shift+minus floating enable; sticky toggle; resize set 600 400
 bindsym $mod+p exec flameshot gui -d 500
 bindsym $mod+Shift+p exec gpick -p
 bindsym $mod+Control+p exec gpick
