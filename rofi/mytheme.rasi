@@ -11,6 +11,7 @@ configuration {
 	show-icons:      true;
 	sidebar-mode:    true;
 	lines:           10;
+    modi:            [combi];
 	combi-modi:      [window,drun,run];
 }
 

@@ -5,3 +5,5 @@ compton
 wdiff
 colordiff
 pidcat # https://github.com/JakeWharton/pidcat
+jq # Javascript reader
+polybar #github.com/polybar/polybar
