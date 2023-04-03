@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+function _midea() {
+    PS3="Which Intellij version would you like to run? "; 
+    TOOLBOX_PATH=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/
+    SCRIPT_NAME="idea.sh"
+    IDEA_PATHS=$(find $TOOLBOX_PATH -name $SCRIPT_NAME -print)
+    IDEA_VERSIONS=( $(echo $IDEA_PATHS | awk -F'/' '{print $(NF-2)}' | sort -r ) )
+    select name in $IDEA_VERSIONS ; do break; done;
+
+    SELECTED=$(echo $IDEA_PATHS | grep $name)
+
+    [[ ! -f $SELECTED ]] && { echo "$SELECTED is not a file."; return 1 }
+
+    $SELECTED >/dev/null 2>&1 &; disown
+}
+
+_midea
