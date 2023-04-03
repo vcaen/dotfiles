@@ -1,0 +1,96 @@
+#!/bin/zsh
+
+source ~/.dotfiles/bin/h.sh
+
+function print_usage() {
+    cat >&2 <<-EOF 
+Usage logcat_filter [options] [-L logcat_args...] -- [filter_args]:
+options:
+ -p : print the last 200 lines of logcat
+ -c : clear previous logcat
+ -f : filter the logcat output based on the filter args (if not set, words will only be highlighted)
+
+logcat_args: Extra arguments to be passed to logcat (e.g: -S, "*:D", "Tag:E" )
+filter_args: Regexes to be highlighted in the output. Use -f to only show line mathing the filters.
+EOF
+}
+
+function logcat_filter() {
+    [[ -n $DEBUG ]] && set -x
+
+    local print_previous="false"
+    local filter="false"
+    local verbose=
+    local logcat_default=("-v" "tag color")
+    local logcat_options=()
+
+    while [[ -n "$1" ]] ; do 
+        case "$1" in
+          -p) print_previous="true"
+              shift
+          ;;
+          -c) logcat_options+=("-T", "1")
+              shift
+          ;;
+          -f) filter="true"
+              shift
+          ;;
+          -v) verbose="true"
+              shift
+          ;;
+          --) break; # no shift, next loop is removing it
+          ;;
+          -L) # Start parsing logcat args or filters
+               shift;
+               break;
+          ;;
+          *)   print_usage
+               return 1
+           ;;
+        esac
+    done
+
+    while [[ -n "$1" ]] ; do 
+        case "$1" in
+          --) shift; break;
+          ;;
+          *)
+              logcat_args+=( "$1" )
+              shift
+           ;;
+        esac
+    done
+
+    if [[ $# -lt 1 ]] ; then 
+        echo "No filter argument given." >&2;
+        return 1;
+    fi
+
+    filter_args=( $@ ) 
+    gargs_str=""
+    for i in "${filter_args[@]}"; do
+        gargs_str="$gargs_str$i|"
+    done
+    gargs_str=${gargs_str::-1}
+
+    if [[ $verbose == "true" ]] ; then
+        echo "Logcat args: $logcat_args"
+        echo "Filters:     ${filter_args[@]}"
+        echo "Grep filter: $gargs_str"
+    fi
+
+    if [[ $print_previous == "true" ]] ; then
+        echo ">> Last 200 lines ------------------------------------------"
+        adb logcat $logcat_options "$logcat_args" | h -i $(echo "$filter_args")
+        echo ">> ---------------------------------------------------------\n\n\n"
+    fi
+
+    if [[ $filter == true ]] ; then
+        adb logcat $logcat_default $logcat_options $logcat_args | grep -Ei "($gargs_str)" | h -i $(echo "${filter_args[@]}")
+    else
+        adb logcat $logcat_default $logcat_options $logcat_args | h -i $(echo "$filter_args")
+    fi
+
+    [[ -n $DEBUG ]] && set +x
+
+}
