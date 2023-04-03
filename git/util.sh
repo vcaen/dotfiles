@@ -32,8 +32,20 @@ function gitrebase() {
 function gitbranchnum() {
   BRANCHES=$(git branch --sort=-committerdate -v)
   echo "$BRANCHES" | nl
-  read -p "Switch to branch: "
+  read "REPLY?Switch to branch: "
   NEWBRANCH=$(echo "$BRANCHES" | sed "${REPLY}q;d" | tr -s ' ' | cut -d' ' -f2)
   git checkout $NEWBRANCH
 }
+
+function rdl() {
+  local GERRIT_URL="https://googleplex-android-review.git.corp.google.com/changes/"
+  local changeId=$(gob-curl  ${GERRIT_URL}/$(git log --format=%B -n 1 HEAD |\
+    grep Change-Id |\
+    awk '{print$2}') |\
+    grep _number |\
+    awk '{print substr($2, 1, length($2) -1)}')
+
+ local options=$( while [[ $1 = -* ]] ; do echo $1; shift; done)
+ repo download ${options} ${changeId}
+ }
 

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # SOME MOre ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
@@ -10,13 +12,16 @@ alias cdid="cd \$STUDIO_BASE/tools/idea/"
 alias cddis="cd \$STUDIO_BASE/tools/adt/idea/"
 alias cdbase="cd \$STUDIO_BASE/tools/base"
 
+function envproc() { echo $(( $(nproc)*2)); }
+
 # REPO
 # Login if needed and Sync the current projec
 alias rs="git credential-corpsso check > /dev/null || glogin; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -qcj${MP_J:-$(($(envproc) * 2))} "
+alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -qcnj19 && repo sync -qclj99"
 alias rrb="repo rebase"
 alias ra="repo abandon"
+alias rdl="repo download"
 
 # GIT
 alias gsso="git credential-corpsso login"
@@ -33,89 +38,89 @@ alias rupcb="repo upload --cbr ."
 #invoke the cdiff tool
 alias cdiff="cdiff -sw140"
 
-# LayoutLib specific commands
-alias cdll="cd \$LAYOUTLIB_PROJECT"
-alias benv=". \$LAYOUTLIB_BASE/build/envsetup.sh && lunch \$LUNCH-eng"
-alias mm="mm -j"
-alias cpll="cp \$LAYOUTLIB_OUT/layoutlib.jar \$STUDIO_LAYOUTLIB_DIR/"
-alias mcp="pushd \$LAYOUTLIB_PROJECT && mm && cpll && popd"
-
 # Reload bashrc
 alias src="source ~/.zshrc"
 
 # GREP
 # greph: highlight each pattern into a its own color
 function greph() {
-  color=1
-  declare -a patterns
-  declare -a args
-  while [[ -n $1 ]] && [[ $1 != "-" ]] ; do
+    declare -a patterns
+    declare -a args
+    while [[ -n $1 ]] && [[ $1 != "-" ]] ; do
 
-  if [[ $1 = -* ]] ; then
-    args+=("$1")
-  else
-    patterns+=("$1|$")
-  fi
-  shift
-  done
+        if [[ $1 = -* ]] ; then
+            args+=("$1")
+        else
+            patterns+=("$1|$")
+        fi
+        shift
+    done
 
-  if [[ $1 = "-" ]] ; then # Next argument is a file
-    shift
-  fi
+    if [[ $1 = "-" ]] ; then # Next argument is a file
+        shift
+    fi
 
-  result=""
-  while IFS= read line;  # IFS allows to keep whitespace when calling read.
-  do
-    result="$result\n$line"
-  done < "${1:-/dev/stdin}"
+    result=""
+    while IFS= read line;  # IFS allows to keep whitespace when calling read.
+    do
+        color=1
+        result=$line
+        for pattern in "${patterns[@]}"; do
+            result="$(echo -e "$result" | GREP_COLORS="mt=01;49;38;5;$color" grep --color=always -P "${args[@]/#/}" "$pattern")"
+            color=$((color+1))
+        done
+        echo -e "$result"
+        # result="$result\n$line"
+    done < "${1:-/dev/stdin}"
 
-  for pattern in "${patterns[@]}"; do
-    result="$(echo -e "$result" | GREP_COLORS="mt=01;49;38;5;$color" grep --color=always -P "${args[@]/#/}" "$pattern")"
-    color=$((color+1))
-  done
-  echo -e "$result"
+  #for pattern in "${patterns[@]}"; do
+  #  result="$(echo -e "$result" | GREP_COLORS="mt=01;49;38;5;$color" grep --color=always -P "${args[@]/#/}" "$pattern")"
+  #  color=$((color+1))
+  #done
+  #echo -e "$result"
 }
 
 # Diff between two files with highlighting
 function grepd() {
-  local file1=$1; shift
-  local file2=$1; shift
-  local diff=$( (wdiff $file1 $file2) )
-  less -fr <(echo $diff | greph $* | colordiff )
-  return 0
+    local file1=$1; shift
+    local file2=$1; shift
+    local diff=$( (wdiff "$file1" "$file2") )
+    less -fr <(echo "$diff" | greph "$*" | colordiff )
+    return 0
 }
 
 
 # Diff between current clipboard content and next clipboard content
 function clipdiff() {
-  local a="";
-  local b=""
-   while [ "$b" = "$a" ] ; do b="$(xclip -o -selection clip)"; sleep 1; done
-   echo "Selection 1"
-   a="$b"
-   while [ "$a" = "$b" ] ; do a="$(xclip -o -selection clip)"; sleep 1; done
-   echo "Selection 2"
-   grepd <(echo "$b") <(echo "$a")
-
+    local a="$(xclip -o -selection clip)";
+    local b="$a"
+    echo "Waiting for first copy..."
+    while [ "$b" = "$a" ] ; do b="$(xclip -o -selection clip)"; sleep 1; done
+    echo "Frist copy recorded."
+    echo "Waiting for second copy..."
+    a="$b"
+    while [ "$a" = "$b" ] ; do a="$(xclip -o -selection clip)"; sleep 1; done
+    echo "Second copy recorded."
+    grepd <(echo "$b") <(echo "$a")
 }
 
 # Open vim and edit the given command
 function vimc() {
-  local command_path=""
-  local pattern=""
-  if [[ -n "$1" ]] ; then
-    command_path=$(which "$1")
-    [[ -z $command_path ]] && { echo "Nothing found for $1"; return 1; }
+    local command_path=""
+    local pattern=""
+    if [[ -n "$1" ]] ; then
+        command_path=$(which "$1")
+        [[ -z $command_path ]] && { echo "Nothing found for $1"; return 1; }
 
-    if [[ ! -f $command_path ]] ; then
-      command_path=$(type "$1" | rev | cut -d' ' -f1 | rev)
-      pattern="+/function $1"
+        if [[ ! -f $command_path ]] ; then
+            command_path=$(type "$1" | rev | cut -d' ' -f1 | rev)
+            pattern="+/function $1"
+        fi
+
+        [[ ! -f $command_path ]] && { echo "$1 is not a script"; return 2; }
+
+        vim ${pattern:+$pattern} "$command_path";
     fi
-
-    [[ ! -f $command_path ]] && { echo "$1 is not a script"; return 2; }
-
-    vim ${pattern:+$pattern} "$command_path";
-  fi
 }
 
 # Kill existing instance of Xephyr and start a new one
@@ -137,71 +142,136 @@ alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
 
 # Functions
 function killstudio () {
-  kill -9 $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
+    kill -9 $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
 }
 
 function killij () {
-  local sig="$1"
-  if [ -z $sig ] ; then
-    sig="-15"
-  fi
-  processes=$(ps -aux | grep -E "\-Didea.platform.prefix=Idea" | grep -v grep)
-  if [ -z $processes ] ; then
-    echo "No IntelliJ session found"
-    return -1
-  fi
-  pids=$(echo $processes | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
-  echo "Killing $pids"
-  kill $sig $(echo $pids)
+    local sig="$1"
+    if [ -z "$sig" ] ; then
+        sig="-15"
+    fi
+    processes=$(ps -aux | grep -E "\-Didea.platform.prefix=Idea" | grep -v grep)
+    if [ -z "$processes" ] ; then
+        echo "No IntelliJ session found"
+        return 1
+    fi
+    pids=$(echo "$processes" | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
+    echo "Killing $pids"
+    kill $sig $(echo "$pids")
 }
 
 # Open the url given as a parameter as a standalone window of Google Chrome
 function app () {
-  local profile=""
-  local protocol=""
-  if [[ $1 != *"://"* ]]; then
-    protocol="http://"
-  fi
-  if [ -n "$2" ] ; then
-    echo "Opening profile $2"
-    profile="--profile-directory=$2"
-  fi
-  google-chrome --app=$(echo "$protocol$1") "$profile";
+    local profile=""
+    local protocol=""
+    local url=""
+    local flags=""
+
+
+    while [[ -n "$1" ]] ;
+    do 
+        if [[ $1 == -* ]]; then
+            flags="$flags $1"
+        elif [[ -f "$1"  ]]; then
+            protocol="file://"
+            url=$(readlink -f "$1")
+        elif [[ $1 != *"://"* ]]; then
+            protocol="http://"
+            url=$1
+        elif [ -n "$1" ] ; then
+            echo "Opening profile $1"
+            profile="--profile-directory=$1"
+        fi
+        shift
+    done
+    google-chrome "$flags" --app="$protocol$url" "$profile";
+}
+
+function luck() {
+    query=$(echo "$@" | tr ' ' '+')
+    app "https://www.google.com/search?q=$query&btnI"
 }
 
 # Swich links to backup. Files with same prefix and with _ln and _bk suffix are
 # needed
 function swln() {
-  if [ -e "./$1_bk" ];  then
-    mv $1 "$1_ln" && mv "$1_bk" $1
-  elif [ -e "./$1_ln" ]; then
-    mv $1 "$1_bk" && mv "$1_ln" $1
-  else
-   return 1
-  fi
+    if [ -e "./$1_bk" ];  then
+        mv "$1" "$1_ln" && mv "$1_bk" "$1"
+    elif [ -e "./$1_ln" ]; then
+        mv "$1" "$1_bk" && mv "$1_ln" "$1"
+    else
+        return 1
+    fi
 }
 
 # Rebase onto
 function rebo {
-  git rebase --onto $1 HEAD^;
+    git rebase --onto "$1" HEAD^;
 }
 
 function ergo {
-  cp $1 ~/W/ergodoxez
-  unzip $1
-  NAME=$(basename $1)
-  pushd ~/W/ergodoxez;
-  make all file=$NAME;
-  popd;
+    cp "$1" ~/W/ergodoxez
+    unzip "$1"
+    NAME=$(basename "$1")
+    pushd ~/W/ergodoxez || exit;
+    make all file="$NAME";
+    popd || exit;
 }
 
 function ergb {
-  pushd ~/W/ergodoxez;
-  make build;
-  popd;
+    pushd ~/W/ergodoxez || exit;
+    make build;
+    popd || exit;
 }
 
 
 function fs() {
-  i3-msg fullscreen > /dev/null && $*; i3-msg fullscreen > /dev/null
+    i3-msg fullscreen > /dev/null && $*; i3-msg fullscreen > /dev/null
+}
+
+alias sp="i3-msg floating enable; i3-msg move scratchpad; i3-msg scratchpad show"
+
+# Display history
+
+function h() {
+    local arg="*"
+    [ -n "$1" ] && arg="$1"
+    local HIST_GREP=$(history -n -m  "*$arg*" | uniq | tac)
+    local command=$(echo "$HIST_GREP" | rofi -dmenu)
+    [ -z "$command" ] && return 0
+
+  # Print the prompt to simulate a user entry in the terminal
+  print -nP "$PS1"
+  print "$command"
+
+  eval "$command" && print -s "$command" # Exectute the command and add it to the history
+}
+
+alias mn="rofi -dmenu"
+
+function totelegram() {
+
+    if [[ ! -f ~/.telegram_token ]] ; then
+        echo "No token defined in ~/.telegram_token"
+        return 1
+    fi
+    
+    TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
+    VAR=$1
+    while read message ;
+    do
+        curl -s -S -X POST \
+            -H 'Content-Type: application/json' \
+            -d "{\"chat_id\": \"348981135\", \"text\": \"$message\", \"disable_notification\": true}" \
+            https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
+    done < "${VAR:-/dev/stdin}" ;
+}
+
+function notif() {
+    [ -z "$1" ] && return 1
+    notify-send "$1"; echo "$1" | totelegram > /dev/null
+}
+
+function clip() {
+    xclip -selection clip
 }
