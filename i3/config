@@ -223,7 +223,7 @@ bindsym Mod1+Tab workspace back_and_forth
 hide_edge_borders smart #none|vertical|horizontal|both|smart
 new_window 1pixel
 
-bindsym $mod+Shift+x [floating] move scratchpad
+bindsym $mod+Shift+x [floating class="kitty"] move scratchpad
 bindsym $mod+x [floating] scratchpad show
 
 bindsym Mod1+Control+e exec nemo

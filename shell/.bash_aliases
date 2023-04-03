@@ -1,4 +1,4 @@
-# some more ls aliases
+# SOME MOre ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -9,14 +9,20 @@ alias ...="cd ../.."
 alias cdid="cd \$STUDIO_BASE/tools/idea/"
 alias cddis="cd \$STUDIO_BASE/tools/adt/idea/"
 alias cdbase="cd \$STUDIO_BASE/tools/base"
-alias gsso="git credential-corpsso login"
+
+# REPO
 # Login if needed and Sync the current projec
-alias rs="git credential-corpsso check > /dev/null || glogin; repo sync -cj64 ."
+alias rs="git credential-corpsso check > /dev/null || glogin; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -cj64 "
+alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -qcj${MP_J:-$(($(envproc) * 2))} "
 alias rrb="repo rebase"
 alias ra="repo abandon"
+
+# GIT
+alias gsso="git credential-corpsso login"
 alias gcn="gitbranchnum"
+alias gtmp="git add -A && git commit -m TEMP" # Create a commit named TEMP
+alias gdl="git diff --color=always | less -r" # Open git diff in less with colors
 
 # upload a draft on gerrit
 alias draft="repo upload -d --no-verify --cbr ."
@@ -37,6 +43,53 @@ alias mcp="pushd \$LAYOUTLIB_PROJECT && mm && cpll && popd"
 # Reload bashrc
 alias src="source ~/.zshrc"
 
+# GREP
+# greph: highlight each pattern into a its own color
+function greph() {
+  color=31
+  declare -a  patterns
+  while [[ -n $1 ]] && [[ $1 != "-"* ]] ; do
+    patterns+=("$1|$")
+    shift
+  done
+
+  if [[ $1 = "-" ]] ; then # Next argument is a file
+    shift
+  fi
+
+    result=""
+    while IFS= read line;  # IFS allows to keep whitespace when calling read.
+    do
+      result="$result\n$line"
+    done < "${1:-/dev/stdin}"
+
+  for pattern in "${patterns[@]}"; do
+    result="$(echo -e "$result" | GREP_COLORS="mt=01;$color" grep --color=always -P "$pattern")"
+    color=$((color+1))
+  done
+  echo -e "$result"
+}
+
+# Diff between two files with highlighting
+function grepd() {
+  local file1=$1; shift
+  local file2=$1; shift
+  local diff=$( (wdiff $file1 $file2) )
+  less -fr <(echo $diff | greph $* | colordiff )
+  return 0
+}
+
+function clipdiff() {
+  local a="";
+  local b=""
+   while [ "$b" = "$a" ] ; do b="$(xclip -o -selection clip)"; sleep 1; done
+   echo "Selection 1"
+   a="$b"
+   while [ "$a" = "$b" ] ; do a="$(xclip -o -selection clip)"; sleep 1; done
+   echo "Selection 2"
+   grepd <(echo "$b") <(echo "$a")
+
+}
 # Kill existing instance of Xephyr and start a new one
 alias xx="{ killall Xephyr; DISPLAY=:0; (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); sleep 1; DISPLAY=:10; feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; cinnamon2d --replace -d :10 & DISPLAY=:0;  } 2> /dev/null > /dev/null"
 
@@ -59,9 +112,33 @@ function killstudio () {
   kill -9 $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
 }
 
+function killij () {
+  local sig="$1"
+  if [ -z $sig ] ; then
+    sig="-15"
+  fi
+  processes=$(ps -aux | grep -E "\-Didea.platform.prefix=Idea" | grep -v grep)
+  if [ -z $processes ] ; then
+    echo "No IntelliJ session found"
+    return -1
+  fi
+  pids=$(echo $processes | tr -s ' ' | cut -d' ' -f2 | tr '\n' ' ')
+  echo "Killing $pids"
+  kill $sig $(echo $pids)
+}
+
 # Open the url given as a parameter as a standalone window of Google Chrome
 function app () {
-  google-chrome --app=$(echo "$1");
+  local profile=""
+  local protocol=""
+  if [[ $1 != *"://"* ]]; then
+    protocol="http://"
+  fi
+  if [ -n "$2" ] ; then
+    echo "Opening profile $2"
+    profile="--profile-directory=$2"
+  fi
+  google-chrome --app=$(echo "$protocol$1") "$profile";
 }
 
 # Swich links to backup. Files with same prefix and with _ln and _bk suffix are
