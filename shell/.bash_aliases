@@ -9,10 +9,6 @@ alias lt='ls -tcrhl'
 alias ..="cd .."
 alias ...="cd ../.."
 
-alias cdid="cd \$STUDIO_BASE/tools/idea/"
-alias cddis="cd \$STUDIO_BASE/tools/adt/idea/"
-alias cdbase="cd \$STUDIO_BASE/tools/base"
-
 function envproc() { echo $(( $(nproc)*2)); }
 
 # REPO
@@ -31,16 +27,19 @@ alias gtmp="git add -A && git commit -m TEMP" # Create a commit named TEMP
 alias gdl="git diff --color=always | less -r" # Open git diff in less with colors
 
 # upload a draft on gerrit
-alias draft="repo upload -d --no-verify --cbr ."
+alias draft="repo upload -w --no-verify --cbr ."
 
 # upload the current branch on gerrit
 alias rupcb="repo upload --cbr ."
+alias rupcby="repo upload --cbr -y ."
 
 #invoke the cdiff tool
 alias cdiff="cdiff -sw140"
 
 # Reload bashrc
 alias src="source ~/.zshrc"
+
+alias gw="./gradlew"
 
 # GREP
 # greph: highlight each pattern into a its own color
@@ -73,12 +72,6 @@ function greph() {
         echo -e "$result"
         # result="$result\n$line"
     done < "${1:-/dev/stdin}"
-
-  #for pattern in "${patterns[@]}"; do
-  #  result="$(echo -e "$result" | GREP_COLORS="mt=01;49;38;5;$color" grep --color=always -P "${args[@]/#/}" "$pattern")"
-  #  color=$((color+1))
-  #done
-  #echo -e "$result"
 }
 
 # Diff between two files with highlighting
@@ -125,7 +118,15 @@ function vimc() {
 }
 
 # Kill existing instance of Xephyr and start a new one
-alias xx="{ killall Xephyr; DISPLAY=:0; (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); sleep 1; DISPLAY=:10; feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; cinnamon2d --replace -d :10 & DISPLAY=:0;  } 2> /dev/null > /dev/null"
+function xx(){ 
+    killall Xephyr;
+    DISPLAY=:0; 
+    (Xephyr -ac -br -noreset  -resizeable -screen 2560x1600@43 :10 &); 
+    sleep 1;
+    DISPLAY=:10; 
+    feh --bg-center --no-xinerama ~/Documents/wallpaper/LosAngeles-Night-View.jpg; 
+    cinnamon2d --replace -d :10 & DISPLAY=:0;
+}
 
 # Start a new instance of Xephyr with a 4K resolution
 alias x4k="(Xephyr -ac -br -noreset -nolock -dpi 230 -screen 3838x2140 :10 & metacity --replace -d=:10 &) >/dev/null 2>&1"
@@ -143,7 +144,7 @@ alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
 
 # Functions
 function killstudio () {
-    kill -9 $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
+    kill ${1:--9} $(ps -aef | grep -v grep | grep AndroidStudio | tr -s ' ' | cut -d' ' -f2);
 }
 
 function killij () {
@@ -176,6 +177,8 @@ function app () {
         elif [[ -f "$1"  ]]; then
             protocol="file://"
             url=$(readlink -f "$1")
+        elif [[ $1 == *"://"* ]]; then
+            url=$1
         elif [[ $1 != *"://"* ]]; then
             protocol="http://"
             url=$1
@@ -232,6 +235,8 @@ function fs() {
 
 alias sp="i3-msg floating enable; i3-msg move scratchpad; i3-msg scratchpad show"
 
+alias vimi3="vim $DOTFILE_DIR/i3/config"
+
 # Display history
 
 function h() {
@@ -245,7 +250,7 @@ function h() {
   print -nP "$PS1"
   print "$command"
 
-  eval "$command" && print -s "$command" # Exectute the command and add it to the history
+  eval "$command" && print -s "$command" # Execute the command and add it to the history
 }
 
 alias mn="rofi -dmenu"
