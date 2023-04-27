@@ -32,7 +32,7 @@
 	ri = rebase -i
     ria = rebase -i --autosquash
     rian = "! GIT_SEQUENCE_EDITOR=: git ria"
-	llp = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 10
+	llp = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 50
 	ll = "! git llp --color=always | fzf --reverse --preview 'git show {1} --color=always' --preview-window='down,80%' --height=50%"
 	d = difftool --dir-diff
 	dsh = diff --stat HEAD~1

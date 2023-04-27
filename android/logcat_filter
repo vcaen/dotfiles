@@ -89,7 +89,7 @@ function logcat_filter() {
 
     if [[ $filter == true ]] ; then
         adb logcat $logcat_default $logcat_options $logcat_args | grep --line-buffered -Ei "($gargs_str)" | h -i $filter_args
-#        adb logcat $logcat_default $logcat_options $logcat_args -e "($gargs_str)" | h -i $filter_args
+#       adb logcat $logcat_default $logcat_options $logcat_args -e "($gargs_str)" | h -i $filter_args
     else
         adb logcat $logcat_default $logcat_options $logcat_args | h -i $filter_args
     fi

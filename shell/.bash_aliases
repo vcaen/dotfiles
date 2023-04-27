@@ -354,8 +354,8 @@ function fh() {
     print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history | sort -u -k 2 | sort -n -k 1 -r ) | sort -u -k 2 | sort -n -k 1 -r | fzf +s | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
 }
 
-if ! which rofi ; then
-  alias rofi="fzf" >/dev/null ;
+if ! which rofi >/dev/null; then
+  alias rofi="fzf";
 fi
 
 function fout() {
@@ -374,7 +374,7 @@ function fout() {
                 scrollback=$1; shift;
             ;;
             [a-zA-Z]*)
-                query="$query '$1"; shift;
+                query="$query $1"; shift;
             ;;
             *)
                 echo "$1 unrecognized"; return 1
@@ -405,7 +405,6 @@ function fout() {
         preview_command="cat <(eval $input_command) | tail -n+$range_min | head -n+\$FZF_PREVIEW_LINES  | $grep_cmd "
     fi
 
-    # Command to be executed when alt+enter is pressed:
     # jump to the selected line in the TMUX scrollback buffer and select it
     local jump_to_line_cmd="tmux copy-mode; \
         tmux send-keys -X goto-line \$(( $input_length - {n} - 1 )); \
@@ -419,7 +418,7 @@ function fout() {
     fi
 
     local out=$(eval $input_command | \
-        fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 \
+        fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \
         --preview "eval $preview_command" --preview-window "up,75%,nowrap" \
         --bind "ctrl-j:accept+execute(eval $jump_to_line_cmd)" \
@@ -432,5 +431,9 @@ function fout() {
         tmux set-buffer -w $out
         echo $out
     fi
+}
+
+function fkill() {
+  ps -aux | fzf --header-lines 1 --reverse --multi --height 20| awk '{print$2}' | xargs kill "$@"
 }
 
