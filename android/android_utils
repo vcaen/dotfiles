@@ -371,5 +371,5 @@ function sjava() {
 
 function sbp() {
     # Search bp and mk files
-    ag --G ".*\.(bp|mk)" $1 -H -C 5 | bat -l js --pager "less +/$1 -R"
+    ag -G ".*\.(bp|mk)" $1 -H -C 5 | bat -l js --pager "less +/$1 -R"
 }

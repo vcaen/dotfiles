@@ -103,6 +103,8 @@ function clipdiff() {
     grepd <(echo "$b") <(echo "$a")
 }
 
+alias vimi3="vim $DOTFILE_DIR/i3/config"
+
 # Open vim and edit the given command
 function vimc() {
     local command_path=""
@@ -150,7 +152,7 @@ alias 4k="xrandr   -d :0  --fb  3840x2160    --output    default"
 alias hd="xrandr   -d :0  --fb  2560x1600    --output    default"
 
 # Print all Java process with JVM arguments on separate lines
-alias jpl="jps -vl | sed s/-/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
+alias jpl="jps -vl | sed s/\ -/\"\n    >>>> -\"/g | sed -E 's/(^[0-9])/\n\1/g'"
 
 # Functions
 function killstudio () {
@@ -204,20 +206,6 @@ function luck() {
     query=$(echo "$@" | tr ' ' '+')
     app "https://www.google.com/search?q=$query&btnI"
 }
-
-# Swich links to backup. Files with same prefix and with _ln and _bk suffix are
-# needed
-function swln() {
-    if [ -e "./$1_bk" ];  then
-        mv "$1" "$1_ln" && mv "$1_bk" "$1"
-    elif [ -e "./$1_ln" ]; then
-        mv "$1" "$1_bk" && mv "$1_ln" "$1"
-    else
-        return 1
-    fi
-}
-
-alias vimi3="vim $DOTFILE_DIR/i3/config"
 
 # Display history
 function hist() {
@@ -435,5 +423,31 @@ function fout() {
 
 function fkill() {
   ps -aux | fzf --header-lines 1 --reverse --multi --height 20| awk '{print$2}' | xargs kill "$@"
+}
+
+funzip() {
+    # Unzip files in a zipped file using fzf
+
+    if [[ -z $1 ]] ; then
+        echo "Usage: funzip <zipfile>" >&2
+        return 2
+    fi
+
+    local f
+    local fz
+    local outdir
+    f=$1; shift
+    outdir="$(basename $f)-extracted"
+    mkdir $outdir
+    fz=$(unzip -l $f | awk '{print$4}' | fzf --multi --header-lines=3 --reverse --height=90% \
+    --header="Select files to extract. TAB to select. ENTER to validate");
+    if [[ -n $fz ]] ; then 
+        unzip -d $outdir $f $(echo $fz)
+        echo "Extracted into $outdir"
+        return 0 
+    fi
+
+    echo "No file selected. Aborting" >&2
+    return 1
 }
 
