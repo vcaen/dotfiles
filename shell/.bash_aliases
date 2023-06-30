@@ -425,28 +425,33 @@ function fout() {
 
 function fat() {
     # bat with fzf search
-    # !! not working yet
     local input;
     local tempinput;
+    local extension;
     if ! [[ -f $1 ]] ; then
         input=$(mktemp)
         tempinput=$imput
         cat /dev/stdin > $input
     else
         input=$1
+        extension=${$(basename $input)##*.}
     fi
 
     local max_line=$(wc -l $input | awk '{print$1}' )
-    local range_min="\$(( val = {n} - 1000 / 2 - 1, val > 0 ? val : 1 ))"
-    local range_max="\$(( val = {n} + 1000 / 2,  val < $max_line ? val : $max_line ))"
-    local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|^$' )|$)\" - "
-    local preview_command
-    preview_command="set -x; min=$range_min; max=$range_max mid=\$(( max/2 - min/2 )); bat -n --color=always --pager=\"less -R +\${mid}G\" -r $range_min:$range_max -H \$(( {n} + 1 )) $input | $grep_cmd"
+#    local grep_cmd="grep --color=always -iE \"(\$( echo {q} | tr -cd '[:alnum:]|^$' )|$)\" - "
 
-    bat $input | \
-    fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
+    local bold=$(tput smso)
+    local normal=$(tput rmso)
+    local grep_cmd="sed \"s;\({q}\);${bold}\1${normal};gi\" " #not working yet
+    local preview_command
+    preview_command="cat $input | bat -f --highlight-line {1} --style='auto' -l $extension | $grep_cmd | bat -f -n"
+
+
+    bat -f --style='numbers' $input | \
+    fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \
-        --preview "eval $preview_command" --preview-window "up,75%,nowrap"
+        --nth='2..' \
+        --preview "$preview_command" --preview-window 'up,75%,nowrap,+{1}+1/2'
 
     [[ -f $tempinput ]] && rm $tempinput
 }
