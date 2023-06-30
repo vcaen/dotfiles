@@ -117,4 +117,5 @@
     },
     "editor.mouseWheelZoom": true,
     "git.openRepositoryInParentFolders": "never",
+    "editor.unicodeHighlight.nonBasicASCII": false,
 }

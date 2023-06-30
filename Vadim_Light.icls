@@ -1,15 +1,21 @@
 <scheme name="Vadim Light" version="142" parent_scheme="Default">
   <option name="FONT_SCALE" value="1.0" />
   <metaInfo>
-    <property name="created">2023-04-26T14:35:25</property>
-    <property name="ide">Idea</property>
-    <property name="ideVersion">2023.1.0.0</property>
-    <property name="modified">2023-04-26T14:35:47</property>
+    <property name="created">2023-05-03T17:21:55</property>
+    <property name="ide">AndroidStudio</property>
+    <property name="ideVersion">2022.3.1.12</property>
+    <property name="modified">2023-05-03T17:22:02</property>
     <property name="originalScheme">Vadim Light</property>
   </metaInfo>
   <option name="LINE_SPACING" value="1.2" />
-  <option name="EDITOR_FONT_SIZE" value="16" />
-  <option name="EDITOR_FONT_NAME" value="Fira Code" />
+  <font>
+    <option name="EDITOR_FONT_NAME" value="Fira Code" />
+    <option name="EDITOR_FONT_SIZE" value="16" />
+  </font>
+  <font>
+    <option name="EDITOR_FONT_NAME" value="Noto Sans Mono" />
+    <option name="EDITOR_FONT_SIZE" value="16" />
+  </font>
   <option name="EDITOR_LIGATURES" value="true" />
   <colors>
     <option name="ADDED_LINES_COLOR" value="7fc784" />
@@ -83,7 +89,7 @@
       <value>
         <option name="FOREGROUND" value="6dcc" />
         <option name="EFFECT_COLOR" value="6dcc" />
-        <option name="EFFECT_TYPE" value="1" />
+        <option name="EFFECT_TYPE" value="-1" />
       </value>
     </option>
     <option name="CUSTOM_KEYWORD1_ATTRIBUTES" baseAttributes="DEFAULT_KEYWORD" />
@@ -118,7 +124,7 @@
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="83c0" />
+        <option name="FOREGROUND" value="116b5a" />
       </value>
     </option>
     <option name="DEFAULT_CONSTANT">
@@ -176,7 +182,7 @@
     </option>
     <option name="DEFAULT_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="33b3" />
+        <option name="FOREGROUND" value="56db0" />
       </value>
     </option>
     <option name="DEFAULT_LABEL">

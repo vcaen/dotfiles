@@ -248,7 +248,7 @@ function aps() {
         if [[ $pid == true ]] ; then 
             awk_index=2
         fi
-        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30% | awk "{print\$$awk_index}"
+        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30%  --multi | awk "{print\$$awk_index}"
         return 0;
     fi
     if [[ $verbose == true ]] ; then 
@@ -267,6 +267,12 @@ function apkg() {
 		column -t -N "PACKAGE, UID" | \
 		fzf --header-lines 1 --reverse --height 20 | \
 		awk '{print$1}'
+}
+
+function akill() {
+    # Kill android processes
+    processes=$(aps -p)
+    [[ -n $processes ]] && adb shell kill "$@" $processes 
 }
 
 function atouch {
@@ -334,28 +340,36 @@ function ascreen {
 }
 
 function logcat() {
-    local format="brief color"
+    local format="brief time color"
     local args=()
+    local positionals=()
     while [[ -n $1 ]] ; do
         case $1 in
             error)
-                adb logcat -v $format -b all -s "*:E"
+                args+=("*:E")
                 shift
-                return
                 ;;
             warn)
-                adb logcat -v $format -b all -s "*:W"
+                args+=("*:W")
                 shift
-                return
+                ;;
+            debug)
+                args+=("*:D")
+                shift
                 ;;
             all)
                 args+=(-b all)
                 shift
                 ;;
+            *)
+	            positionals+=($1)
+		        shift
+        		;;
         esac
     done
-
-    adb logcat -v $format ${args[@]} "$@"
+    logcat_outfile=$(mktemp)
+    echo "Saving to \$logcat_outfile $logcat_outfile"
+    adb logcat -v "$format" "${args[@]}" "${positionals[@]}" | tee >( less -X -R +F ) > $logcat_outfile
 }
 
 function adebugenable() {
