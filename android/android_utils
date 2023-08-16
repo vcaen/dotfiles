@@ -152,6 +152,10 @@ function aproductname() {
     echo $productname
 }
 
+function adbsync() {
+    adb root && adb remount -R && adb wait-for-device root && adb remount && adb sync
+}
+
 function apxtodp {
     # Convert px to dp for the connected device
     [[ -z $1 ]] && return 1;
@@ -262,9 +266,9 @@ function aps() {
 
 function apkg() {
 	# List installed package and their uid
-	adb shell pm list package -U "$@"| \
+	adb shell pm list package -U "$@" | \
 		sed 's/\(package\|uid\)://gi' | \
-		column -t -N "PACKAGE, UID" | \
+		column -t -N "PACKAGE, UID"   | \
 		fzf --header-lines 1 --reverse --height 20 | \
 		awk '{print$1}'
 }
@@ -367,8 +371,8 @@ function logcat() {
         		;;
         esac
     done
-    logcat_outfile=$(mktemp)
-    echo "Saving to \$logcat_outfile $logcat_outfile"
+    logcat_outfile=$(mktemp --tmpdir logcat-XXXXX.log)
+    echo "Saving to \$logcat_outfile $logcat_outfile" >&2
     adb logcat -v "$format" "${args[@]}" "${positionals[@]}" | tee >( less -X -R +F ) > $logcat_outfile
 }
 
