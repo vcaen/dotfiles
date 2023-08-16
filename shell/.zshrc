@@ -91,8 +91,6 @@ export DEFAULT_USER="caen"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias src="source ~/.zshrc"
 
-autoload -Uz compinit
-compinit
 # Completion for kitty
 if `which kitty >/dev/null 2>&1` ; then
     kitty + complete setup zsh | source /dev/stdin
@@ -121,3 +119,13 @@ if which bat >/dev/null ; then
 fi
 
 
+
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-.]=* r:|=*'
+zstyle :compinstall filename '/usr/local/google/home/caen/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall

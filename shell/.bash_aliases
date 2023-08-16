@@ -318,6 +318,12 @@ function lf() {
     if [ -z $file ] ; then
         echo "No file in $dir"; return 1
     fi
+
+    if [[ -z $command ]] ; then
+        echo $dir/$file
+        return 0
+    fi
+
     echo "$command" "$@" "$dir/$file"
     "$command" "$@" "\"$dir/$file\""
 }
@@ -444,14 +450,17 @@ function fat() {
     local normal=$(tput rmso)
     local grep_cmd="sed \"s;\({q}\);${bold}\1${normal};gi\" " #not working yet
     local preview_command
-    preview_command="cat $input | bat -f --highlight-line {1} --style='auto' -l $extension | $grep_cmd | bat -f -n"
-
+    local lang
+    if bat -L | grep $extension >/dev/null ; then
+        lang=(-l "$extension")
+    fi
+    preview_command="cat $input | bat -f --highlight-line {1} --style='auto' ${lang} | $grep_cmd | bat -f -n"
 
     bat -f --style='numbers' $input | \
     fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \
         --nth='2..' \
-        --preview "$preview_command" --preview-window 'up,75%,nowrap,+{1}+1/2'
+        --preview "$preview_command" --preview-window 'up,75%,wrap,+{1}+1/2'
 
     [[ -f $tempinput ]] && rm $tempinput
 }
@@ -460,9 +469,8 @@ function fkill() {
   ps -aux | fzf --header-lines 1 --reverse --multi --height 20| awk '{print$2}' | xargs kill "$@"
 }
 
-funzip() {
+function funzip() {
     # Unzip files in a zipped file using fzf
-
     if [[ -z $1 ]] ; then
         echo "Usage: funzip <zipfile>" >&2
         return 2
@@ -486,3 +494,18 @@ funzip() {
     return 1
 }
 
+function ftree() {
+    # tree with fzf, preview. Relative path of Selected line will be printed upon selection
+    local header_lines=2
+    local output_command="sh -c 'cat <(echo ..) <(tree -fi) | tac | sed -n \$(( {n} + $header_lines + 1 ))p ' "
+    cat <(echo ..) <(tree -C) | tac | \
+    fzf --ansi --header-lines=$header_lines \
+    --bind "enter:become($output_command)" \
+    --bind 'start:last' \
+    --bind 'ctrl-p:toggle-preview' \
+    --bind "ctrl-space:reload(cat <(echo ..) <(tree -C \$($output_command)) | tac)" \
+    --preview="f=\$($output_command); [[ -f \$f ]] && bat -f \$f" \
+    --preview-window="70%,hidden" \
+    --height=~50% \
+    --header="ctrl-p: Preview"
+}
