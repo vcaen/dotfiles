@@ -49,7 +49,7 @@
      ************************************/
     // --------------
     // Font
-    "editor.fontFamily": "'Fira Code', 'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontFamily": "'Fira Code', 'Droid Sans Mono', 'monospace', monospace, 'Font Awesome 6 Brands'",
     "editor.fontLigatures": true,
     "editor.formatOnSaveMode": "modifications",
     "editor.lineHeight": 1.8,

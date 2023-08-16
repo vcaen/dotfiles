@@ -1,0 +1,11 @@
+#!/bin/zsh
+[[ $DEBUG == "true" ]] && set -x
+
+device=$(bluetoothctl devices Paired | rofi -dmenu -window-title="Quick Bluetooth" | awk '{print$2}')
+connected=$(bluetoothctl devices Connected | grep $device >/dev/null && echo true)
+
+if [[ $connected == "true" ]] ; then
+    bluetoothctl disconnect $device
+else 
+    bluetoothctl connect $device
+fi

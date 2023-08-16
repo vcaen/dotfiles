@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+[[ $DEBUG == "true" ]] && set -x
+
+function parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+        ls)
+            shift
+            list
+            return 0
+            ;;
+        rm)
+            shift
+            rm
+            ;;
+        iml)
+            shift
+            iml
+            ;;
+        *)
+            shift
+            ;;
+        esac
+    done
+}
+
+function list() {
+    mutagen sync list | grep Identifier | awk '{print$2}' |\
+     fzf --ansi --preview="mutagen sync list -l {}" --preview-window="up,80%" --height=50% "$@" --header="Mutagen sessions"
+}
+
+function rm() {
+    local ids=$(list --multi)
+    while IFS= read -r id; do
+        mutagen sync terminate $id
+    done <<<"$ids"
+}
+
+function iml() {
+    local module_iml_path_regex='s;^.*filepath="\(.*\)".*;\1;p'
+    local module_source_regex='s;^.*url="\(.*://\)\([^"]*\)".*;\1 \2;p' # split the url into group1=protocol, group2=path
+    local iml_modules=$(cat .idea/modules.xml | grep "filepath.*\"" | sed -n "$module_iml_path_regex" | sed "s;\$PROJECT_DIR\\$;`pwd`;")
+    for iml_module in $(echo $iml_modules) ; do 
+        cat $iml_module | grep -E "(root|sourceFolder).*url" | sed -n "$module_source_regex" | sed "s;\$MODULE_DIR\\$;$(dirname $iml_module);p" | sed "s;jar!/;jar;"
+    done 
+}
+
+parse_args "$@"
