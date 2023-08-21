@@ -240,7 +240,7 @@ bindsym $mod+Control+p exec gpick
 bindsym $mod+Tab workspace back_and_forth
 
 hide_edge_borders smart #none|vertical|horizontal|both|smart
-new_window 1pixel
+# new_window 1pixel
 
 # Scratchpad
 bindsym $mod+Shift+x move scratchpad
@@ -274,12 +274,12 @@ for_window [class="crx_.*" title=".*Tasks.*"] floating enable, resize set 400 70
 for_window [title="JetBrains Toolbox"] floating enable, move absolute position mouse
 for_window [class="jetbrains-studio"] title_format "<span foreground='#3DDC84' size='smaller'>   %title</span>"
 for_window [class="jetbrains-idea"] title_format "  <span foreground='#05c1fd' size='smaller'> %title</span>"
-for_window [class="jetbrains-*" title="^win\d+$"] floating enable, move to workspace $w1   # Jetbrains splashscreen
+for_window [class="jetbrains-.*" title="^win\d+$"] floating enable, move to workspace $w1   # Jetbrains splashscreen
 
 ## Terminal
-for_window [class="*terminal*" title=".*ssh.*"] title_format \
+for_window [class=".*terminal.*" title=".*ssh.*"] title_format \
             "<span stretch='ultracondensed'> </span><span foreground='#05F1Cd' size='smaller'> %title</span>"
-for_window [class="*terminal*"] title_format \
+for_window [class=".*terminal.*"] title_format \
            "<span stretch='ultracondensed'> </span><span foreground='#05F1Cd' size='smaller'> %title</span>"
 
 ## VS Code
@@ -287,8 +287,11 @@ for_window [class="Code"] title_format \
            "<span stretch='ultracondensed' foreground='#05D1Fd' > </span><span size='smaller'> %title</span>"
 
 ## Google Chrome
+
 for_window [class="Google-chrome"] title_format \
            "<span stretch='ultracondensed' foreground='#aa786c' > </span><span size='smaller'> %title</span>"
+for_window [class="Google-chrome" title=".*Mail$"] title_format "<span stretch='ultracondensed' foreground='#3D9CF4'>   <span size='smaller'>%title</span>"
+for_window [class="Google-chrome" title="^Chrome Remote Desktop.*"] title_format "<span foreground='#3DDC84' size='smaller'>  %title</span>"
 
 ## Android Specific
 for_window [class="jetbrains-idea" title=".*android/rvc"] title_format \
@@ -305,7 +308,7 @@ set $google-chat crx_mdpkiolbdkhdjpekfbkbmhigcaggjagi
 for_window [class="Google-chrome" instance=$google-chat] title_format "<span size='smaller'>   %title</span>" 
 
 ## Emulator
-for_window [title="^Android Emulator*"] floating enable; resize set 400 700; move window to position mouse; border normal
+for_window [title="^Android Emulator.*"] floating enable; resize set 400 700; move window to position mouse; border normal
 
 ## Other
 for_window [class="scrcpy"] floating enable; border normal 

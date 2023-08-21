@@ -3,6 +3,11 @@
 [[ $DEBUG == "true" ]] && set -x
 
 function parse_args() {
+    if [[ $# -eq 0 ]] ; then
+        select_help "$@"
+        return
+    fi
+
     while [[ $# -gt 0 ]]; do
         case $1 in
         ls)
@@ -19,7 +24,8 @@ function parse_args() {
             iml
             ;;
         *)
-            shift
+            select_help "$@"
+            return
             ;;
         esac
     done
@@ -44,6 +50,12 @@ function iml() {
     for iml_module in $(echo $iml_modules) ; do 
         cat $iml_module | grep -E "(root|sourceFolder).*url" | sed -n "$module_source_regex" | sed "s;\$MODULE_DIR\\$;$(dirname $iml_module);p" | sed "s;jar!/;jar;"
     done 
+}
+
+function select_help() {
+    command=$(mutagen sync help | tail -n+7 | head -n 8 | fzf --header-lines=1 --reverse --height="~20%" --header-first | awk '{print$1}')
+    [[ -z $command ]] && return 1
+    mutagen sync $command "$@"
 }
 
 parse_args "$@"
