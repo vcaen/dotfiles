@@ -10,12 +10,12 @@ function parse_args() {
 
     while [[ $# -gt 0 ]]; do
         case $1 in
-        ls)
+        ls|list)
             shift
             list
             return 0
             ;;
-        rm)
+        rm|remove)
             shift
             rm
             ;;
