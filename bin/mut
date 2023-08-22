@@ -23,6 +23,11 @@ function parse_args() {
             shift
             iml
             ;;
+        here)
+            shift
+            here "$@"
+            exit $?
+            ;;
         *)
             select_help "$@"
             return
@@ -56,6 +61,18 @@ function select_help() {
     command=$(mutagen sync help | tail -n+7 | head -n 8 | fzf --header-lines=1 --reverse --height="~20%" --header-first | awk '{print$1}')
     [[ -z $command ]] && return 1
     mutagen sync $command "$@"
+}
+
+function here() {
+    [[ -z $1 ]] && { echo "No remote specified" >&2; return 1; } 
+    local remote=$1; shift;
+    
+    local local_dir=$(pwd)
+    local remote_dir=$( echo $local_dir | sed "s;$HOME;~;" )
+    echo mutagen sync start $remote:$remote_dir/ $local_dir/
+    echo "Start mutagen (y/N) ?"
+    [[ $(read) != "y" ]] && return 1
+    mutagen sync create $remote:$remote_dir/ $local_dir/
 }
 
 parse_args "$@"
