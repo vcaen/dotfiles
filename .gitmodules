@@ -1,3 +1,6 @@
 [submodule "i3/i3-gnome-flashback"]
 	path = i3/i3-gnome-flashback
 	url = git@github.com:regolith-linux/i3-gnome-flashback.git
+[submodule "corp"]
+	path = corp
+	url = ./corp
