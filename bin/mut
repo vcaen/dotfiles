@@ -2,6 +2,21 @@
 
 [[ $DEBUG == "true" ]] && set -x
 
+function print_usage() {
+    cat <<EOF
+    Utility for mutagen (mutagen.io)
+
+    Usage: mut <command> <options...>
+
+    ls|list         mutagen sync list
+    rm|remove       mutagen sync remove
+    iml             {in progress}
+    here <target>   mutagen sync create in this dir.
+    
+    [nothing] -> FZF menu
+EOF
+}
+
 function parse_args() {
     if [[ $# -eq 0 ]] ; then
         select_help "$@"
@@ -27,6 +42,10 @@ function parse_args() {
             shift
             here "$@"
             exit $?
+            ;;
+        -h|--help|help)
+            print_usage
+            exit 0
             ;;
         *)
             select_help "$@"
@@ -69,9 +88,10 @@ function here() {
     
     local local_dir=$(pwd)
     local remote_dir=$( echo $local_dir | sed "s;$HOME;~;" )
-    echo mutagen sync start $remote:$remote_dir/ $local_dir/
+    echo mutagen sync create $remote:$remote_dir/ $local_dir/
     echo "Start mutagen (y/N) ?"
     [[ $(read) != "y" ]] && return 1
+    echo "Creating mutagen session"
     mutagen sync create $remote:$remote_dir/ $local_dir/
 }
 
