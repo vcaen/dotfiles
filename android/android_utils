@@ -391,3 +391,15 @@ function sbp() {
     # Search bp and mk files
     ag -G ".*\.(bp|mk)" $1 -H -C 5 | bat -l js --pager "less +/$1 -R"
 }
+
+function fdzip() {
+    # Find files within jars and or zips
+    jar_pattern=$1
+    find_pattern=$2
+    dir=$3
+
+    unzip_search_command='jar=$(echo {}); files=$(unzip -l $jar | grep '
+    unzip_search_command+=$find_pattern
+    unzip_search_command+='); [ -n "$files" ] && { echo "$jar"; echo "$files" | awk "{print \"  - \" \$4}"; echo; } '
+    fd -Hi "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
+}
