@@ -7,7 +7,7 @@ connected=$(bluetoothctl devices Connected | grep $device >/dev/null && echo tru
 function try_connect() {
     attempts=5
     while [[ $attempts -gt 0 ]] ; do
-        attempts-=1
+        attempts=$attemps-1
         bluetoothctl connect $device && exit 0
     done
 }

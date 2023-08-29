@@ -118,4 +118,10 @@
     "editor.mouseWheelZoom": true,
     "git.openRepositoryInParentFolders": "never",
     "editor.unicodeHighlight.nonBasicASCII": false,
+    "[toml]": {
+        "editor.defaultFormatter": "be5invis.toml"
+    },
+    "git.autofetch": true,
+    "kotlin.languageServer.enabled": false,
+    "kotlin.debugAdapter.enabled": false,
 }
