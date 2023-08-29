@@ -18,19 +18,19 @@ EOF
 }
 
 function parse_args() {
-    if [[ $# -eq 0 ]] ; then
+    if [[ $# -eq 0 ]]; then
         select_help "$@"
         return
     fi
 
     while [[ $# -gt 0 ]]; do
         case $1 in
-        ls|list)
+        ls | list)
             shift
             list
             return 0
             ;;
-        rm|remove)
+        rm | remove)
             shift
             rm
             ;;
@@ -43,7 +43,7 @@ function parse_args() {
             here "$@"
             exit $?
             ;;
-        -h|--help|help)
+        -h | --help | help)
             print_usage
             exit 0
             ;;
@@ -56,8 +56,9 @@ function parse_args() {
 }
 
 function list() {
-    mutagen sync list | grep Identifier | awk '{print$2}' |\
-     fzf --ansi --preview="mutagen sync list -l {}" --preview-window="up,80%" --height=50% "$@" --header="Mutagen sessions"
+    sync_list=$(mutagen sync list)
+    echo $sync_list | grep Identifier | awk '{print$2}' |
+        fzf --ansi --preview="mutagen sync list -l {}" --preview-window="up,80%" --height=50% "$@" --header="Mutagen sessions"
 }
 
 function rm() {
@@ -70,10 +71,21 @@ function rm() {
 function iml() {
     local module_iml_path_regex='s;^.*filepath="\(.*\)".*;\1;p'
     local module_source_regex='s;^.*url="\(.*://\)\([^"]*\)".*;\1 \2;p' # split the url into group1=protocol, group2=path
-    local iml_modules=$(cat .idea/modules.xml | grep "filepath.*\"" | sed -n "$module_iml_path_regex" | sed "s;\$PROJECT_DIR\\$;`pwd`;")
-    for iml_module in $(echo $iml_modules) ; do 
-        cat $iml_module | grep -E "(root|sourceFolder).*url" | sed -n "$module_source_regex" | sed "s;\$MODULE_DIR\\$;$(dirname $iml_module);p" | sed "s;jar!/;jar;"
-    done 
+    local iml_modules=$(cat .idea/modules.xml | grep "filepath.*\"" | sed -n "$module_iml_path_regex" | sed "s;\$PROJECT_DIR\\$;$(pwd);")
+    files=""
+    for iml_module in $(echo $iml_modules); do
+        files+=$(cat $iml_module | grep -E "(root|sourceFolder).*url" | sed -n "$module_source_regex" | sed "s;\$MODULE_DIR\\$;$(dirname $iml_module);p" | sed "s;jar!/;jar;" | sort -u)
+    done
+    files=$(echo $files | sort -u)
+
+    # Get the directory names of jars
+    jars=$(dirname $(echo $files | grep jar:// | awk '{print$2}')) #
+    directories=$(echo $files | grep 'file://' | awk '{print$2}')
+
+    # Stripped the jars from the list of files and only keep the files
+    files=$(cat <(echo $directories) <(echo $jars) | sort -u)
+    files=$(realpath -eq $(echo $files) | sort -u )
+    echo $files
 }
 
 function select_help() {
@@ -83,16 +95,21 @@ function select_help() {
 }
 
 function here() {
-    [[ -z $1 ]] && { echo "No remote specified" >&2; return 1; } 
-    local remote=$1; shift;
-    
+    [[ -z $1 ]] && {
+        echo "No remote specified" >&2
+        return 1
+    }
+    local remote=$1
+    shift
+
     local local_dir=$(pwd)
-    local remote_dir=$( echo $local_dir | sed "s;$HOME;~;" )
+    local remote_dir=$(echo $local_dir | sed "s;$HOME;~;")
     echo mutagen sync create $remote:$remote_dir/ $local_dir/
     echo "Start mutagen (y/N) ?"
     [[ $(read) != "y" ]] && return 1
     echo "Creating mutagen session"
     mutagen sync create $remote:$remote_dir/ $local_dir/
+    [[ $? == 0 ]] && echo "Mutagen session created"
 }
 
 parse_args "$@"
