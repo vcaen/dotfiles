@@ -1,4 +1,4 @@
-# vcaen's dotfiles
+# .vcaen (Vadim's dotfiles)
 
 ## What are dotfiles ?
 
