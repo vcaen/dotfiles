@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+hello_corp=~/.dotfiles/corp/hello_corp
+[[ -f $hello_corp ]] && $hello_corp
