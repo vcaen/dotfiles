@@ -277,7 +277,7 @@ for_window [class="jetbrains-idea"] title_format "  <span foreground='#05c1fd
 for_window [class="jetbrains-.*" title="^win\d+$"] floating enable, move to workspace $w1   # Jetbrains splashscreen
 
 ## Terminal
-for_window [class=".*terminal.*" title=".*ssh.*"] title_format \
+for_window [class=".*terminal.*" title="(?i).*ssh.*"] title_format \
             "<span stretch='ultracondensed'> </span><span foreground='#05F1Cd' size='smaller'> %title</span>"
 for_window [class=".*terminal.*"] title_format \
            "<span stretch='ultracondensed'> </span><span foreground='#05F1Cd' size='smaller'> %title</span>"
