@@ -1,60 +1,54 @@
-# .vcaen (Vadim's dotfiles) 🧗🏻‍♂
+# .vcaen (Vadim's Dotfiles) 🧗🏻‍♂
 
-## What are dotfiles ?
+## What Are Dotfiles?
 
-The name _dotfiles_ comes from the concept files whose name is prefixed with a dot `.`. 
-Those files are usually hidden in Linux and MacOS, and are used to save configurations for various programs.
+The term "dotfiles" is derived from files whose names have a dot `.` as a prefix. These files are typically hidden in Linux and macOS environments and are used to store configurations for various programs.
 
-If one wants to save the customization they made to those configuration file, it's a good practice to back them up somehere. 
-I decided to go the Github route to be able to share them to the world.
+If you want to preserve the customizations you've made to these configuration files, it's a good practice to back them up somewhere. I decided to take the GitHub route to share them with the world.
 
-## 🌟 What is special about my dotfiles ?
+## 🌟 What Makes My Dotfiles Special?
 
-I've been working on Android at Google for 7 years and my dotfiles reflect the tooling I need to be more productive. 
+I've been working on Android at Google for 7 years, and my dotfiles reflect the tools I need to boost productivity.
 
-I usually share them with new teammates when they join the team to help them setup their own workflow. 
-But I also insist on them just cherry-picking the tools they need, because utlimiatlty the best workflow for you is 
-the one you made for yourself.
+I usually share them with new teammates when they join the team to help them set up their own workflows. But I also emphasize that they should cherry-pick the tools they need because, ultimately, the best workflow for you is the one you create for yourself.
 
-## My workflow
+## My Workflow
 
-To better understand what is in my dotfiles, let me explain the tools I use:
+To get a better understanding of what's inside my dotfiles, let me explain the tools I use:
 
- - 🖥️ **Hardware**
-     - I work mainly on a Linux desktop locally or remotly via my Mac.
-       
- - 🐚 **Shell**
-     - My Shell is setup to [zsh] with [Oh My Zsh] to improve the experience
-     - Most of the time I use [tmux], but few of my scripts are not dependent on it
-     - I recently discover [fzf] so I integrate it more and more with my scripts.
-     - I don't have a particular prefence for the terminal emulators: kitty, gnome-ternminal, iTerm2 on Mac.
+- 🖥️ **Hardware**
+  - I primarily work on a Linux desktop, whether locally or remotely via my Mac.
 
- - 🪛 **Tools**:
-     - I extensively use git and repo (a wrapper made by Google to manage multiple Git repository at the same time).
-       You can find a lot of usefule alias in my [.gitconfig](git/gitconfig)
-     - My window manager is [i3wm] (made by another Googler ;) )
-     - I use IntelliJ/Andorid Studio and VS Code as my main IDE and file editor.
-  
-  - 🦀 **Rust tools**
-      - I'm not really developpin in rust, but the Rust package manager provides some really cool tool that I use daily:
-        [bat], [ag] (aka. `The Silver Searcher`), [fd-find].
-  
-  ## 🖌️ Color Schemes
+- 🐚 **Shell**
+  - My shell is configured with [zsh] using [Oh My Zsh] to enhance the experience.
+  - I mostly use [tmux], but a few of my scripts aren't dependent on it.
+  - I recently discovered [fzf], and I'm integrating it more and more into my scripts.
+  - I don't have a particular preference for terminal emulators; I use kitty, gnome-terminal, and iTerm2 on Mac.
 
-   - [Intellij dark theme](Vadim%20Scheme.icls)
+- 🪛 **Tools**:
+  - I extensively use Git and [repo] (a wrapper by Google for managing multiple Git repositories concurrently). You can find many useful aliases in my [.gitconfig](git/gitconfig).
+  - My window manager of choice is [i3wm] (made by another Googler 😉).
+  - I rely on IntelliJ/Android Studio and VS Code as my main IDEs and file editors.
 
-     ![](https://github.com/vcaen/intellij-color-scheme/raw/master/screenshot.png)
+- 🦀 **Rust Tools**
+  - I don't develop much in Rust, but the Rust package manager provides some really cool tools that I use daily, such as [bat], [ag] (aka "The Silver Searcher"), and [fd-find].
 
-   - [Intellij light theme](Vadim_light.icls) (for when it's sunny  outside or I need to wake up)
+## 🖌️ Color Schemes
 
-     ![](screenshots/light_theme.png)
+- [IntelliJ Dark Theme](Vadim%20Scheme.icls)
 
+  ![IntelliJ Dark Theme](https://github.com/vcaen/intellij-color-scheme/raw/master/screenshot.png)
 
-[fzf]: https://github.com/junegunn/fzf
-[i3wm]: https://i3wm.org/
-[tmux]: https://github.com/tmux/tmux/wiki
+- [IntelliJ Light Theme](Vadim_light.icls) (for sunny days or when I need to wake up)
+
+  ![IntelliJ Light Theme](screenshots/light_theme.png)
+
 [zsh]: https://wiki.archlinux.org/title/zsh
-[Oh My Zsh]: ohmyz.sh
+[Oh My Zsh]: https://ohmyz.sh
 [bat]: https://github.com/sharkdp/bat
 [ag]: https://github.com/ggreer/the_silver_searcher
 [fd-find]: https://github.com/sharkdp/fd
+[fzf]: https://github.com/junegunn/fzf
+[i3wm]: https://i3wm.org/
+[tmux]: https://github.com/tmux/tmux/wiki
+[repo]: https://gerrit.googlesource.com/git-repo/
