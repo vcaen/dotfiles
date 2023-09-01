@@ -1,4 +1,4 @@
-# .vcaen (Vadim's dotfiles)
+# .vcaen (Vadim's dotfiles) 🧗🏻‍♂
 
 ## What are dotfiles ?
 
@@ -8,7 +8,7 @@ Those files are usually hidden in Linux and MacOS, and are used to save configur
 If one wants to save the customization they made to those configuration file, it's a good practice to back them up somehere. 
 I decided to go the Github route to be able to share them to the world.
 
-## What is special about my dotfiles ?
+## 🌟 What is special about my dotfiles ?
 
 I've been working on Android at Google for 7 years and my dotfiles reflect the tooling I need to be more productive. 
 
@@ -20,26 +20,26 @@ the one you made for yourself.
 
 To better understand what is in my dotfiles, let me explain the tools I use:
 
- - **Hardware**
+ - 🖥️ **Hardware**
      - I work mainly on a Linux desktop locally or remotly via my Mac.
        
- - **Shell**
+ - 🐚 **Shell**
      - My Shell is setup to [zsh] with [Oh My Zsh] to improve the experience
      - Most of the time I use [tmux], but few of my scripts are not dependent on it
      - I recently discover [fzf] so I integrate it more and more with my scripts.
      - I don't have a particular prefence for the terminal emulators: kitty, gnome-ternminal, iTerm2 on Mac.
 
- - **Tools**:
+ - 🪛 **Tools**:
      - I extensively use git and repo (a wrapper made by Google to manage multiple Git repository at the same time).
        You can find a lot of usefule alias in my [.gitconfig](git/gitconfig)
      - My window manager is [i3wm] (made by another Googler ;) )
      - I use IntelliJ/Andorid Studio and VS Code as my main IDE and file editor.
   
-  - **Rust tools**
+  - 🦀 **Rust tools**
       - I'm not really developpin in rust, but the Rust package manager provides some really cool tool that I use daily:
         [bat], [ag] (aka. `The Silver Searcher`), [fd-find].
   
-  ## Color Schemes
+  ## 🖌️ Color Schemes
 
    - [Intellij dark theme](Vadim%20Scheme.icls)
 
