@@ -1,2 +1,4 @@
 VadimDebug*
 .vscode
+*.code-workspace
+

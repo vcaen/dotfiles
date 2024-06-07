@@ -40,7 +40,7 @@
     ],
     "editor.largeFileOptimizations": false,
     "[cpp]": {
-        "editor.defaultFormatter": "xaver.clang-format"
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
     },
     "workbench.startupEditor": "none",
     "C_Cpp.intelliSenseEngine": "disabled",
@@ -121,7 +121,8 @@
     "[toml]": {
         "editor.defaultFormatter": "be5invis.toml"
     },
-    "git.autofetch": true,
+    "git.autofetch": false,
     "kotlin.languageServer.enabled": false,
     "kotlin.debugAdapter.enabled": false,
+    "workbench.editor.mouseBackForwardToNavigate": true
 }

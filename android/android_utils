@@ -131,12 +131,43 @@ function adbserial() {
     # variable.
     # If an argument is given, the line matching the argument will be used without
     # showing a prompt.
-    filter=""
-    if [[ $# -gt 0 ]] ; then
-        filter="-f $1"
-        shift
+    local filter=""
+    local fastboot
+    local use_pontis
+    while [[ $# -gt 0 ]] ; do
+        case $1 in
+            -h)
+                echo "Usage: fastboot [flags] [filter]\n \
+flags:
+    -h : help.\n\
+    -f : fastboot.\n\
+    -p : use pontis."
+                return 0
+                ;;
+            -f)
+                fastboot=true; shift;
+                ;;
+            -p) 
+                use_pontis=true; shift;
+                ;;
+            *)
+                filter="-f $1"; shift
+                ;;     
+        esac
+    done
+
+    if [[ $use_pontis == true ]] ; then
+        if [[ $fastboot == true ]] ; then
+            serial=$(pontis devices | grep fastboot |  fzf --height=5 | awk '{print$2}')
+        else
+            serial="$(pontis devices | grep ADB | fzf --height=5 | awk '{print$6}' )"
+            [[ -n $serial ]] && serial=localhost:$serial
+        fi
+    else
+        local serial
+        serial=$(adbd $(echo "$filter"))
     fi
-    serial=$(adbd $(echo "$filter"))
+    
     if [[ -z $serial ]] ; then
         unset ANDROID_SERIAL
         unset ANDROID_SERIAL_PRODUCT
@@ -153,7 +184,7 @@ function aproductname() {
 }
 
 function adbsync() {
-    adb root && adb remount -R && adb wait-for-device root && adb remount && adb sync
+    adb root && adb remount -R && adb wait-for-device root && adb remount && adb shell stop && adb sync && adb shell start
 }
 
 function apxtodp {
@@ -252,7 +283,7 @@ function aps() {
         if [[ $pid == true ]] ; then 
             awk_index=2
         fi
-        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30%  --multi | awk "{print\$$awk_index}"
+        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30%  --multi --exact | awk "{print\$$awk_index}"
         return 0;
     fi
     if [[ $verbose == true ]] ; then 
@@ -276,7 +307,7 @@ function apkg() {
 function akill() {
     # Kill android processes
     processes=$(aps -p)
-    [[ -n $processes ]] && adb shell kill "$@" $processes 
+    [[ -n $processes ]] && adb shell kill "$@" $(echo $processes)
 }
 
 function atouch {
@@ -365,15 +396,19 @@ function logcat() {
                 args+=(-b all)
                 shift
                 ;;
+            -c)
+                adb logcat -c && echo "Logcat cleared"
+                return
+                ;;
             *)
 	            positionals+=($1)
 		        shift
         		;;
         esac
     done
-    logcat_outfile=$(mktemp --tmpdir logcat-XXXXX.log)
+    logcat_outfile=$(mktemp --tmpdir logcat-`date "+%Y-%m-%d_%H-%M-%S"`-XXX.log)
     echo "Saving to \$logcat_outfile $logcat_outfile" >&2
-    adb logcat -v "$format" "${args[@]}" "${positionals[@]}" | tee >( less -X -R +F ) > $logcat_outfile
+    adb logcat -v "$format" "${args[@]}" "${positionals[@]}" | tee $logcat_outfile |  less --ignore-case --quit-if-one-screen -R +F 
 }
 
 function adebugenable() {
@@ -384,7 +419,7 @@ function adebugenable() {
 
 function sjava() {
     # Search Java file
-    ag --java --ignore "*test*" -H -C 5 $1 | bat -l java --pager "less +/$1 -R"
+    ag --java --ignore "*test*" -H -C 5 $1 | bat -l java --pager "less +/$1 -R -n -i" --style="grid"
 }
 
 function sbp() {
@@ -392,14 +427,32 @@ function sbp() {
     ag -G ".*\.(bp|mk)" $1 -H -C 5 | bat -l js --pager "less +/$1 -R"
 }
 
-function fdzip() {
-    # Find files within jars and or zips
-    jar_pattern=$1
-    find_pattern=$2
-    dir=$3
+function aospformat() {
+    # Format code the the aosp format
+    git diff -U0 HEAD^ | $(gettop)/external/google-java-format/scripts/google-java-format-diff.py -a -p1 -i
+}
 
-    unzip_search_command='jar=$(echo {}); files=$(unzip -l $jar | grep '
-    unzip_search_command+=$find_pattern
-    unzip_search_command+='); [ -n "$files" ] && { echo "$jar"; echo "$files" | awk "{print \"  - \" \$4}"; echo; } '
-    fd -Hi "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
+function asettings() {
+    # List all Android settings
+    cat <(adb shell settings list system) <(adb shell settings list secure) <(adb shell settings list global) | sort -u | fzf
+}
+
+function aanr() {
+    # Make all ANR alert visible
+    local value=${1:-1}
+    adb shell settings put secure show_all_anrs $value
+    adb shell settings put secure anr_show_background $value
+
+    adb shell settings list secure | grep --color=no anr
+}
+
+function aselinuxaudit() {
+    adb pull /sys/fs/selinux/policy; adb logcat -b events -d | audit2allow -p policy
+}
+
+function android_generate_compile_commands() {
+    export SOONG_GEN_COMPDB=1
+    export SOONG_GEN_COMPDB_DEBUG=1
+    export SOONG_COLLECT_JAVA_DEPS=1
+    export SOONG_LINK_COMPDB_TO=$ANDROID_HOST_OUT
 }

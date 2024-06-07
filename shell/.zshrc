@@ -109,13 +109,14 @@ alias -s {png,PNG,jpeg,jpg,JPEG}="eog"
 source /usr/share/doc/fzf/examples/key-bindings.zsh
 source /usr/share/doc/fzf/examples/completion.zsh
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
-export FZF_DEFAULT_OPTS="--ansi"
+export FZF_DEFAULT_OPTS="--ansi --height=~20%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export LESS="--mouse -RXF" # enable mouse navigation for less
+export LESS="--mouse -RXF --ignore-case" # enable mouse navigation for less
 
 if which bat >/dev/null ; then
-	export MANPAGER="sh -c 'col -bx | bat -l man -p'" # use bat as man pager
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'" # use bat as man pager
+    export MANROFFOPT="-c"
 fi
 
 

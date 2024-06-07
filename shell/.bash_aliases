@@ -15,9 +15,9 @@ function envproc() { echo $(( $(nproc)*2)); }
 
 # REPO
 # Login if needed and Sync the current projec
-alias rs="git credential-corpsso check > /dev/null || glogin; repo sync -cj99 ."
+alias rs="gsso; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="git credential-corpsso check > /dev/null || glogin; repo sync -cj32"
+alias rsa="gsso; repo sync -cj32"
 alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"
@@ -28,7 +28,7 @@ alias rupcb="repo upload --cbr ."
 alias rupcby="repo upload --cbr -y ."
 
 # GIT
-alias gsso="git credential-corpsso login"
+alias gsso="gcertstatus --check_remaining=1h --quiet || glogin"
 alias gcn="gitbranchnum"
 alias gtmp="git add -A && git commit -m TEMP" # Create a commit named TEMP
 alias gdl="git diff --color=always | less -r" # Open git diff in less with colors
@@ -302,30 +302,36 @@ function clip() {
 }
 
 function lf() {
-    if [ $# -lt 1 ] ; then
+    if [[ $1 = "-h" ]] ; then
         echo "Usage: lf [<dir>] <command> [args...]. "
         echo "Execute the command using the last modified file from the dir as argument"
         return 1
     fi
     dir="."
     command=""
-    if [ $# -gt 1 ] ; then
-        command=$1; shift
+    if [[ -d $1 ]] ; then
+         dir=$1; shift
     fi
-    dir=$1; shift
+
     file=$(ls -FtH1 $dir | grep -vE "@|/" | head -n 1)
 
     if [ -z $file ] ; then
         echo "No file in $dir"; return 1
     fi
 
+    if [[ $# = 0 ]] ; then
+        echo $file
+        return 0
+    fi
+
+    command="$1"; shift
     if [[ -z $command ]] ; then
         echo $dir/$file
         return 0
     fi
 
     echo "$command" "$@" "$dir/$file"
-    "$command" "$@" "\"$dir/$file\""
+    "$command" "$@" "$dir/$file"
 }
 
 function gcon() {
@@ -497,8 +503,9 @@ function funzip() {
 function ftree() {
     # tree with fzf, preview. Relative path of Selected line will be printed upon selection
     local header_lines=2
-    local output_command="sh -c 'cat <(echo ..) <(tree -fi) | tac | sed -n \$(( {n} + $header_lines + 1 ))p ' "
-    cat <(echo ..) <(tree -C) | tac | \
+    local dir=${1:-.}
+    local output_command="sh -c 'cat <(echo ${dir}/..) <(tree -fi ${dir} ) | tac | sed -n \$(( {n} + $header_lines + 1 ))p ' "
+    cat <(echo ${dir}/..) <(tree -C ${dir} ) | tac | \
     fzf --ansi --header-lines=$header_lines \
     --bind "enter:become($output_command)" \
     --bind 'start:last' \
@@ -507,5 +514,25 @@ function ftree() {
     --preview="f=\$($output_command); [[ -f \$f ]] && bat -f \$f" \
     --preview-window="70%,hidden" \
     --height=~50% \
-    --header="ctrl-p: Preview"
+    --header="ctrl-p: Preview" \
+    --tac \
+    --layout=reverse-list
+}
+
+function fdzip() {
+    # Find files within jars and or zips
+    jar_pattern=$1
+    find_pattern=$2
+    dir=$3
+
+    [[ -z $3 ]] && {echo "Error" >&2; return 1 }
+
+    unzip_search_command='jar=$(echo {}); files=$(unzip -l $jar 2>/dev/null | grep '
+    unzip_search_command+=$find_pattern
+    unzip_search_command+='); [ -n "$files" ] && { echo "$jar"; echo "$files" | awk "{print \"  - \" \$4}"; echo; } '
+    fd -Hi "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
+}
+
+function tpane() {
+    tmux send -t+1 C-c q C-c C-m "$(echo $@)" C-m
 }

@@ -8,6 +8,7 @@ mkdir -p ~/.oh-my-zsh/custom/themes
 # Links:
 ln -is ~/.dotfiles/bin/aanim ~/bin/aanim
 ln -is ~/.dotfiles/bin/dc ~/bin/dc
+ln -is ~/.dotfiles/bin/h.sh ~/bin/h
 ln -is ~/.dotfiles/bluetooth/bose_connect ~/bin/boseconnect
 ln -is ~/.dotfiles/config/mpv ~/.config/mpv
 ln -is ~/.dotfiles/git/gitconfig ~/.gitconfig

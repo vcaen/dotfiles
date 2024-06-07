@@ -103,12 +103,21 @@ function here() {
     shift
 
     local local_dir=$(pwd)
-    local remote_dir=$(echo $local_dir | sed "s;$HOME;~;")
+    local remote_dir
+
+    if [[ -n $1 ]] ; then
+        remote_dir=$1; 
+        shift;
+    else
+        remote_dir=$(echo $local_dir | sed "s;$HOME;~;")
+    fi
     echo mutagen sync create $remote:$remote_dir/ $local_dir/
     echo "Start mutagen (y/N) ?"
-    [[ $(read) != "y" ]] && return 1
+    read -q || return 1
     echo "Creating mutagen session"
-    mutagen sync create $remote:$remote_dir/ $local_dir/
+    mutagen sync create \
+        --symlink-mode posix-raw\
+        $remote:$remote_dir/ $local_dir/
     [[ $? == 0 ]] && echo "Mutagen session created"
 }
 
