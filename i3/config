@@ -13,9 +13,12 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: FiraCode-Regular 12, FontAwesome 10, "Font Awesome 6 Brands" 10
+font pango: FiraCode-Regular 6, FontAwesome 5, "Font Awesome 6 Brands" 5
 
-title_align center #left|center|right
+title_align center # left|center|right
+for_window [class=".*"] title_window_icon no
+#for_window [class=".*"] title_window_icon padding 5px
+
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -48,7 +51,7 @@ bar {
 # start a terminal
 # bindsym $mod+Return exec kitty #tmux new-session
 # bindsym $mod+Shift+Return exec kitty --detach zsh -c "tmux attach -t $(tmux list-session | grep -v attached | cut -d':' -f1 | head -n 1)"
- bindsym $mod+Return exec gnome-terminal
+bindsym $mod+Return exec alacritty --class terminal
 
 set $close "Close the window? (y/n)"
 
@@ -151,24 +154,24 @@ bindsym XF86Forward workspace next
 bindsym XF86Back workspace prev
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $w1
-bindsym $mod+Shift+2 move container to workspace $w2
-bindsym $mod+Shift+3 move container to workspace $w3
-bindsym $mod+Shift+4 move container to workspace $w4
-bindsym $mod+Shift+5 move container to workspace $w5
-bindsym $mod+Shift+6 move container to workspace $w6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace $w1; workspace $w1
+bindsym $mod+Shift+2 move container to workspace $w2; workspace $w2
+bindsym $mod+Shift+3 move container to workspace $w3; workspace $w3
+bindsym $mod+Shift+4 move container to workspace $w4; workspace $w4
+bindsym $mod+Shift+5 move container to workspace $w5; workspace $w5
+bindsym $mod+Shift+6 move container to workspace $w6; workspace $w6
+bindsym $mod+Shift+7 move container to workspace 7; workspace 7
+bindsym $mod+Shift+8 move container to workspace 8; workspace 8
+bindsym $mod+Shift+9 move container to workspace 9; workspace 9
+bindsym $mod+Shift+0 move container to workspace 10; workspace 10
 
-bindsym $mod+Shift+F1 move container to workspace 6
+bindsym $mod+Shift+F1 move container to workspace $w6
 bindsym $mod+Shift+F2 move container to workspace 7
 bindsym $mod+Shift+F3 move container to workspace 8
 bindsym $mod+Shift+F4 move container to workspace 9
 bindsym $mod+Shift+F5 move container to workspace 10
 
-bindsym $mod+F1 workspace 6
+bindsym $mod+F1 workspace $w6
 bindsym $mod+F2 workspace 7
 bindsym $mod+F3 workspace 8
 bindsym $mod+F4 workspace 9
@@ -248,7 +251,7 @@ bindsym $mod+x scratchpad show
 bindsym $mod+g [title="^(Android )?Emulator"] move container to workspace emulator, [title="^(Android )?Emulator"] floating enable
 
 # Border toggle
-bindsym $mod+t border toggle 
+bindsym $mod+t border toggle
 
 bindsym Mod1+Control+e exec nemo
 bindsym $mod+c move absolute position mouse
@@ -265,6 +268,7 @@ bindsym $mod+y exec --no-startup-id remote_copy_paste
 assign [class="jetbrains-studio"] $w1
 assign [class="jetbrains-idea"] $w1
 assign [title=".*YouTube Music$"] media
+
 
 # Window Formatting
 for_window [class=".*"] title_format "<span size='smaller'>%title</span>"
@@ -290,28 +294,22 @@ for_window [class="Code"] title_format \
 
 for_window [class="Google-chrome"] title_format \
            "<span stretch='ultracondensed' foreground='#aa786c' > </span><span size='smaller'> %title</span>"
-for_window [class="Google-chrome" title=".*Mail$"] title_format "<span stretch='ultracondensed' foreground='#3D9CF4'>   <span size='smaller'>%title</span>"
+for_window [class="Google-chrome" title=".*Mail$"] title_format "<span stretch='ultracondensed' foreground='#3D9CF4'>   </span><span size='smaller'>%title</span>"
 for_window [class="Google-chrome" title="^Chrome Remote Desktop.*"] title_format "<span foreground='#3DDC84' size='smaller'>  %title</span>"
 
 ## Android Specific
-for_window [class="jetbrains-idea" title=".*android/rvc"] title_format \
-           "<span foreground='#05c1fd' stretch='ultracondensed'>[RVC]</span><span size='smaller'> %title</span>"
-for_window [class="jetbrains-idea" title=".*android/sc"] title_format \
-          "<span foreground='#05c1fd' stretch='ultracondensed'>[SC] </span><span size='smaller'> %title</span>"
-for_window [class="jetbrains-idea" title=".*android/master"] title_format "[MSTR]<span size='smaller'> %title</span>"
-for_window [class="jetbrains-idea" title=".*android/sc.*cts"] title_format \
-          "<span foreground='#05c1fd' stretch='ultracondensed'>[SC-CTS] </span><span size='smaller'> %title</span>"
+for_window [class="jetbrains-idea" title=".*android/main"] title_format "[MAIN]<span size='smaller'> %title</span>"
 
 set $google-chat crx_mdpkiolbdkhdjpekfbkbmhigcaggjagi
 
 ## Google Chat
-for_window [class="Google-chrome" instance=$google-chat] title_format "<span size='smaller'>   %title</span>" 
+for_window [class="Google-chrome" instance=$google-chat] title_format "<span size='smaller'>   %title</span>"
 
 ## Emulator
 for_window [title="^Android Emulator.*"] floating enable; resize set 400 700; move window to position mouse; border normal
 
 ## Other
-for_window [class="scrcpy"] floating enable; border normal 
+for_window [class="scrcpy"] floating enable; border normal
 for_window [class="^pavucontrol*"] floating enable; resize set 500 500; move position center # Volume Controls
 for_window [class="^copyq"] floating enable, move position center
 
