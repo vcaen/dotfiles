@@ -1,7 +1,8 @@
 #!/bin/zsh
 [[ $DEBUG == "true" ]] && set -x
 
-device=$(bluetoothctl devices Paired | rofi -dmenu -window-title="Quick Bluetooth" | awk '{print$2}')
+device_list=$(cat <(bluetoothctl devices Connected) <(bluetoothctl devices Paired) )
+device=$(echo $device_list| rofi -dmenu -window-title="Quick Bluetooth" | awk '{print$2}')
 connected=$(bluetoothctl devices Connected | grep $device >/dev/null && echo true)
 
 function try_connect() {
@@ -12,9 +13,11 @@ function try_connect() {
     done
 }
 
+[[ -z $device ]] && return 0 ;
+
 if [[ $connected == "true" ]] ; then
     bluetoothctl disconnect $device
-else 
+else
     attempts=5
     try_connect
 

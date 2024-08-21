@@ -83,7 +83,7 @@
 	cmd = kitty kitty +kitten diff $LOCAL $REMOTE
 
 [http]
-	cookiefile = /home/caen/.gitcookies
+	cookiefile = /usr/local/google/home/caen/.gitcookies
 [log]
 	date = iso
 [core]
