@@ -11,8 +11,8 @@ function print_usage() {
     ls|list         mutagen sync list
     rm|remove       mutagen sync remove
     iml             {in progress}
-    here <target>   mutagen sync create in this dir.
-    
+    here <remote> (<target>)   mutagen sync create in this dir.
+
     [nothing] -> FZF menu
 EOF
 }
@@ -106,11 +106,17 @@ function here() {
     local remote_dir
 
     if [[ -n $1 ]] ; then
-        remote_dir=$1; 
+        remote_dir=$1;
         shift;
     else
         remote_dir=$(echo $local_dir | sed "s;$HOME;~;")
     fi
+    local dir_basename=$(basename $remote_dir)
+    if [[ $dir_basename -ne $(basename $local_dir) ]] ; then
+        mkdir -p $local_dir/$dir_basename
+        $local_dir=$local_dir/$dir_basename
+    fi
+
     echo mutagen sync create $remote:$remote_dir/ $local_dir/
     echo "Start mutagen (y/N) ?"
     read -q || return 1
