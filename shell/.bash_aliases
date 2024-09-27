@@ -507,10 +507,10 @@ function ftree() {
     local output_command="sh -c 'cat <(echo ${dir}/..) <(tree -fi ${dir} ) | tac | sed -n \$(( {n} + $header_lines + 1 ))p ' "
     cat <(echo ${dir}/..) <(tree -C ${dir} ) | tac | \
     fzf --ansi --header-lines=$header_lines \
-    --bind "enter:become($output_command)" \
+    --bind "ctrl-space:become($output_command)" \
     --bind 'start:last' \
     --bind 'ctrl-p:toggle-preview' \
-    --bind "ctrl-space:reload(cat <(echo ..) <(tree -C \$($output_command)) | tac)" \
+    --bind "enter:reload(cat <(echo ..) <(tree -C \$($output_command)) | tac)" \
     --preview="f=\$($output_command); [[ -f \$f ]] && bat -f \$f" \
     --preview-window="70%,hidden" \
     --height=~50% \
@@ -531,6 +531,38 @@ function fdzip() {
     unzip_search_command+=$find_pattern
     unzip_search_command+='); [ -n "$files" ] && { echo "$jar"; echo "$files" | awk "{print \"  - \" \$4}"; echo; } '
     fd -Hi "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
+}
+
+fzfp () {
+        fzf \
+          --preview='bat -f {}' \
+          --height='100' \
+          --preview-window='right,66%' \
+          --keep-right \
+          --reverse \
+          --bind 'enter:execute(bat {})' \
+          --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
+          --biund
+          --header="Enter: Preview"
+}
+
+fzfg () {
+        local pattern
+        if [[ -n "$1" ]]
+        then
+                pattern="$1"
+                shift
+        fi
+        local ag_option=$@
+        local AG_PREFIX="ag --smart-case -C0 --color ${ag_option[@]}"
+        echo | fzf --ansi --color "hl:-1:underline,hl+:-1:underline:reverse" \
+            --delimiter : \
+            --preview '[[ -z {} ]] || bat --color=always {1} --highlight-line {2}' \
+            --preview-window 'right,70%,border-bottom,+{2}+3/3,~3' \
+            --height=100% --keep-right --with-nth=1,2 \
+            --prompt="Search: " \
+            --bind "change:reload:$AG_PREFIX {q} || true" \
+            --ansi --disabled --query "$pattern"
 }
 
 function tpane() {
