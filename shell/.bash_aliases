@@ -17,7 +17,7 @@ function envproc() { echo $(( $(nproc)*2)); }
 # Login if needed and Sync the current projec
 alias rs="gsso; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="gsso; repo sync -cj32"
+alias rsa="gsso; repo sync -cj32 --rebase"
 alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"
@@ -343,6 +343,13 @@ function gcon() {
     git co $br
 }
 
+function git_fzf_diff() {
+    local ref=${1:-"HEAD"}
+    git diff --stat=1000 --relative  --color=always --no-renames $ref | tac | \
+		fzf --ansi --header-lines=1 --header="diffs with $ref" \
+		--preview="git diff $ref -- {1} | bat -f -l diff --file-name={1}" --preview-window='up,85%' --height=100%
+}
+
 function rcode() {
     local host=$1
     local file=$2
@@ -487,10 +494,16 @@ function funzip() {
     local outdir
     f=$1; shift
     outdir="$(basename $f)-extracted"
-    mkdir $outdir
-    fz=$(unzip -l $f | awk '{print$4}' | fzf --multi --header-lines=3 --reverse --height=90% \
-    --header="Select files to extract. TAB to select. ENTER to validate");
+    fz=$(unzip -l $f | awk '{print$4}' | grep -v "/$" | \
+    fzf --multi --header-lines=3 --reverse --height=90% \
+    --header="Select files to extract. TAB to select. ENTER to validate. ctrl-p to preview" \
+    --delimiter=" " \
+    --preview-window hidden \
+    --preview "echo {1} ; [[ {1} != */ ]] && { unzip -p $f {1} | bat -f --file-name {1} }" \
+    --bind 'ctrl-p:toggle-preview' \
+    );
     if [[ -n $fz ]] ; then 
+        mkdir $outdir || return 1
         unzip -d $outdir $f $(echo $fz)
         echo "Extracted into $outdir"
         return 0 
@@ -525,7 +538,7 @@ function fdzip() {
     find_pattern=$2
     dir=$3
 
-    [[ -z $3 ]] && {echo "Error" >&2; return 1 }
+    [[ -z $3 ]] && {echo "Usage fdzip <jar pattern> <file pattern> <directory>" >&2; return 1 }
 
     unzip_search_command='jar=$(echo {}); files=$(unzip -l $jar 2>/dev/null | grep '
     unzip_search_command+=$find_pattern
@@ -540,10 +553,10 @@ fzfp () {
           --preview-window='right,66%' \
           --keep-right \
           --reverse \
-          --bind 'enter:execute(bat {})' \
+          --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat {} ; sleep 2)' \
           --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
-          --biund
-          --header="Enter: Preview"
+          --bind 'ctrl-y:yank+accept' \
+          --header="Enter: Preview | Ctrl-y : accept"
 }
 
 fzfg () {

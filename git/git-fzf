@@ -1,0 +1,65 @@
+#!/bin/zsh
+
+git_fzf() {
+    fzf_status() {
+        # Interactive git diff, with selection to add to the index
+        preview_command="git diff --color=always --stat {-1}  | head -n1; git diff --color=always --exit-code -- {-1} && bat {-1}"
+
+        git -c color.status=always status --untracked-files=all -s |
+            fzf --reverse --no-sort --nth=2 --preview="$preview_command" \
+                --preview-window="up,67%,~1" \
+                --multi |
+            awk '{print $NF}'git
+    }
+
+    diff() {
+        local ref=${1:-'HEAD'}
+        local header="Diff with $(git log --oneline -n 1 --decorate=full --color $ref) "
+        local preview_cmd="git diff $ref -- {1} | bat -f -l diff --file-name={1} "
+        local preview_cmd_search="echo \"Search result\"; git diff $ref --color --unified=0 -- {} | grep -C 3 {q} | sed 's/{q}/\x1b[7m&\x1b[27m/ig' | bat -f -l diff --file-name={}"
+        local search_cmd="git diff --stat=1000 --relative --color=always --no-renames $ref | tac"
+
+        git diff --stat=1000 --relative --color=always --no-renames $ref | tac |
+            fzf \
+                --ansi \
+                --header-lines=1 \
+                --header=\"$header\" \
+                --header-first \
+                --reverse \
+                --preview="$preview_cmd" \
+                --preview-window='up,85%' --height=100% \
+                --bind "ctrl-f:disable-search+change-prompt(Search diff:)+rebind(change)+unbind(load)" \
+                --bind 'load:unbind(change)' \
+                --bind "change:reload($search_cmd)+preview:$preview_cmd_search"
+    }
+
+    diff_grep() {
+        local ref=${1:-'HEAD'}
+        local search_cmd="for file in $(git diff --name-only $ref) ; do \
+                git diff --color --unified=0 ${file} | grep -i {q} >/dev/null && echo ${file} ;\
+            done"
+        local default_cmd="git diff --relative --name-only --unified=0 $ref"
+        local preview_cmd="bat -f {1}"
+        local preview_cmd_search="echo \"Searching for {q}:\"; \
+            [[ -n {q} && -f {1} ]] && { git diff $ref --color -- {1} | grep -iEC 3 '{q}' | sed 's/{q}/\x1b[7m&\x1b[27m/ig' | bat -f -l diff --file-name={1} }"
+        local header="Diff with $(git log --oneline -n 1 --decorate=full --color $ref) "
+        local PARAMS=(
+            --ansi
+            --header-lines=1
+            --header="$header"
+            --header-first
+            --reverse
+            --preview="set -x; [[ -n {q} ]] && $preview_cmd_search || $preview_cmd "
+            --disabled
+            --preview-window='up,85%' 
+            --height=100%
+            #            --bind "ctrl-f:disable-search+change-prompt(Search diff:)+rebind(change)+unbind(load)"
+            #            --bind 'load:unbind(change)'
+            --bind "change:reload-sync($search_cmd)"
+        )
+        eval $default_cmd | tac | fzf "${PARAMS[@]}"
+    } 
+    "$@"
+}
+
+git_fzf "$@"

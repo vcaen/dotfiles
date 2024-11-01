@@ -286,25 +286,40 @@ function astopstart() {
 
 function aps() {
     # Find an Android process by name
-    grep_str=""
-    pid=false
-    verbose=false
-    [[ "$1" == "-p" ]] && {
-        pid=true
-        shift
-    }
-    [[ "$1" == "-v" ]] && {
-        verbose=true
-        shift
-    }
-    [[ -n "$1" ]] && grep_str="$1"
+    local grep_str=""
+    local pid=false
+    local verbose=false
+    local uid=false
+    local ps_options=()
 
+    while [[ -n $1 ]] ; do 
+        case $1 in
+         -p) 
+            pid=true
+            shift
+            ;;
+         -v)
+            verbose=true
+            shift            
+            ;;
+        --uid|-u)
+            uid=true
+            ps_options+=(-O UID)
+            shift
+            ;;
+        *)
+            grep_str+=$1
+            shift
+            ;;
+        esac
+    done
+    
     if [[ -z $grep_str ]]; then
         local awk_index=9
         if [[ $pid == true ]]; then
             awk_index=2
         fi
-        adb shell ps | fzf --header-lines 1 --layout=reverse --height=30% --multi --exact | awk "{print\$$awk_index}"
+        adb shell ps ${ps_options[@]} | fzf --header-lines 1 --layout=reverse --height=30% --multi --exact | awk "{print\$$awk_index}"
         return 0
     fi
     if [[ $verbose == true ]]; then

@@ -25,7 +25,7 @@
 	cmn = commit --amend --no-edit
 	cimn = commit --amend --no-edit
 	co = checkout
-	con = "! b=$(git b | fzf --reverse --height=20% | awk '{print$1}'); [[ -n $b ]] && git co $b"
+	con = ! gitbranchnum
 	cp = cherry-pick
 	cpc = cherry-pick --continue
 	cpa = cherry-pick --abort
@@ -36,13 +36,18 @@
 	ria = rebase -i --autosquash
 	rian = "! GIT_SEQUENCE_EDITOR=: git ria"
 	llp = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 50
-	ll = "! git llp \"$@\" --color=always | fzf --reverse --preview 'git show --color=always --stat -p {1}' --preview-window='down,80%,wrap' --height=50% | awk '{print$1} '"
-	d = difftool --dir-diff
+
+	ll = "! git llp \"$@\" --color=always | \
+            fzf --reverse \
+                --preview 'git show --color=always --stat -p {1}' \
+                --preview-window='down,80%,wrap' \
+                --height=50% | awk '{print$1} '"
+
+	d = "! ~/.dotfiles/git/git-fzf diff"
+
+    dh ="! git d HEAD~1"
 	dsh = diff --stat HEAD~1
 	ds = diff --stat
-	dh = "! git diff --stat=1000 --relative HEAD~1 --color=always --no-renames | tac | \
-		fzf --ansi --header-lines=1 --header='diffs with HEAD~1' \
-		--preview='echo {1}; git diff --color=always HEAD~1 -- {1}' --preview-window='up,85%' --height=100%"
 	reball = ! gitrebase
 	dn = "!sh -c 'if [ $# -eq 0 ] ; then git d HEAD~1 HEAD ; else git diff HEAD~`expr $1 + 1` HEAD~$1 ; fi' -"
 
@@ -52,7 +57,7 @@
 	# temp/untemp : create/remvove a temporaty commit
 	temp="!git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign -m \"TEMP\""
 	untemp="!git log -n 1 | grep -q -c \"TEMP\" && git reset HEAD~1"
-	stf="! ~/.dotfiles/git/git-fuzzydiff"
+	stf="! ~/.dotfiles/git/git-fzf fzf_status"
 	df="stf"
 
 	# Visual git branch using rofi
