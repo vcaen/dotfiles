@@ -216,8 +216,8 @@ bindsym $mod+r mode "resize"
 bindsym $mod+z floating enable; resize set 400 700; move window to position cursor
 
 # lock screen
-# bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
-bindsym Mod1+Mod4+l exec "xdg-screensaver lock && sleep 3 && xset dpms force off"
+bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
+# bindsym Mod1+Mod4+l exec "xdg-screensaver lock && sleep 3 && xset dpms force off"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@
@@ -241,6 +241,7 @@ bindsym $mod+p exec flameshot gui -d 500
 bindsym $mod+Shift+p exec gpick -p
 bindsym $mod+Control+p exec gpick
 bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+u exec setxkbmap $(echo -e "us \nus intl nodeadkey" | rofi -dmenu)
 
 hide_edge_borders smart #none|vertical|horizontal|both|smart
 # new_window 1pixel
