@@ -25,11 +25,12 @@
 	cmn = commit --amend --no-edit
 	cimn = commit --amend --no-edit
 	co = checkout
-	con = ! gitbranchnum
+	con = "! git co $(git bl)"
 	cp = cherry-pick
 	cpc = cherry-pick --continue
 	cpa = cherry-pick --abort
 	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset)%(end) %(contents:subject)\""
+    bl="!git b | grep -v '*' | fzf --preview 'git llp -n3 --color {+1}' --preview-window='up,wrap' --multi | awk '{print$1}'"
 	rc = rebase --continue
 	ra = rebase --abort
 	ri = rebase -i
@@ -37,11 +38,11 @@
 	rian = "! GIT_SEQUENCE_EDITOR=: git ria"
 	llp = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 50
 
-	ll = "! git llp \"$@\" --color=always | \
+	ll = "! f() { git llp ${@} --color=always | \
             fzf --reverse \
                 --preview 'git show --color=always --stat -p {1}' \
                 --preview-window='down,80%,wrap' \
-                --height=50% | awk '{print$1} '"
+                --height=50% | awk '{print$1}'; }; f"
 
 	d = "! ~/.dotfiles/git/git-fzf diff"
 

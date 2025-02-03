@@ -17,7 +17,7 @@ function envproc() { echo $(( $(nproc)*2)); }
 # Login if needed and Sync the current projec
 alias rs="gsso; repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="gsso; repo sync -cj32 --rebase"
+alias rsa="gsso; repo sync -cj32"
 alias rrb="repo rebase"
 alias ra="repo abandon"
 alias rdl="repo download"
@@ -473,7 +473,10 @@ function fat() {
     fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \
         --nth='2..' \
-        --preview "$preview_command" --preview-window 'up,75%,wrap,+{1}+1/2'
+        --preview "$preview_command" \
+        --preview-window 'up,50%,wrap,+{1}+1/2' \
+        --bind "ctrl-p:toggle-preview" \
+        --header="ctrl-p: Preview" 
 
     [[ -f $tempinput ]] && rm $tempinput
 }
@@ -547,37 +550,23 @@ function fdzip() {
 }
 
 fzfp () {
-        fzf \
-          --preview='bat -f {}' \
-          --height='100' \
-          --preview-window='right,66%' \
-          --keep-right \
-          --reverse \
-          --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat {} ; sleep 2)' \
-          --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
-          --bind 'ctrl-y:yank+accept' \
-          --header="Enter: Preview | Ctrl-y : accept"
+  ~/.dotfiles/bin/fz preview $@
+}
+
+fzfd () {
+  ~/.dotfiles/bin/fz dir $@
 }
 
 fzfg () {
-        local pattern
-        if [[ -n "$1" ]]
-        then
-                pattern="$1"
-                shift
-        fi
-        local ag_option=$@
-        local AG_PREFIX="ag --smart-case -C0 --color ${ag_option[@]}"
-        echo | fzf --ansi --color "hl:-1:underline,hl+:-1:underline:reverse" \
-            --delimiter : \
-            --preview '[[ -z {} ]] || bat --color=always {1} --highlight-line {2}' \
-            --preview-window 'right,70%,border-bottom,+{2}+3/3,~3' \
-            --height=100% --keep-right --with-nth=1,2 \
-            --prompt="Search: " \
-            --bind "change:reload:$AG_PREFIX {q} || true" \
-            --ansi --disabled --query "$pattern"
+  ~/.dotfiles/bin/fz grep $@
 }
 
 function tpane() {
     tmux send -t+1 C-c q C-c C-m "$(echo $@)" C-m
+}
+
+function cdd() {
+    [[ $# -ge 1 ]] || return 1;
+    [[ -f $1 ]] && { cd $( dirname $1 ); return 0 }
+    [[ -d $1 ]] && { cd $1; return 0 }
 }

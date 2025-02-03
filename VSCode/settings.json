@@ -124,5 +124,6 @@
     "git.autofetch": false,
     "kotlin.languageServer.enabled": false,
     "kotlin.debugAdapter.enabled": false,
-    "workbench.editor.mouseBackForwardToNavigate": true
+    "workbench.editor.mouseBackForwardToNavigate": true,
+    "cloudcode.duetAI.project": ""
 }

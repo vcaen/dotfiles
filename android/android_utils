@@ -14,29 +14,20 @@ function adbd() {
     local filter=""
     if [[ "$1" == "-f" ]]; then
         shift
-        filter="$1"
+        filter="--query $1 --select-1"
         shift
     fi
 
-    local devices=$(adb devices -l | awk '{print $1 "\t" $4 "\t" $5}')
-    header="$devices"
-    devices=$(echo "$devices" | tail -n +2)
-    count=$(($(echo "$devices" | wc -l) - 1))
-    sel=1
-    serial=-1
-    if [[ -n $filter ]]; then
-        serial=$(echo "$devices" | grep "$filter" | awk '{print$1}')
-    else
-        if [ $count -gt 1 ]; then
-            echo $(echo "$header" | head -n1) >&2
-            echo "$devices" | >&2 grep -n '^'
-            read sel"?Device: "
-        fi
-        if [[ -z $sel ]]; then
-            return 0
-        fi
-        serial=$(echo "$devices" | awk "NR==$sel {print\$1}")
-    fi
+    local devices=""
+    for serial in $(adb devices -l | tail -n+2 | awk '{print$1}') ; 
+    do
+        devices="$devices\n$serial"
+        devices="$devices $(adb -s $serial shell 'echo `getprop ro.serialno` `getprop ro.product.device` `getprop ro.product.model`' 2>&1)"
+    done
+    
+    local serial=$(echo $devices |  fzf $(echo $filter) --bind 'focus:execute-silent(adb -s {1} shell input keyevent KEYCODE_NOTIFICATION KEYCODE_ESCAPE)'| awk '{print$1}')
+
+    adb -s $serial shell input keyevent KEYCODE_ESCAPE
 
     if [ $# -gt 0 ]; then
         adb -s "$serial" "$@"
@@ -292,17 +283,17 @@ function aps() {
     local uid=false
     local ps_options=()
 
-    while [[ -n $1 ]] ; do 
+    while [[ -n $1 ]]; do
         case $1 in
-         -p) 
+        -p)
             pid=true
             shift
             ;;
-         -v)
+        -v)
             verbose=true
-            shift            
+            shift
             ;;
-        --uid|-u)
+        --uid | -u)
             uid=true
             ps_options+=(-O UID)
             shift
@@ -313,7 +304,7 @@ function aps() {
             ;;
         esac
     done
-    
+
     if [[ -z $grep_str ]]; then
         local awk_index=9
         if [[ $pid == true ]]; then
@@ -522,3 +513,8 @@ function android_generate_compile_commands() {
     export SOONG_COLLECT_JAVA_DEPS=1
     export SOONG_LINK_COMPDB_TO=$ANDROID_HOST_OUT
 }
+
+# Enable native verbose loging
+alias alogv='sed -i "s;^\(//\s*\)\?\(#define LOG_NDEBUG 0\);\2;g" $(ag -r "#define LOG_NDEBUG 0"  -l)'
+# Disable native verbose loging
+alias alogvn='sed -i "s;^\(//\s*\)\?\(#define LOG_NDEBUG 0\);// \2;g" $(ag -r "#define LOG_NDEBUG 0"  -l)'
