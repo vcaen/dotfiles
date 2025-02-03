@@ -1,0 +1,10 @@
+#!/bin/zsh
+# Interactive git diff, with selection to add to the index
+preview_command="git diff --color=always --stat {-1}  | head -n1; git diff --color=always --exit-code -- {-1} && bat {-1}"
+
+git -c color.status=always status --untracked-files=all -s |\
+ fzf --reverse --no-sort --nth=2 --preview="$preview_command" \
+ --preview-window="up,67%,~1" \
+ --multi | \
+ awk '{print $NF}'git 
+

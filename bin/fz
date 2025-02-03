@@ -1,0 +1,77 @@
+#!/bin/zsh
+
+[[ $DEBUG == "true" ]] && set -x
+
+fz_preview() {
+    local dir=$(pwd)
+    [[ -n $1 && -d $1 ]] && dir="$1"
+    (
+        cd $dir
+        fzf \
+            --preview='bat -f {}' \
+            --height='100' \
+            --preview-window='right,66%' \
+            --keep-right \
+            --reverse \
+            --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat -f {} ; sleep 2)' \
+            --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
+            --bind 'ctrl-y:yank+accept' \
+            --header="Enter: Preview | Ctrl-y : accept"
+    )
+}
+
+fz_dir() {
+    local dir=$(pwd)
+    [[ -n $1 && -d $1 ]] && dir="$1"
+    (
+        cd $dir
+        file_list=$( cat <(echo ..) <(fd --color always --max-depth 1 ) )
+        echo $file_list | \
+            fzf \
+                --preview='[[ -d {} ]] && { cd {}; fd --color always --max-depth 1} || bat -f {}' \
+                --height='100%' \
+                --preview-window='right,70%' \
+                --keep-right \
+                --reverse \
+                --bind "enter:become( [[ -d {} ]] && { cd {}; $my_file dir } || bat -f {})" \
+                --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
+                --bind 'ctrl-y:yank+accept' \
+                --bind 'ctrl-o:accept' \
+                --header="Enter: Preview | Ctrl-y : accept"
+    )
+}
+
+fz_grep() {
+    local pattern
+    if [[ -n "$1" ]]; then
+        pattern="$1"
+        shift
+    fi
+    local ag_option=$@
+    local AG_PREFIX="ag --smart-case -C0 --color ${ag_option[@]}"
+    echo | fzf --ansi --color "hl:-1:underline,hl+:-1:underline:reverse" \
+        --delimiter : \
+        --preview '[[ -z {} ]] || bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'right,70%,border-bottom,+{2}+3/3,~3' \
+        --height=100% --keep-right --with-nth=1,2 \
+        --prompt="Search: " \
+        --bind "change:reload:$AG_PREFIX {q} || true" \
+        --ansi --disabled --query "$pattern"
+}
+
+my_file=$0
+arg=$1
+shift
+case $arg in
+"grep")
+    fz_grep "$@"
+    ;;
+"dir")
+    fz_dir "$@"
+    ;;
+"preview")
+    fz_preview "$@"
+    ;;
+ "*")
+     return 1
+esac
