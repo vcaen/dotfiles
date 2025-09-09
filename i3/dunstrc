@@ -1,5 +1,5 @@
 [global]
-font = Noto Sans 8
+font = Noto Sans 16
 
 # Allow a small subset of html markup:
 #   <b>bold</b>

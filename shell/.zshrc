@@ -96,8 +96,6 @@ if `which kitty >/dev/null 2>&1` ; then
     kitty + complete setup zsh | source /dev/stdin
 fi
 
-zstyle ':completion:*' file-sort modification
-
 fpath+=~/.dotfiles/shell/zfunc/
 
 
@@ -119,14 +117,15 @@ if which bat >/dev/null ; then
     export MANROFFOPT="-c"
 fi
 
-
-
 # The following lines were added by compinstall
-
+zstyle ':completion:*' file-sort modification
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:]}={[:upper:]}' 'r:|[._-.]=* r:|=*'
 zstyle :compinstall filename '/usr/local/google/home/caen/.zshrc'
+zstyle ':completion:*' menu no
 
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+source ~/bin/fzf-tab/fzf-tab.plugin.zsh

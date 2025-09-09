@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: FiraCode-Regular 16, FontAwesome 10, "Font Awesome 6 Brands" 10
+font pango: FiraCode-Regular 8, FontAwesome 6, "Font Awesome 6 Brands" 8
 
 title_align center # left|center|right
 for_window [class=".*"] title_window_icon no
@@ -119,6 +119,8 @@ bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
+bindsym $mod+t move container right; focus right; resize set width 33 ppt; focus left
+
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
@@ -213,11 +215,11 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-bindsym $mod+z floating enable; resize set 400 700; move window to position cursor
 
 # lock screen
 bindsym Mod1+Mod4+l exec "i3lock -p win -i ~/Documents/wallpaper/8k-mountain.jpg  -f && xset dpms force off"
 # bindsym Mod1+Mod4+l exec "xdg-screensaver lock && sleep 3 && xset dpms force off"
+# bindsym Mod1+Mod4+l exec "xdg && sleep 3 && xset dpms force off"
 
 # Pulse Audio controls
 set $sink @DEFAULT_SINK@
@@ -252,7 +254,7 @@ bindsym $mod+x scratchpad show
 bindsym $mod+g [title="^(Android )?Emulator"] move container to workspace emulator, [title="^(Android )?Emulator"] floating enable
 
 # Border toggle
-bindsym $mod+t border toggle
+bindsym $mod+Shift+t border toggle
 
 bindsym Mod1+Control+e exec nemo
 bindsym $mod+c move absolute position mouse

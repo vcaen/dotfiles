@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 [[ $DEBUG == "true" ]] && set -x
+local self=$0
 
 fz_preview() {
     local dir=$(pwd)
@@ -10,13 +11,15 @@ fz_preview() {
         fzf \
             --preview='bat -f {}' \
             --height='100' \
-            --preview-window='right,66%' \
+            --preview-window='right,66%,~3' \
             --keep-right \
             --reverse \
             --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat -f {} ; sleep 2)' \
             --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
             --bind 'ctrl-y:yank+accept' \
-            --header="Enter: Preview | Ctrl-y : accept"
+            --bind "ctrl-f:select-all+become($self grep . {+})" \
+            --header="Enter: Preview | Ctrl-y : accept | Ctrl-f : search in current selection" \
+            --multi 
     )
 }
 
@@ -42,20 +45,44 @@ fz_dir() {
 }
 
 fz_grep() {
-    local pattern
+    if [[ DEBUG == "true" ]] ; then 
+        echo >&2 "DEBUG $@"
+    fi
+
+    local pattern=""
+    local paths=()
+    local options=()
+    while [[ $# -gt 0 ]] ; do 
+        if [[ $1 == "-"* ]] ; then
+            options+=($1)
+        elif [[ -z $pattern ]] ; then
+            pattern=$1
+        else
+            paths+=($1)
+        fi
+        shift
+    done
+
     if [[ -n "$1" ]]; then
         pattern="$1"
         shift
     fi
-    local ag_option=$@
+    local ag_option="$options[@]"
     local AG_PREFIX="ag --smart-case -C0 --color ${ag_option[@]}"
-    echo | fzf --ansi --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    local disabled=""
+    local inital_results=""
+    if [[ -n $pattern ]] then 
+        inital_results=$(eval "noglob $AG_PREFIX $pattern $paths")
+    fi
+    echo $inital_results | fzf --ansi --color "hl:-1:underline,hl+:-1:underline:reverse" \
         --delimiter : \
         --preview '[[ -z {} ]] || bat --color=always {1} --highlight-line {2}' \
         --preview-window 'right,70%,border-bottom,+{2}+3/3,~3' \
-        --height=100% --keep-right --with-nth=1,2 \
+        --height=90% --keep-right --with-nth=1,2 \
+        --layout=reverse \
         --prompt="Search: " \
-        --bind "change:reload:$AG_PREFIX {q} || true" \
+        --bind "start:reload:$AG_PREFIX {q} $paths || true" \
+        --bind "change:reload:$AG_PREFIX {q} $paths || true" \
         --ansi --disabled --query "$pattern"
 }
 

@@ -1,1 +1,78 @@
-../corp/adebug
+#!/bin/zsh
+
+# Forward a a port to the remote jdwp process matching the given
+# filter expression
+
+FORWARD_PORT=8712
+
+[ $DEBUG ] && set -x
+
+function usage() {
+    echo "Usage \"adebug [-w|-l] [filter-expression]\""
+    echo ""
+    echo " -w : Wait for matching process to start"
+    echo " -l : List the running debuggable process"
+}
+
+function open_port() {
+	local waitProcess=false
+    local listOnly=false
+
+    if [ -z "$1" ]; then
+		usage
+		return 1
+	fi
+
+    while [ -n "$1" ];  do
+        case "$1" in
+            -l)
+                listOnly=true
+                ;;
+            -w)
+                waitProcess=true
+                ;;
+            *)
+                break;
+            esac
+            shift
+        done
+
+
+	if [ "$waitProcess" = true ] ; then
+		echo "Waiting for process matching $1 to start"
+	fi
+
+	while
+		process=$(list_debuggable_processes | grep "$1")
+		process_name=$(echo $process | awk '{print$2}')
+		[ "$waitProcess" = true ] && [ -z $process ]
+	do :; done
+
+	if [ -z $process ] ; then
+		echo "No debuggable process matching the filter expression"
+		return 1
+	fi
+
+    if [ "$listOnly" = true ]; then
+		echo "$(echo "$process" | grep --color=always $1)"
+        return 0
+    elif [ $(echo $process | wc -l) -gt 1 ]; then
+		echo "More than one process matches the filter expression"
+		echo "$(echo "$process" | grep --color=always $1)"
+		return 1
+	fi
+
+	pid=$(echo $process | awk '{print$1}')
+	echo "Forwarding port $FORWARD_PORT to $process_name ($pid)"
+
+	adb forward --remove tcp:$FORWARD_PORT > /dev/null
+	adb forward tcp:$FORWARD_PORT jdwp:${pid} > /dev/null
+}
+
+function list_debuggable_processes() {
+    adb shell ps -p $(timeout 1 adb jdwp) -o pid,name 
+}
+
+open_port "$@"
+set +x
+

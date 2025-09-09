@@ -27,6 +27,8 @@ function adbd() {
     
     local serial=$(echo $devices |  fzf $(echo $filter) --bind 'focus:execute-silent(adb -s {1} shell input keyevent KEYCODE_NOTIFICATION KEYCODE_ESCAPE)'| awk '{print$1}')
 
+    [[ -z $serial ]] && return 1
+
     adb -s $serial shell input keyevent KEYCODE_ESCAPE
 
     if [ $# -gt 0 ]; then
@@ -432,6 +434,8 @@ function ascreen {
 
 function logcat() {
     local format="brief time color"
+    local full_format="threadtime uid"
+    local lnav=0
     local args=()
     local positionals=()
     while [[ -n $1 ]]; do
@@ -455,6 +459,11 @@ function logcat() {
         -c)
             adb logcat -c && echo "Logcat cleared"
             return
+            ;;
+        --lnav)
+            format="$full_format"
+            lnav="true"
+            shift
             ;;
         *)
             positionals+=($1)

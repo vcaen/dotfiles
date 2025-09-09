@@ -44,6 +44,12 @@ alias gw="./gradlew"
 
 alias fd="fdfind"
 
+# From Basic commands for for KVM, PIP and PBP features for Dell Monitor U2723QE on Linux ddcutil
+# https://gist.github.com/lainosantos/06d233f6c586305cde67489c2e4a764d
+alias dellpip='ddcutil setvcp E9 0x0 -d 2'
+alias dellpippos='ddcutil setvcp E9 0x02 -d 2'
+alias dellusb='ddcutil setvcp E7 0xFF00 -d 2'
+
 # Highlight
 source ~/.dotfiles/bin/h.sh
 
@@ -425,7 +431,7 @@ function fout() {
     fi
 
     local out=$(eval $input_command | \
-        fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
+        fzf --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 --multi -e \
         --no-sort --tac \
         --preview "eval $preview_command" --preview-window "up,75%,nowrap" \
         --bind "ctrl-j:accept+execute(eval $jump_to_line_cmd)" \
@@ -437,8 +443,8 @@ function fout() {
     out=$(echo $out | sed "s/^\s*\(.*\)\s*/\1/gi")
     if [[ -n $out ]] ; then
         tmux set-buffer -w $out
-        echo $out
-        tmux pasteb
+        # echo $out
+        tmux pasteb -s '\n'
     fi
 }
 
@@ -452,7 +458,7 @@ function fat() {
         tempinput=$imput
         cat /dev/stdin > $input
     else
-        input=$1
+        input=$1; shift
         extension=${$(basename $input)##*.}
     fi
 
@@ -463,13 +469,13 @@ function fat() {
     local normal=$(tput rmso)
     local grep_cmd="sed \"s;\({q}\);${bold}\1${normal};gi\" " #not working yet
     local preview_command
-    local lang
+    local lang=(-m \""*logcat*:log"\")
     if bat -L | grep $extension >/dev/null ; then
-        lang=(-l "$extension")
+        lang+=(-l "$extension")
     fi
-    preview_command="cat $input | bat -f --highlight-line {1} --style='auto' ${lang} | $grep_cmd | bat -f -n"
+    preview_command="cat \"${input}\" | bat -f --highlight-line {1} --style='auto' ${lang[@]} | $grep_cmd | bat -f -n"
 
-    bat -f --style='numbers' $input | \
+    bat -f --style='numbers' "$input" | \
     fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \
         --nth='2..' \
@@ -520,53 +526,88 @@ function ftree() {
     # tree with fzf, preview. Relative path of Selected line will be printed upon selection
     local header_lines=2
     local dir=${1:-.}
-    local output_command="sh -c 'cat <(echo ${dir}/..) <(tree -fi ${dir} ) | tac | sed -n \$(( {n} + $header_lines + 1 ))p ' "
-    cat <(echo ${dir}/..) <(tree -C ${dir} ) | tac | \
-    fzf --ansi --header-lines=$header_lines \
+    local output_command="sh -c 'cat <(tree -fi ${dir} ) | sed -n \$(( {n} + 1 ))p ' "
+    local tree_cmd_suffix="| head -n-$header_lines"
+    local tree_cmd="tree -C $tree_cmd_suffix"
+    eval $tree_cmd | \
+    fzf --ansi \
     --bind "ctrl-space:become($output_command)" \
-    --bind 'start:last' \
+    --bind 'start:first' \
     --bind 'ctrl-p:toggle-preview' \
-    --bind "enter:reload(cat <(echo ..) <(tree -C \$($output_command)) | tac)" \
-    --preview="f=\$($output_command); [[ -f \$f ]] && bat -f \$f" \
+    --bind "enter:reload(f=\$($output_command); [[ -d \$f ]] && tree -C \$f $tree_cmd_suffix)" \
+    --preview="echo $output_command; f=\$($output_command); [[ -f \$f ]] && bat -f \$f" \
     --preview-window="70%,hidden" \
     --height=~50% \
     --header="ctrl-p: Preview" \
-    --tac \
     --layout=reverse-list
 }
 
 function fdzip() {
-    # Find files within jars and or zips
-    jar_pattern=$1
-    find_pattern=$2
-    dir=$3
 
-    [[ -z $3 ]] && {echo "Usage fdzip <jar pattern> <file pattern> <directory>" >&2; return 1 }
+    [[ $# -lt 3 ]] && { echo "Usage fdzip <jar pattern> <file pattern> <directory>" >&2; return 1; }
+    # Find files within jars and or zips
+    jar_pattern=$1; shift;
+    find_pattern=$1; shift;
+    dir=$1; shift;
+
+    [[ -d $dir ]] || { echo "$dir is not a directory" >&2; return 1; }
 
     unzip_search_command='jar=$(echo {}); files=$(unzip -l $jar 2>/dev/null | grep '
     unzip_search_command+=$find_pattern
     unzip_search_command+='); [ -n "$files" ] && { echo "$jar"; echo "$files" | awk "{print \"  - \" \$4}"; echo; } '
-    fd -Hi "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
+    fd -Hi --type file "$@" "$jar_pattern" $dir  -p -x  sh -c "$unzip_search_command"
 }
 
 fzfp () {
-  ~/.dotfiles/bin/fz preview $@
+  ~/.dotfiles/bin/fz preview "$@"
 }
 
 fzfd () {
-  ~/.dotfiles/bin/fz dir $@
+  ~/.dotfiles/bin/fz dir "$@"
 }
 
 fzfg () {
-  ~/.dotfiles/bin/fz grep $@
+  ~/.dotfiles/bin/fz grep "$@"
 }
 
 function tpane() {
-    tmux send -t+1 C-c q C-c C-m "$(echo $@)" C-m
+    tmux send -t+1 C-c q C-c C-m "$@" C-m
 }
 
 function cdd() {
     [[ $# -ge 1 ]] || return 1;
-    [[ -f $1 ]] && { cd $( dirname $1 ); return 0 }
-    [[ -d $1 ]] && { cd $1; return 0 }
+    [[ -f $1 ]] && { cd "$( dirname $1 )" && return 0; }
+    [[ -d $1 ]] && { cd $1 && return 0; }
 }
+
+sshdl() {
+    if [[ $# -lt 3 ]] ; then
+        echo "Usage sshdl host dir [dest]">&2
+        exit 1
+    fi
+
+    local host=$1
+    local dir=$2
+    local dest=${3:-.}
+
+    local file
+    file=$(ssh $host "ls $dir" | fzf)
+    if [[ -n $file ]] ; then
+        echo "Downloading $dir/$file from $host into $dest"
+        scp $host:$dir/$file $dest
+    fi
+}
+
+ hdpi_toggle() {
+     (
+         export DISLPAY=:20
+         local value
+         value=1
+         if [[ $(gsettings get org.gnome.desktop.interface scaling-factor | cut -f2 -d' ') -eq 1 ]] ; then
+             value=2
+         fi
+         gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "[{'Gdk/WindowScalingFactor', <$value>}]"; 
+         gsettings set org.gnome.desktop.interface scaling-factor $value
+         # gsettings set org.gnome.desktop.interface text-scaling-factor $value
+     )
+ }

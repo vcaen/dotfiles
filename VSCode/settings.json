@@ -26,7 +26,6 @@
     "zenMode.hideActivityBar": false,
     "zenMode.fullScreen": false,
     "zenMode.silentNotifications": false,
-    "workbench.editor.untitled.hint": "hidden",
     "workbench.editor.limit.enabled": true,
     "workbench.editor.limit.value": 15,
     "terminal.integrated.defaultProfile.linux": "tmux",
@@ -59,7 +58,7 @@
     "editor.inlayHints.padding": true,
     "editor.minimap.renderCharacters": false,
     "editor.minimap.maxColumn": 50,
-    "editor.minimap.autohide": true,
+    "editor.minimap.autohide": "mouseover",
     "editor.scrollbar.verticalScrollbarSize": 5,
     // -----------
     // Error Lens
@@ -125,5 +124,26 @@
     "kotlin.languageServer.enabled": false,
     "kotlin.debugAdapter.enabled": false,
     "workbench.editor.mouseBackForwardToNavigate": true,
-    "cloudcode.duetAI.project": ""
+    "geminicodeassist.project": "aipp-internal-testing",
+    "workbench.editor.empty.hint": "hidden",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "zsh"
+        },
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    }
 }

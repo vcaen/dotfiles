@@ -14,3 +14,6 @@ cargo install fd-find
 
 # hHighlighter
 curl -o bin/h.sh https://raw.githubusercontent.com/paoloantinori/hhighlighter/master/h.sh
+
+# fzf-tab : fzf zsh completion
+git clone https://github.com/Aloxaf/fzf-tab.git
