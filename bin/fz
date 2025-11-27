@@ -15,11 +15,15 @@ fz_preview() {
             --keep-right \
             --reverse \
             --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat -f {} ; sleep 2)' \
+            --bind "ctrl-l:execute(flog {})" \
             --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
             --bind 'ctrl-y:yank+accept' \
-            --bind "ctrl-f:select-all+become($self grep . {+})" \
-            --header="Enter: Preview | Ctrl-y : accept | Ctrl-f : search in current selection" \
-            --multi 
+            --bind "ctrl-f:select-all+execute($self grep . {+})" \
+            --header="Enter: Preview | Ctrl-y : accept " \
+            --header-first \
+            --multi \
+            --preview-label "Ctrl-f : search in current selection | Ctrl-l : Flog current file"
+
     )
 }
 

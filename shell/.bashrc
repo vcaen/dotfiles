@@ -96,3 +96,4 @@ fi
 
 
 . "$HOME/.cargo/env"
+export PATH=$HOME/depot_tools:$PATH

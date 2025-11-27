@@ -1,0 +1,57 @@
+#!/bin/zsh
+
+flog() {
+    # bat with fzf search
+    local input;
+    local tempinput;
+    local extension;
+    if ! [[ -f $1 ]] ; then
+        input=$(mktemp)
+        tempinput=$imput
+        cat /dev/stdin > $input
+    else
+        input=$1; shift
+        extension=${$(basename $input)##*.}
+    fi
+
+    local preview_command
+    local lang=(-m \""*logcat*:log"\")
+    if bat -L | grep $extension >/dev/null ; then
+        lang+=(-l "$extension")
+    fi
+
+    # Check if {1} is a number and display only that line from input. The first enty in each line should be the line numer (-n flag for bat)
+    preview_command="[[ {1} =~ '^[0-9]+$' ]] && sed '{1}q;d' ${input}"
+    local BAT_COMMAND="bat -f --style='numbers'"
+
+    # Function to be injected to parse the context line from the query string
+    # It will take the second field, split by ':' and take the value as the line number
+    # $((0 + ${line:-0} ) : little trick to add 0 to the variable $line. If line is not a number, it will be 0.
+    local contextFn='contextFn() { line=$(echo $1 | cut -d":" -f2); echo $((0 + ${line:-0} ))}'
+
+    # {q:1} takes the first filed of the query
+    local MY_COMMAND="$contextFn; eval ${BAT_COMMAND} ${input} | grep -iE {q:1}  -C \$(contextFn {q:2})"
+
+    eval ${BAT_COMMAND} "$input" | \
+    fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
+        --no-sort --tac \
+        --nth='2..' \
+        --preview "${contextFn}; ${preview_command} || true" \
+        --preview-window 'up,10%,wrap' \
+        --disabled \
+        --bind "change:reload-sync($MY_COMMAND)"  \
+        --bind "ctrl-p:toggle-preview" \
+        --bind "ctrl-w:toggle-wrap" \
+        --bind "ctrl-u:page-up" \
+        --bind "ctrl-d:page-down" \
+        --bind "ctrl-g:pos(1)" \
+        --bind "ctrl-alt-g:pos(-1)" \
+        --header="[ C-P: Preview | C-W : Wrap | C-U: Page Up | C-D: Page Down | C-(alt)-G: jump to bottom (top)] c:<number> context lines" \
+        --multi \
+        --track \
+
+
+    [[ -f $tempinput ]] && rm $tempinput
+}
+
+flog "$@"

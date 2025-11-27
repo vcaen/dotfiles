@@ -14,8 +14,10 @@ git_fzf() {
 
     diff() {
         local ref=${1:-'HEAD'}
+        local header_doc="ctrl-s : split diff"
         local header="Diff with $(git log --oneline -n 1 --decorate=full --color $ref) "
         local preview_cmd="git diff $ref -- {1} | bat -f -l diff --file-name={1} "
+        local preview_cmd_delta="echo  \$(( \$FZF_PREVIEW_COLUMNS )); git diff $ref -- {1} | delta -w \$(( \$FZF_PREVIEW_COLUMNS ))"
         local preview_cmd_search="echo \"Search result\"; git diff $ref --color --unified=0 -- {} | grep -C 3 {q} | sed 's/{q}/\x1b[7m&\x1b[27m/ig' | bat -f -l diff --file-name={}"
         local search_cmd="git diff --stat=1000 --relative --color=always --no-renames $ref | tac"
 
@@ -27,14 +29,20 @@ git_fzf() {
                 --header-first \
                 --reverse \
                 --preview="$preview_cmd" \
-                --preview-window='up,85%' --height=100% \
+                --preview-window='up,85%' \
+                --height=100% \
                 --bind "ctrl-f:disable-search+change-prompt(Search diff:)+rebind(change)+unbind(load)" \
+                --bind "ctrl-s:change-preview($preview_cmd_delta)" \
+                --bind "ctrl-alt-s:change-preview($preview_cmd)" \
+                --bind "ctrl-y:accept" \
+                --bind "enter:execute(git diff $ref -- {1} | delta --paging always)" \
                 --bind 'load:unbind(change)' \
                 --bind "change:reload($search_cmd)+preview:$preview_cmd_search" \
             | awk '{print$1}'
     }
 
     diff_grep() {
+        # NOT WORKING YET
         local ref=${1:-'HEAD'}
         local search_cmd="for file in $(git diff --name-only $ref) ; do \
                 git diff --color --unified=0 ${file} | grep -i {q} >/dev/null && echo ${file} ;\

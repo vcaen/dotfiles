@@ -1,0 +1,90 @@
+#!/bin/zsh
+
+function totelegram() {
+    local message=""
+    local chatid="7730039782"
+
+    postMessage() {
+        curl -s -S -X POST \
+            -H 'Content-Type: application/json' \
+            -d "{\"chat_id\": \"$chatid\", \"text\": \"$message\", \"disable_notification\": false}" \
+            https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage;
+    }
+
+    if [[ ! -f ~/.telegram_token ]] ; then
+        echo "No token defined in ~/.telegram_token or env variable TELEGRAM_BOT_TOKEN"
+        return 1
+    fi
+
+    TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
+
+    if [[ -n $1 ]] ; then
+        message=$@
+        postMessage
+    else
+        while read message ;
+        do
+            postMessage
+        done < "/dev/stdin" ;
+    fi
+}
+
+function n() {
+    # Run a command a notification when done
+    "$@"
+    msg=$(make_message $?)
+    notif "$1" "$msg" --urgency=$urgency
+}
+
+function make_message() {
+    result=$1
+    result_verbose=""
+    if [[ $result -eq 0 ]] ; then
+        result_verbose="sucessfully"
+        urgency=normal
+    else
+        result_verbose="with an error ($result)"
+        urgency=critical
+    fi
+
+    msg="$(date +%T): $1 finised $result_verbose"
+
+    echo $msg
+}
+
+function notif() {
+    [[ -z "$1" ]] && return 1
+    local args=()
+    local summary=''
+    local message=""
+    local result=$2
+
+    while [[ -n $1 ]] ; do
+        if [[ $1 = "--"* ]] ;  then
+            args+=("$1")
+            shift
+        else
+            [[ $# -gt 1 ]] && { summary="$1"; shift; }
+            message="$1"
+            shift
+        fi
+    done
+
+    notify-send -t 5000 "$summary" "$message" "${args[@]}" "$@"
+
+    if [[ -n $summary ]] ; then
+        message="$summary\n$message"
+    fi
+    totelegram "$message\n$*"
+}
+
+
+arg=$1
+shift
+case $arg in
+"notif")
+    notif "$@" > /dev/null
+    ;;
+ "*")
+     return 1
+esac

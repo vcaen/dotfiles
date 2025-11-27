@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export PATH=$HOME/W/clank/depot_tools:$PATH
+export SKIP_GCE_AUTH_FOR_GIT=1
+
 source ~/.profile
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -129,3 +132,17 @@ compinit
 # End of lines added by compinstall
 
 source ~/bin/fzf-tab/fzf-tab.plugin.zsh
+
+
+my_commands=(m mp mpc gw gradlew echo)
+precmd() {
+    local ret_code=$?
+   (
+      {
+        local value=$(history | tail -n1 | awk '{print$2}')
+        if (($my_commands[(Ie)$value])); then
+            notif $value finished with code $?
+        fi
+      }  & 
+      )
+}

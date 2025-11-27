@@ -15,10 +15,11 @@ function envproc() { echo $(( $(nproc)*2)); }
 
 # REPO
 # Login if needed and Sync the current projec
-alias rs="gsso; repo sync -cj99 ."
+alias rs="repo sync -cj99 ."
 # Login if needed and Sync all projects
-alias rsa="gsso; repo sync -cj32"
+alias rsa="repo sync -cj32"
 alias rrb="repo rebase"
+alias rsb="rsa && rrb --autostash; SOONG_USE_PARTIAL_COMPILE=false m"
 alias ra="repo abandon"
 alias rdl="repo download"
 # Upload a draft on gerrit
@@ -49,6 +50,9 @@ alias fd="fdfind"
 alias dellpip='ddcutil setvcp E9 0x0 -d 2'
 alias dellpippos='ddcutil setvcp E9 0x02 -d 2'
 alias dellusb='ddcutil setvcp E7 0xFF00 -d 2'
+
+
+alias notif="~/.dotfiles/bin/personal_notif notif"
 
 # Highlight
 source ~/.dotfiles/bin/h.sh
@@ -229,79 +233,6 @@ function hist() {
 }
 
 alias mn="rofi -dmenu"
-
-function totelegram() {
-    local message=""
-    local chatid="5361565130"
-
-    postMessage() {
-        curl -s -S -X POST \
-            -H 'Content-Type: application/json' \
-            -d "{\"chat_id\": \"$chatid\", \"text\": \"$message\", \"disable_notification\": false}" \
-            https://api.telegram.org/bot"$TELEGRAM_BOT_TOKEN"/sendMessage > /dev/null;
-    }
-
-    if [[ ! -f ~/.telegram_token ]] ; then
-        echo "No token defined in ~/.telegram_token or env variable TELEGRAM_BOT_TOKEN"
-        return 1
-    fi
-
-    TELEGRAM_BOT_TOKEN=$(cat ~/.telegram_token)
-
-    if [[ -n $1 ]] ; then
-        message=$@
-        postMessage
-    else
-        while read message ;
-        do
-            postMessage
-        done < "/dev/stdin" ;
-    fi
-}
-
-function n() {
-    # Run a command a notification when done
-    "$@"
-    result=$?
-    result_verbose=""
-    if [[ $result -eq 0 ]] ; then
-        result_verbose="sucessfully"
-        urgency=normal
-    else
-        result_verbose="with an error ($result)"
-
-        urgency=critical
-    fi
-
-    msg="$(date +%T): $1 finised $result_verbose"
-
-    notif "$1" "$msg" --urgency=$urgency
-}
-
-function notif() {
-    [[ -z "$1" ]] && return 1
-    local args=()
-    local summary=''
-    local message=""
-
-    while [[ -n $1 ]] ; do
-        if [[ $1 = "--"* ]] ;  then
-            args+=("$1")
-            shift
-        else
-            [[ $# -gt 1 ]] && { summary="$1"; shift; }
-            message="$1"
-            shift
-        fi
-    done
-
-    notify-send -t 5000 "$summary" "$message" "${args[@]}" "$@"
-
-    if [[ -n $summary ]] ; then
-        message="$summary\n$message"
-    fi
-    totelegram "$message\n$*" > /dev/null
-}
 
 function clip() {
     xclip -selection clip

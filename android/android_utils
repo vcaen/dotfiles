@@ -433,7 +433,7 @@ function ascreen {
 }
 
 function logcat() {
-    local format="brief time color"
+    local format="threadtime color uid"
     local full_format="threadtime uid"
     local lnav=0
     local args=()

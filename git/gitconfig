@@ -1,6 +1,6 @@
 [user]
 	name = Vadim Caen
-	email = caen@google.com
+	email = vadimcaen@gmail.com
 
 [include]
 	path = ~/.dotfiles/corp/gitconfig
@@ -25,12 +25,12 @@
 	cmn = commit --amend --no-edit
 	cimn = commit --amend --no-edit
 	co = checkout
-	con = ! gitbranchnum
+	con = "! b=$(git bl); [[ -n $b ]] && git co $b"
 	cp = cherry-pick
 	cpc = cherry-pick --continue
 	cpa = cherry-pick --abort
 	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset)%(end) %(contents:subject)\""
-  bl="!git b | grep -v '*' | fzf --preview 'git llp -n3 --color {+1}' --preview-window='left,25%,wrap' --multi | awk '{print$1}'"
+  bl="!git b | grep -v '*' | fzf --preview 'git llp -n3 --color {+1}' --preview-window='up,3,wrap' --multi | awk '{print$1}'"
 	rc = rebase --continue
 	ra = rebase --abort
 	ri = rebase -i
@@ -45,6 +45,7 @@
                 --bind='ctrl-d:become(git d {1}~1..{1})' \
                 --bind='ctrl-p:toggle-preview' \
                 --header='Ctrl-d Show diff with previous | Ctrl-p: Toggle Preview' \
+                --no-sort \
                 --height=50% | awk '{print$1}'; }; f"
 
 	d = "! ~/.dotfiles/git/git-fzf diff"
@@ -90,17 +91,28 @@
 
 [difftool "kitty.gui"]
 	cmd = kitty kitty +kitten diff $LOCAL $REMOTE
-
-[http]
-	cookiefile = /usr/local/google/home/caen/.gitcookies
 [log]
 	date = iso
 [core]
 	pager = less -FRX
+#    pager = delta
 	excludesfile = ~/.personal_gitignore
 	editor = vim
 [pager]
 	log = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    # delta detects terminal colors automatically; set one of these to disable auto-detection
+    # dark = true
+    # light = true
+    side-by-side = true
+
+[merge]
+    conflictStyle = zdiff3
 [merge]
 	renameLimit = 999999
 [repo]
@@ -108,3 +120,29 @@
 	superprojectChoice = true
 [pull]
 	rebase = true
+[protocol "sso"]
+	allow = always
+[url "sso://android/"]
+	insteadOf = https://android.googlesource.com/
+[url "sso://aomedia/"]
+	insteadOf = https://aomedia.googlesource.com/
+[url "sso://beto-core/"]
+	insteadOf = https://beto-core.googlesource.com/
+[url "sso://boringssl/"]
+	insteadOf = https://boringssl.googlesource.com/
+[url "sso://chromium/"]
+	insteadOf = https://chromium.googlesource.com/
+[url "sso://chrome-internal/"]
+	insteadOf = https://chrome-internal.googlesource.com/
+[url "sso://dawn/"]
+	insteadOf = https://dawn.googlesource.com/
+[url "sso://pdfium/"]
+	insteadOf = https://pdfium.googlesource.com/
+[url "sso://quiche/"]
+	insteadOf = https://quiche.googlesource.com/
+[url "sso://skia/"]
+	insteadOf = https://skia.googlesource.com/
+[url "sso://swiftshader/"]
+	insteadOf = https://swiftshader.googlesource.com/
+[url "sso://webrtc/"]
+	insteadOf = https://webrtc.googlesource.com/

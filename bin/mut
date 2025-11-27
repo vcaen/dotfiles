@@ -58,7 +58,7 @@ function parse_args() {
 function list() {
     sync_list=$(mutagen sync list)
     echo $sync_list | grep Identifier | awk '{print$2}' |
-        fzf --ansi --preview="mutagen sync list -l {}" --preview-window="up,80%" --height=50% "$@" --header="Mutagen sessions"
+        fzf --ansi --preview="mutagen sync list -l {}" --preview-window="up,80%" --height=100% "$@" --header="Mutagen sessions"
 }
 
 function rm() {
