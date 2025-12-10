@@ -138,12 +138,19 @@
             "path": "fish"
         },
         "tmux": {
-            "path": "tmux",
-            "icon": "terminal-tmux"
+            "path": "tmx2",
+            "icon": "terminal-tmux",
+            "args": ["new", "-A", "-s", "ssh"],
         },
         "pwsh": {
             "path": "pwsh",
             "icon": "terminal-powershell"
         }
-    }
+    },
+    "java.imports.gradle.wrapper.checksums": [
+        {
+            "sha256": "e2b82129ab64751fd40437007bd2f7f2afb3c6e41a9198e628650b22d5824a14",
+            "allowed": true
+        }
+    ],
 }

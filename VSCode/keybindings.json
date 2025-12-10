@@ -1239,5 +1239,10 @@
     {
         "key": "ctrl+shift+alt+i",
         "command": "editor.action.inspectTMScopes"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "editor.action.revealDefinition",
+        "when": "editorHasDefinitionProvider"
     }
 ]
