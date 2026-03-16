@@ -11,10 +11,10 @@ alias pidcat=~/.dotfiles/android/pidcat.py
 
 function adbd() {
     # Prompt which device to use before running the adb command
-    local filter=""
+    local fzf_opts=()
     if [[ "$1" == "-f" ]]; then
         shift
-        filter="--query $1 --select-1"
+        fzf_opts=(--query "$1" --select-1)
         shift
     fi
 
@@ -24,12 +24,13 @@ function adbd() {
         devices="$devices\n$serial"
         devices="$devices $(adb -s $serial shell 'echo `getprop ro.serialno` `getprop ro.product.device` `getprop ro.product.model`' 2>&1)"
     done
-    
-    local serial=$(echo $devices |  fzf $(echo $filter) --bind 'focus:execute-silent(adb -s {1} shell input keyevent KEYCODE_NOTIFICATION KEYCODE_ESCAPE)'| awk '{print$1}')
+
+    local show_device_notification_panel="adb -s {1} shell input keyevent KEYCODE_NOTIFICATION KEYCODE_ESCAPE &"
+    local serial=$(echo $devices |  fzf $(echo $filter) --bind "focus:execute-silent(${show_device_notification_panel})" | awk '{print$1}')
 
     [[ -z $serial ]] && return 1
 
-    adb -s $serial shell input keyevent KEYCODE_ESCAPE
+    adb -s "$serial" shell input keyevent KEYCODE_ESCAPE
 
     if [ $# -gt 0 ]; then
         adb -s "$serial" "$@"
@@ -474,6 +475,10 @@ function logcat() {
     logcat_outfile=$(mktemp --tmpdir logcat-$(date "+%Y-%m-%d_%H-%M-%S")-XXX.log)
     echo "Saving to \$logcat_outfile $logcat_outfile" >&2
     adb logcat -v "$format" "${args[@]}" "${positionals[@]}" | tee $logcat_outfile | less --ignore-case --quit-if-one-screen -R +F
+}
+
+function lastlogcat() { 
+    find /tmp -name 'logcat-*log' 2>/dev/null | head -n 1
 }
 
 function adebugenable() {

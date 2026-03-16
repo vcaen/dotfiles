@@ -29,9 +29,17 @@ flog() {
     # $((0 + ${line:-0} ) : little trick to add 0 to the variable $line. If line is not a number, it will be 0.
     local contextFn='contextFn() { line=$(echo $1 | cut -d":" -f2); echo $((0 + ${line:-0} ))}'
 
-    # {q:1} takes the first filed of the query
-    local MY_COMMAND="$contextFn; eval ${BAT_COMMAND} ${input} | grep -iE {q:1}  -C \$(contextFn {q:2})"
 
+    local highlight
+    # if which h >/dev/null ; then
+    #    # highlight="| h -i \$( echo \"{q:1}\" | tr '|' ' ' ); echo toto"
+    #     highlight="| h a"
+    # fi
+    
+    # {q:1} takes the first field of the query
+    local MY_COMMAND="$contextFn; eval ${BAT_COMMAND} ${input} | \
+      ag --color -i -C \$(contextFn {q:2}) {q:1} "
+    
     eval ${BAT_COMMAND} "$input" | \
     fzf --ansi --height=100% --ansi --info=inline --border="horizontal" --margin=1 --padding=0 -e \
         --no-sort --tac \

@@ -19,7 +19,7 @@ alias rs="repo sync -cj99 ."
 # Login if needed and Sync all projects
 alias rsa="repo sync -cj32"
 alias rrb="repo rebase"
-alias rsb="rsa && rrb --autostash; SOONG_USE_PARTIAL_COMPILE=false m"
+alias rsb="rsa; rrb --autostash; export SOONG_USE_PARTIAL_COMPILE=false; m && export SOONG_USE_PARTIAL_COMPILE=true"
 alias ra="repo abandon"
 alias rdl="repo download"
 # Upload a draft on gerrit
@@ -514,15 +514,15 @@ function cdd() {
 sshdl() {
     if [[ $# -lt 3 ]] ; then
         echo "Usage sshdl host dir [dest]">&2
-        exit 1
+        return 1
     fi
 
-    local host=$1
-    local dir=$2
-    local dest=${3:-.}
+    local host="$1"
+    local dir="$2"
+    local dest="${3:-.}"
 
     local file
-    file=$(ssh $host "ls $dir" | fzf)
+    file=$(ssh $host "ls -t \"$dir\"" | fzf)
     if [[ -n $file ]] ; then
         echo "Downloading $dir/$file from $host into $dest"
         scp $host:$dir/$file $dest

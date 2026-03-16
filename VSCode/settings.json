@@ -153,4 +153,6 @@
             "allowed": true
         }
     ],
+    "diffEditor.codeLens": true,
+    "git.blame.editorDecoration.enabled": true,
 }

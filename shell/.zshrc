@@ -113,6 +113,9 @@ export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi --height=~20%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 export LESS="--mouse -RX --ignore-case" # enable mouse navigation for less
 
 if which bat >/dev/null ; then
@@ -134,7 +137,7 @@ compinit
 source ~/bin/fzf-tab/fzf-tab.plugin.zsh
 
 
-my_commands=(m mp mpc gw gradlew echo)
+my_commands=(m mp mpc gw gradlew rsa)
 precmd() {
     local ret_code=$?
    (
