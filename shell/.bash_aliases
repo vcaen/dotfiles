@@ -19,7 +19,7 @@ alias rs="repo sync -cj99 ."
 # Login if needed and Sync all projects
 alias rsa="repo sync -cj32"
 alias rrb="repo rebase"
-alias rsb="rsa; rrb --autostash; export SOONG_USE_PARTIAL_COMPILE=false; m && export SOONG_USE_PARTIAL_COMPILE=true"
+alias rsb="rsa; rrb --auto-stash; export SOONG_USE_PARTIAL_COMPILE=false; m && export SOONG_USE_PARTIAL_COMPILE=true"
 alias ra="repo abandon"
 alias rdl="repo download"
 # Upload a draft on gerrit
