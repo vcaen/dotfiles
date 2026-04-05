@@ -4,3 +4,6 @@
 [submodule "corp"]
 	path = corp
 	url = ./corp
+[submodule "submodules/fzf-tab"]
+	path = submodules/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
