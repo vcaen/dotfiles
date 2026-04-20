@@ -136,6 +136,8 @@ compinit
 
 source ~/bin/fzf-tab/fzf-tab.plugin.zsh
 
+# fzf-tab to tmux popup
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 my_commands=(m mp mpc gw gradlew rsa)
 precmd() {
