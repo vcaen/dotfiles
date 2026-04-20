@@ -64,6 +64,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+ZSH_TMUX_AUTOSTART="true"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -100,7 +101,6 @@ if `which kitty >/dev/null 2>&1` ; then
 fi
 
 fpath+=~/.dotfiles/shell/zfunc/
-
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.cargo/bin:$PATH"
 
