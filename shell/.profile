@@ -41,5 +41,9 @@ if [ -f ~/.dotfiles/corp/aliases ]; then
       . ~/.dotfiles/corp/aliases
 fi
 
+if ! which tac >/dev/null ; then
+	alias tac="tail -r"
+fi
+
 #PATH
 export PATH=~/bin:~/Android/Sdk/platform-tools:~/.dotfiles/bin:$PATH

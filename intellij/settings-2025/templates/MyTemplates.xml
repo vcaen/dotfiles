@@ -1,0 +1,8 @@
+<templateSet group="MyTemplates">
+  <template name="mapp" value="VadimDebug.isMyApp(this)$CURSOR$" description="isMyApp" toReformat="false" toShortenFQNames="true">
+    <variable name="CURSOR" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

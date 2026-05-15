@@ -1,0 +1,332 @@
+[
+  {
+    "key": "alt+1",
+    "command": "workbench.view.explorer",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+alt+1",
+    "command": "workbench.view.explorer",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+1",
+    "command": "workbench.view.explorer",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+7",
+    "command": "outline.focus",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "f2",
+    "command": "outline.focus",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+G",
+    "command": "intellij.action.Annotate",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+left",
+    "command": "workbench.action.navigateBack",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+left",
+    "command": "workbench.action.navigateBack",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+right",
+    "command": "workbench.action.navigateForward",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+right",
+    "command": "workbench.action.navigateForward",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+f10",
+    "command": "workbench.action.debug.selectandstart",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "f10",
+    "command": "workbench.action.debug.selectandstart",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+f4",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+f4",
+    "command": "workbench.action.closeActiveEditor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+subtract",
+    "command": "editor.foldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+minus",
+    "command": "editor.foldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+up",
+    "command": "editor.foldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+D",
+    "command": "intellij.action.DockPinnedMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+up",
+    "command": "editor.action.insertCursorAbove",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+down",
+    "command": "editor.action.insertCursorBelow",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+M",
+    "command": "revealLine",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "capslock",
+    "command": "revealLine",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+W",
+    "command": "editor.action.toggleWordWrap",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+add",
+    "command": "editor.unfoldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+equal",
+    "command": "editor.unfoldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+down",
+    "command": "editor.unfoldAll",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+f12",
+    "command": "outline.focus",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "f1",
+    "command": "outline.focus",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+7",
+    "command": "editor.action.referenceSearch.trigger",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+f7",
+    "command": "editor.action.referenceSearch.trigger",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+minus",
+    "command": "intellij.action.Git.ResolveConflicts",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+N",
+    "command": "editor.action.marker.nextInFiles",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+f12",
+    "command": "workbench.action.toggleZenMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+G",
+    "command": "workbench.action.toggleZenMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "pause",
+    "command": "intellij.action.Hotswap",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+f9",
+    "command": "intellij.action.Hotswap",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+equal",
+    "command": "intellij.action.JumpToLastWindow",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "f12",
+    "command": "intellij.action.JumpToLastWindow",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+9",
+    "command": "intellij.action.Macro.debug system process",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+contextmenu",
+    "command": "intellij.action.MainMenu",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+delete",
+    "command": "intellij.action.MainMenu",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+K",
+    "command": "workbench.action.toggleActivityBarVisibility",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+backquote",
+    "command": "workbench.action.focusNextGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+equal",
+    "command": "workbench.action.focusNextGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+I",
+    "command": "editor.action.goToImplementation",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+Q",
+    "command": "editor.action.goToImplementation",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+Q",
+    "command": "editor.action.showHover",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+backquote",
+    "command": "workbench.action.splitEditorRight",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+enter",
+    "command": "workbench.action.splitEditorRight",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+semicolon",
+    "command": "workbench.action.splitEditorRight",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+backquote",
+    "command": "intellij.action.StepOut",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+enter",
+    "command": "intellij.action.SwitchApply",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+bracketright",
+    "command": "intellij.action.TWViewModes",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+tab",
+    "command": "intellij.action.TabsPlacementLeft",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+escape",
+    "command": "intellij.action.TabsPlacementNone",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+f11",
+    "command": "intellij.action.ToggleDistractionFreeMode",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+2",
+    "command": "intellij.action.ToggleInlineHintsAction",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+semicolon",
+    "command": "intellij.action.Tool_External Tools_Code Search",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+escape",
+    "command": "workbench.action.closeEditorsInGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+ctrl+alt+backspace",
+    "command": "workbench.action.closeEditorsInGroup",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+L",
+    "command": "workbench.action.editor.nextChange",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+K",
+    "command": "workbench.action.editor.previousChange",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+D",
+    "command": "workbench.action.toggleMaximizedPanel",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+quote",
+    "command": "intellij.action.XDebugger.MuteBreakpoints",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+f10",
+    "command": "intellij.action.android.deploy.ApplyChanges",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+f10",
+    "command": "intellij.action.android.deploy.CodeSwap",
+    "when": "editorTextFocus"
+  }
+]

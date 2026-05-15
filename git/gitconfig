@@ -30,12 +30,14 @@
 	cpc = cherry-pick --continue
 	cpa = cherry-pick --abort
 	b ="branch -l --sort=-committerdate --format=\"%(align:width=30)%(if)%(HEAD)%(then)%(color:bold green)%(end) %(HEAD) %(refname:short)%(color:reset)%(end) %(contents:subject)\""
-  bl="!git b | grep -v '*' | fzf --preview 'git llp -n3 --color {+1}' --preview-window='up,3,wrap' --multi | awk '{print$1}'"
+        bl="!git b | grep -v '*' | fzf --preview 'git llp -n3 --color {+1}' --preview-window='up,3,wrap' --multi | awk '{print$1}'"
 	rc = rebase --continue
 	ra = rebase --abort
 	ri = rebase -i
 	ria = rebase -i --autosquash
 	rian = "! GIT_SEQUENCE_EDITOR=: git ria"
+	plr ="pull --rebase origin staging"
+	pf="push --force-with-lease"
 	llp = log --pretty=format:\"%Cgreen%h %>(10,trunc)%C(cyan)%aN %Creset%s\" -n 50
 
 	ll = "! f() { git llp --color=always --abbrev=4 ${@} | \
@@ -51,7 +53,7 @@
 
 	d = "! ~/.dotfiles/git/git-fzf diff"
 
-    dh ="! git d HEAD~1"
+        dh ="! git d HEAD~1"
 	dsh = diff --stat HEAD~1
 	ds = diff --stat
 	reball = ! gitrebase
@@ -78,6 +80,18 @@
 		COMMIT=$(git log -n 1 --pretty=format:"%H" $1) && \
 		git commit --fixup=$COMMIT' -"
 
+
+	# Worktrees
+	wt = worktree
+	wta = worktree add
+	wtr = worktree remove
+	wtl = worktree list	
+	wcd = "! d=$( \
+	    git worktree list | fzf --exit-0 --accept-nth 1 \
+	        --preview 'git -C {1} log -n 1 --color=always' \
+			--preview-window=up,10,wrap \
+		) && [[ -d $d ]] && echo $d;"
+
 [diff]
 	tool = kitty
 	guitool = kitty.gui
@@ -95,7 +109,7 @@
 [log]
 	date = iso
 [core]
-	pager = less -FRX
+	pager = delta
 #    pager = delta
 	excludesfile = ~/.personal_gitignore
 	editor = vim
@@ -103,17 +117,18 @@
 	log = true
 
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [delta]
-    navigate = true    # use n and N to move between diff sections
+	navigate = true
     # delta detects terminal colors automatically; set one of these to disable auto-detection
     # dark = true
     # light = true
     side-by-side = true
+	dark = true
 
 [merge]
-    conflictStyle = zdiff3
+	conflictStyle = zdiff3
 [merge]
 	renameLimit = 999999
 [repo]
@@ -147,3 +162,8 @@
 	insteadOf = https://swiftshader.googlesource.com/
 [url "sso://webrtc/"]
 	insteadOf = https://webrtc.googlesource.com/
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

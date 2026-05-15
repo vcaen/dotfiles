@@ -1,0 +1,15 @@
+<application>
+  <component name="ActionMacroManager">
+    <macro name="debug system process">
+      <action id="AndroidConnectDebuggerAction" />
+      <typing text-keycode="83:0;89:0;83:0;84:0;69:0;77:0;45:1;80:0;82:0;79:0;67:0;69:0;83:0;83:0">system_process</typing>
+      <shortuct text="ENTER" />
+    </macro>
+    <macro name="Font Size 16">
+      <action id="ShowSettings" />
+      <typing text-keycode="70:0;79:0;78:0;84:0">font</typing>
+      <action id="EditorBackSpace" />
+      <typing text-keycode="54:0">6</typing>
+    </macro>
+  </component>
+</application>

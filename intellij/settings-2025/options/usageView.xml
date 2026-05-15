@@ -1,0 +1,15 @@
+<application>
+  <component name="ImportFilteringUsageViewSetting">
+    <option name="SHOW_IMPORTS" value="false" />
+  </component>
+  <component name="ShowUsagesSettings">
+    <option name="GROUP_BY_FILE_STRUCTURE" value="true" />
+    <option name="PREVIEW_USAGES_SPLITTER_PROPORTIONS" value="0.3514793" />
+  </component>
+  <component name="UsageViewSettings">
+    <option name="IS_EXPANDED" value="true" />
+    <option name="IS_FILTER_DUPLICATED_LINE" value="false" />
+    <option name="GROUP_BY_SCOPE" value="true" />
+    <option name="PREVIEW_USAGES_SPLITTER_PROPORTIONS" value="0.38751" />
+  </component>
+</application>

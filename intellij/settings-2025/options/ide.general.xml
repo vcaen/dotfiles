@@ -1,0 +1,38 @@
+<application>
+  <component name="GeneralSettings">
+    <option name="showTipsOnStartup" value="false" />
+    <option name="autoSaveIfInactive" value="true" />
+    <option name="searchInBackground" value="true" />
+    <option name="confirmOpenNewProject2" value="-1" />
+    <option name="processCloseConfirmation" value="DISCONNECT" />
+  </component>
+  <component name="Registry">
+    <entry key="win.editor.thumb.darcula.fill.min" value="102" source="SYSTEM" />
+    <entry key="win.editor.thumb.darcula.alpha.delta" value="102" source="SYSTEM" />
+    <entry key="win.editor.thumb.default.fill.min" value="102" source="SYSTEM" />
+    <entry key="documentation.show.toolbar" value="true" source="SYSTEM" />
+    <entry key="ide.windowSystem.autoShowProcessPopup" value="true" source="SYSTEM" />
+    <entry key="ide.tooltip.initialDelay" value="197" source="SYSTEM" />
+    <entry key="debugger.new.tool.window.layout" value="true" source="SYSTEM" />
+    <entry key="caches.indexerThreadsCount" value="16" source="SYSTEM" />
+    <entry key="editor.distraction.free.mode" value="true" source="SYSTEM" />
+    <entry key="ide.experimental.ui" value="true" source="SYSTEM" />
+    <entry key="win.editor.thumb.darcula.alpha.base" value="0" source="SYSTEM" />
+    <entry key="win.editor.thumb.default.fill.max" value="150" source="SYSTEM" />
+    <entry key="debugger.watches.in.variables" value="false" source="SYSTEM" />
+    <entry key="win.editor.thumb.default.alpha.base" value="0" source="SYSTEM" />
+    <entry key="win.editor.thumb.default.alpha.delta" value="102" source="SYSTEM" />
+    <entry key="ide.balloon.shadow.size" value="0" source="SYSTEM" />
+    <entry key="moved.to.new.ui" value="true" source="SYSTEM" />
+    <entry key="enable.connection.configuration.widget" value="false" source="SYSTEM" />
+    <entry key="THIN_CLIENT_EXTERNAL_SYSTEM.system.in.process" value="true" source="SYSTEM" />
+  </component>
+  <component name="StatusBar">
+    <option name="widgets">
+      <map>
+        <entry key="Memory" value="true" />
+        <entry key="PowerSaveMode" value="true" />
+      </map>
+    </option>
+  </component>
+</application>

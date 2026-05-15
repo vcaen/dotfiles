@@ -1,11 +1,13 @@
 # AVIT ZSH Theme
 
-PROMPT='$(_user_host)${_current_dir} $(git_prompt_info) %{$fg[$CARETCOLOR]%}%{%G▶%}%{$resetcolor%} '
+PROMPT='$(_user_host)$(_current_dir) $(git_prompt_info)
+%{$fg[$CARETCOLOR]%}▶%{$resetcolor%} '
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
 #RPROMPT='%{$(echotc UP 1)%}$(android_prompt) $(git_prompt_status) ${_return_status}%{$(echotc DO 1)%}'
-RPROMPT='%{$(echotc UP 1)%}$(android_prompt)  ${_return_status}%{$(echotc DO 1)%}'
+#RPROMPT='%{$(echotc UP 1)%}$(android_prompt)  ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='%{$(echotc UP 1)%}${_return_status}%{$(echotc DO 1)%}'
 
 local _current_dir="%{$fg_bold[blue]%}%5~%{$reset_color%} "
 local _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"

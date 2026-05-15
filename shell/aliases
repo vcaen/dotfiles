@@ -33,7 +33,10 @@ alias gsso="gcertstatus --check_remaining=1h --quiet || glogin"
 alias gcn="gitbranchnum"
 alias gtmp="git add -A && git commit -m TEMP" # Create a commit named TEMP
 alias gdl="git diff --color=always | less -r" # Open git diff in less with colors
+alias gwdd="cd \$(git wcd)"
 
+#GITHUB
+alias ghprv="gh pr view --web":
 
 #invoke the cdiff tool
 alias cdiff="cdiff -sw140"
@@ -42,8 +45,6 @@ alias cdiff="cdiff -sw140"
 alias src="source ~/.zshrc"
 
 alias gw="./gradlew"
-
-alias fd="fdfind"
 
 # From Basic commands for for KVM, PIP and PBP features for Dell Monitor U2723QE on Linux ddcutil
 # https://gist.github.com/lainosantos/06d233f6c586305cde67489c2e4a764d

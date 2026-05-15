@@ -1,0 +1,20 @@
+<application>
+  <component name="PostfixTemplates">
+    <template id="anonym@userDefined" key=".anonym" provider="builtin.java" language-level="1.3" topmost="false">
+      <conditions>
+        <condition id="notPrimitive" />
+      </conditions>
+      <template name="fakeKey" value="object : $EXPR$ {&#10;  $CURSOR$&#10;}" toReformat="true" toShortenFQNames="true" />
+    </template>
+    <template id="lambda" key=".lambda" provider="builtin.java" builtin="lambda" language-level="8" topmost="true">
+      <conditions />
+      <template name="fakeKey" value="() -&gt; $EXPR$" description="" toReformat="true" toShortenFQNames="true" />
+    </template>
+    <template id="retnull@userDefined" key=".retnull" provider="builtin.java" language-level="1.3" topmost="false">
+      <conditions>
+        <condition id="non void" />
+      </conditions>
+      <template name="fakeKey" value="if($EXPR$ == null) {&#10;  return null;&#10;}" description="" toReformat="true" toShortenFQNames="true" />
+    </template>
+  </component>
+</application>

@@ -1,0 +1,6 @@
+<application>
+  <component name="ExternalResourceManagerImpl">
+    <resource url="http://schemas.android.com/apk/res/android" location="$USER_HOME$/W/android/master/frameworks/base" />
+    <ignored-resource url="http://schemas.android.com/apk/res/android" />
+  </component>
+</application>

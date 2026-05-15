@@ -1,0 +1,19 @@
+<templateSet group="other">
+  <template name="time" value="long startTime = System.currentTimeMillis();&#10;System.out.printf(&quot;$METHODE$() duration: %d ms\n&quot;, System.currentTimeMillis() - startTime);" description="" toReformat="false" toShortenFQNames="true">
+    <variable name="METHODE" expression="methodName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="timen" value="long startTime = System.nanoTime();&#10;System.out.printf(&quot;$METHODE$() duration: %d ns\n&quot;, System.nanoTime() - startTime);" description="" toReformat="false" toShortenFQNames="true">
+    <variable name="METHODE" expression="methodName()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_EXPRESSION" value="true" />
+    </context>
+  </template>
+  <template name="trace" value="&quot;--&gt;&quot; + Thread.currentThread().getStackTrace()[3] +&#10;&quot;\n  |--&gt;&quot; + Thread.currentThread().getStackTrace()[2] +&#10;&quot;\n     |--&gt;&quot;+Thread.currentThread().getStackTrace()[1]" description="" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JAVA_CODE" value="true" />
+    </context>
+  </template>
+</templateSet>

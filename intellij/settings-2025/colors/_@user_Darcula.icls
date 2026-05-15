@@ -1,0 +1,20 @@
+<scheme name="_@user_Darcula" version="142" parent_scheme="Darcula">
+  <metaInfo>
+    <property name="created">2018-06-04T14:43:46</property>
+    <property name="ide">Idea</property>
+    <property name="ideVersion">2018.2.0.0</property>
+    <property name="modified">2018-11-27T18:24:10</property>
+    <property name="originalScheme">Darcula</property>
+  </metaInfo>
+  <colors>
+    <option name="FILESTATUS_HIJACKED" value="b28c00" />
+    <option name="FILESTATUS_MODIFIED" value="72d4ff" />
+    <option name="FILESTATUS_NOT_CHANGED_IMMEDIATE" value="c4086" />
+    <option name="FILESTATUS_NOT_CHANGED_RECURSIVE" value="3241" />
+    <option name="FILESTATUS_OBSOLETE" value="7c7c00" />
+    <option name="FILESTATUS_SUPPRESSED" value="" />
+    <option name="FILESTATUS_SWITCHED" value="8978f" />
+    <option name="FILESTATUS_addedOutside" value="52ce36" />
+    <option name="FILESTATUS_modifiedOutside" value="385571" />
+  </colors>
+</scheme>

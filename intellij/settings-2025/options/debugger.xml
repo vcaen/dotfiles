@@ -1,0 +1,186 @@
+<application>
+  <component name="DebuggerSettings">
+    <capture-points>
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="supplyAsync" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture$AsyncSupply" insert-method-name="run" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="runAsync" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture$AsyncRun" insert-method-name="run" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="thenAcceptAsync" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture" insert-method-name="uniAccept" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="thenRunAsync" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture" insert-method-name="uniRun" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="thenApplyAsync" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture" insert-method-name="uniApply" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="java.util.concurrent.CompletableFuture" method-name="thenApply" capture-key-expression="param_0" insert-class-name="java.util.concurrent.CompletableFuture" insert-method-name="uniApply" insert-key-expression="f" />
+      <capture-point enabled="false" class-name="com.intellij.util.ui.update.MergingUpdateQueue" method-name="queue" capture-key-expression="update" insert-class-name="com.intellij.util.ui.update.Update" insert-method-name="run" insert-key-expression="" />
+      <capture-point class-name="android.os.Handler" method-name="enqueueMessage" capture-key-expression="msg" insert-class-name="android.os.Handler" insert-method-name="dispatchMessage" insert-key-expression="msg" />
+      <capture-point class-name="android.os.Handler" method-name="enqueueMessage" capture-key-expression="msg" insert-class-name="android.os.Handler" insert-method-name="handleMessage" insert-key-expression="msg" />
+    </capture-points>
+    <option name="SHOW_ALTERNATIVE_SOURCE" value="false" />
+    <option name="RUN_HOTSWAP_AFTER_COMPILE" value="RunHotswapAlways" />
+    <option name="WATCH_RETURN_VALUES" value="true" />
+    <option name="AUTO_VARIABLES_MODE" value="true" />
+    <filter>
+      <option name="PATTERN" value="com.sun.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="java.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="javax.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="org.omg.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="sun.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="jdk.internal.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="junit.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.intellij.rt.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.yourkit.runtime.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.springsource.loaded.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="org.springsource.loaded.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="javassist.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="org.apache.webbeans.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.ibm.ws.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="kotlin.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="*.mockito.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.android.dx.mockito.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="*mockito*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.android.icu.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="org.mockito*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="com.android.dx.mockito.inline.MockMethodAdvice$SuperMethodCall" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+    <filter>
+      <option name="PATTERN" value="androidx.compose.runtime.*" />
+      <option name="ENABLED" value="true" />
+      <option name="INCLUDE" value="true" />
+    </filter>
+  </component>
+  <component name="NodeRendererSettings">
+    <Renderer ID="ClassRenderer">
+      <option name="SHOW_STATIC" value="true" />
+      <option name="SHOW_DECLARED_TYPE" value="true" />
+    </Renderer>
+    <CustomRenderers VERSION="8">
+      <Renderer ID="CompoundNodeRenderer">
+        <option name="NAME" value="AbstractTreeNode" />
+        <option name="ENABLED" value="true" />
+        <option name="QUALIFIED_NAME" value="com.intellij.ide.util.treeView.AbstractTreeNode" />
+        <Renderer ID="LabelRenderer" role="label">
+          <option name="QUALIFIED_NAME" value="com.intellij.ide.util.treeView.AbstractTreeNode" />
+          <option name="ON_DEMAND" value="false" />
+          <option name="LABEL_EXPRESSION" value="toTestString(null)&#13;&#13;JAVA" />
+        </Renderer>
+      </Renderer>
+      <Renderer ID="CompoundNodeRenderer">
+        <option name="NAME" value="HTMLDocument$RunElement" />
+        <option name="ENABLED" value="true" />
+        <option name="QUALIFIED_NAME" value="javax.swing.text.html.HTMLDocument$RunElement" />
+        <Renderer ID="LabelRenderer" role="label">
+          <option name="QUALIFIED_NAME" value="javax.swing.text.html.HTMLDocument$RunElement" />
+          <option name="ON_DEMAND" value="false" />
+          <option name="LABEL_EXPRESSION" value="this.getAttributes()&#13;&#13;JAVA" />
+        </Renderer>
+      </Renderer>
+      <Renderer ID="CompoundNodeRenderer">
+        <option name="NAME" value="DomAttributeXmlDescriptor" />
+        <option name="ENABLED" value="true" />
+        <option name="QUALIFIED_NAME" value="com.intellij.xml.impl.dom.DomAttributeXmlDescriptor" />
+        <Renderer ID="LabelRenderer" role="label">
+          <option name="QUALIFIED_NAME" value="com.intellij.xml.impl.dom.DomAttributeXmlDescriptor" />
+          <option name="ON_DEMAND" value="false" />
+          <option name="LABEL_EXPRESSION" value="this.getName()&#13;&#13;JAVA" />
+        </Renderer>
+      </Renderer>
+      <Renderer ID="CompoundNodeRenderer">
+        <option name="NAME" value="java.util.HashMap" />
+        <option name="ENABLED" value="true" />
+        <option name="QUALIFIED_NAME" value="java.util.HashMap" />
+      </Renderer>
+    </CustomRenderers>
+  </component>
+  <component name="ThreadsViewSettings">
+    <option name="SHOW_THREAD_GROUPS" value="true" />
+    <option name="SHOW_SOURCE_NAME" value="true" />
+    <option name="SHOW_ARGUMENTS_TYPES" value="true" />
+  </component>
+  <component name="XDebuggerSettings">
+    <data-views>
+      <sort-values>true</sort-values>
+    </data-views>
+    <general>
+      <confirm-breakpoint-removal>true</confirm-breakpoint-removal>
+      <unmute-on-stop>true</unmute-on-stop>
+    </general>
+  </component>
+</application>

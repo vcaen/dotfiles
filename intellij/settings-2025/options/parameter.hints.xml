@@ -1,0 +1,16 @@
+<application>
+  <component name="ParameterNameHintsSettings">
+    <blacklists>
+      <blacklist language="Java" />
+      <blacklist language="Groovy" />
+    </blacklists>
+    <option id="java.build.like.method" value="true" />
+    <option id="java.enums" value="false" />
+    <option id="java.new.expr" value="false" />
+    <disabledLanguages>
+      <language id="JAVA" />
+      <language id="kotlin" />
+      <language id="Groovy" />
+    </disabledLanguages>
+  </component>
+</application>

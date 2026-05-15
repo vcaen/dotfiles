@@ -1,0 +1,30 @@
+<application>
+  <component name="FindSettings">
+    <option name="customScope" value="Virtual Camera" />
+    <option name="defaultScopeName" value="Virtual Camera" />
+    <option name="localRegularExpressions" value="true" />
+    <option name="regularExpressions" value="true" />
+    <option name="REGULAR_EXPRESSIONS" value="true" />
+    <option name="LOCAL_REGULAR_EXPRESSIONS" value="true" />
+    <option name="SEARCH_SCOPE" value="Virtual Camera" />
+    <mask>*.properties</mask>
+    <mask>*.html</mask>
+    <mask>*.jsp</mask>
+    <mask>*.js</mask>
+    <mask>*.as</mask>
+    <mask>*.css</mask>
+    <mask>*.mxml</mask>
+    <mask>xml</mask>
+    <mask>*Drop*</mask>
+    <mask>*.gradle</mask>
+    <mask>*xml</mask>
+    <mask>*bp</mask>
+    <mask>*aidl</mask>
+    <mask>*java</mask>
+    <mask>*.aidl</mask>
+    <mask>*.bp</mask>
+    <mask>*.xml</mask>
+    <mask>.*Proto.*</mask>
+    <mask>*.java</mask>
+  </component>
+</application>

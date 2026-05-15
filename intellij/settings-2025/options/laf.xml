@@ -1,0 +1,9 @@
+<application>
+  <component name="LafManager">
+    <laf themeId="Islands Dark" />
+    <lafs-to-previous-schemes>
+      <laf-to-scheme laf="ExperimentalLight" scheme="Vadim Light" />
+      <laf-to-scheme laf="Islands Dark" scheme="Vadim Scheme" />
+    </lafs-to-previous-schemes>
+  </component>
+</application>

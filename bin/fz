@@ -3,27 +3,27 @@
 [[ $DEBUG == "true" ]] && set -x
 local self=$0
 
+_fz_preview_pane() {
+    fzf \
+                --preview='[[ -d {} ]] && { cd {}; fd --color always --max-depth 1} || bat -f {}' \
+                --height='100%' \
+                --preview-window='right,70%' \
+                --keep-right \
+                --reverse \
+                --bind "enter:become( [[ -d {} ]] && { cd {}; $my_file dir } || bat -f {})" \
+                --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
+                --bind 'ctrl-y:yank+accept' \
+                --bind 'ctrl-o:accept' \
+                --header="Enter: Preview | Ctrl-y : accept" \
+                "$@"
+}
+
 fz_preview() {
     local dir=$(pwd)
-    [[ -n $1 && -d $1 ]] && dir="$1"
+    [[ -n $1 && -d $1 ]] && dir="$1" && shift
     (
         cd $dir
-        fzf \
-            --preview='bat -f {}' \
-            --height='100' \
-            --preview-window='right,66%,~3' \
-            --keep-right \
-            --reverse \
-            --bind 'enter:execute([[ {} == *jar ]] && { echo funzip {} ; funzip {}; } || bat -f {} ; sleep 2)' \
-            --bind "ctrl-l:execute(flog {})" \
-            --bind 'shift-up:preview-page-up,shift-down:preview-page-down' \
-            --bind 'ctrl-y:yank+accept' \
-            --bind "ctrl-f:select-all+execute($self grep . {+})" \
-            --header="Enter: Preview | Ctrl-y : accept " \
-            --header-first \
-            --multi \
-            --preview-label "Ctrl-f : search in current selection | Ctrl-l : Flog current file"
-
+        fd -tf -E .git "$@" . | _fz_preview_pane
     )
 }
 
@@ -85,9 +85,10 @@ fz_grep() {
         --height=90% --keep-right --with-nth=1,2 \
         --layout=reverse \
         --prompt="Search: " \
+        --bind "enter:reload-sync( [[ -d {} ]] && { cd {}; $my_file dir } || bat --pager \"less +/{q} -R\" -f {1})" \
         --bind "start:reload:$AG_PREFIX {q} $paths || true" \
         --bind "change:reload:$AG_PREFIX {q} $paths || true" \
-        --ansi --disabled --query "$pattern"
+        --ansi --disabled --query "$pattern" 
 }
 
 my_file=$0

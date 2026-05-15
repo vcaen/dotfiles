@@ -4,7 +4,14 @@
 export PATH=$HOME/W/clank/depot_tools:$PATH
 export SKIP_GCE_AUTH_FOR_GIT=1
 
+safesource() {
+    if [[ -f $1 ]]; then
+        source $1
+    fi
+}
+
 source ~/.profile
+source ~/W/goodweek/dotfiles/goodweek.sh
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -55,6 +62,8 @@ if [[ -n /opt/homebrew/bin ]] ; then
   export PATH=/opt/homebrew/bin:$PATH
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -65,7 +74,7 @@ plugins=(
     z
 )
 
-source $ZSH/oh-my-zsh.sh
+safesource $ZSH/oh-my-zsh.sh
 
 # User configuration
 ZSH_TMUX_AUTOSTART="true"
@@ -111,8 +120,8 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$HOME/.
 alias -s {png,PNG,jpeg,jpg,JPEG}="eog"
 
 # FZF Config
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
+safesource /usr/share/doc/fzf/examples/key-bindings.zsh
+safesource /usr/share/doc/fzf/examples/completion.zsh
 export FZF_DEFAULT_COMMAND="fd --type file --color=always"
 export FZF_DEFAULT_OPTS="--ansi --height=~20%"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
